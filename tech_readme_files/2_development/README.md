@@ -54,7 +54,7 @@ Active development guides, implementation references, and troubleshooting resour
 
 ---
 
-### 🐛 Bug Fixes
+### 🐛 Bug Fixes & Testing
 
 #### [BUG_FIXES_AND_FREE_MAP.md](./BUG_FIXES_AND_FREE_MAP.md)
 **Use when:** Encountering or fixing issues
@@ -64,6 +64,30 @@ Active development guides, implementation references, and troubleshooting resour
 - Map/Location troubleshooting
 - Common error fixes
 - Workarounds
+
+---
+
+#### [DATA_PERSISTENCE_TEST.md](./DATA_PERSISTENCE_TEST.md)
+**Use when:** Testing data storage and persistence
+
+**Contents:**
+- Data persistence testing guide
+- GetStorage implementation details
+- Test scenarios for posts, meals, and moods
+- Storage keys and date format reference
+- Debug logging information
+
+---
+
+#### [QUICK_FEATURE_GUIDE.md](./QUICK_FEATURE_GUIDE.md)
+**Use when:** Need quick reference for implemented features
+
+**Contents:**
+- Visual feature guides with UI mockups
+- Step-by-step testing instructions
+- Real-time update behavior
+- Pro tips and demo data reference
+- Quick 5-minute test sequence
 
 ---
 

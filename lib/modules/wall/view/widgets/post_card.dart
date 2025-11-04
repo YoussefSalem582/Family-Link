@@ -130,6 +130,15 @@ class PostCard extends StatelessWidget {
               style: TextStyle(color: Colors.grey[700], fontSize: 13),
             ),
           ],
+          if (post.commentCount > 0) ...[
+            if (post.likeCount > 0) SizedBox(width: 16),
+            Icon(Icons.comment, size: 16, color: Colors.grey[600]),
+            SizedBox(width: 4),
+            Text(
+              '${post.commentCount} ${post.commentCount == 1 ? 'comment' : 'comments'}',
+              style: TextStyle(color: Colors.grey[700], fontSize: 13),
+            ),
+          ],
         ],
       ),
     );

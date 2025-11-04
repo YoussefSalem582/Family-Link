@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MoodSelectorSheet extends StatelessWidget {
+class MoodSelectorSheet extends StatefulWidget {
   final Function(String mood, String? note) onMoodSelected;
 
   const MoodSelectorSheet({Key? key, required this.onMoodSelected})
     : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final TextEditingController noteController = TextEditingController();
-    String? selectedMood;
+  State<MoodSelectorSheet> createState() => _MoodSelectorSheetState();
+}
 
+class _MoodSelectorSheetState extends State<MoodSelectorSheet> {
+  final TextEditingController noteController = TextEditingController();
+  String? selectedMood;
+
+  @override
+  void dispose() {
+    noteController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(24),
       child: Column(
@@ -42,48 +53,56 @@ class MoodSelectorSheet extends StatelessWidget {
                 context,
                 '😊',
                 'mood_happy'.tr,
+                'happy',
                 (mood) => selectedMood = mood,
               ),
               _buildMoodOption(
                 context,
                 '😢',
                 'mood_sad'.tr,
+                'sad',
                 (mood) => selectedMood = mood,
               ),
               _buildMoodOption(
                 context,
                 '😠',
                 'mood_angry'.tr,
+                'angry',
                 (mood) => selectedMood = mood,
               ),
               _buildMoodOption(
                 context,
                 '😰',
                 'mood_anxious'.tr,
+                'anxious',
                 (mood) => selectedMood = mood,
               ),
               _buildMoodOption(
                 context,
                 '😴',
                 'mood_tired'.tr,
+                'tired',
                 (mood) => selectedMood = mood,
               ),
               _buildMoodOption(
                 context,
                 '😎',
                 'mood_excited'.tr,
+                'excited',
                 (mood) => selectedMood = mood,
               ),
               _buildMoodOption(
                 context,
                 '😌',
                 'mood_calm'.tr,
+                'calm',
                 (mood) => selectedMood = mood,
               ),
               _buildMoodOption(
                 context,
                 '😐',
                 'mood_neutral'.tr,
+                'neutral',
                 (mood) => selectedMood = mood,
               ),
             ],
@@ -106,7 +125,7 @@ class MoodSelectorSheet extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {
                 if (selectedMood != null) {
-                  onMoodSelected(
+                  widget.onMoodSelected(
                     selectedMood!,
                     noteController.text.isEmpty ? null : noteController.text,
                   );
@@ -136,22 +155,44 @@ class MoodSelectorSheet extends StatelessWidget {
     BuildContext context,
     String emoji,
     String label,
+    String moodKey,
     Function(String) onSelect,
   ) {
+    final isSelected = selectedMood == moodKey;
+
     return InkWell(
-      onTap: () => onSelect(label.toLowerCase()),
+      onTap: () {
+        setState(() {
+          selectedMood = moodKey;
+        });
+        onSelect(moodKey);
+      },
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.grey[100],
+          color: isSelected
+              ? Theme.of(context).primaryColor.withOpacity(0.1)
+              : Colors.grey[100],
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.grey[300]!),
+          border: Border.all(
+            color: isSelected
+                ? Theme.of(context).primaryColor
+                : Colors.grey[300]!,
+            width: isSelected ? 2 : 1,
+          ),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(emoji, style: TextStyle(fontSize: 32)),
             SizedBox(height: 4),
-            Text(label, style: TextStyle(fontSize: 10)),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                color: isSelected ? Theme.of(context).primaryColor : null,
+              ),
+            ),
           ],
         ),
       ),

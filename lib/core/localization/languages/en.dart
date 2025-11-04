@@ -94,6 +94,7 @@ const Map<String, String> en = {
   'wall_share': 'Share',
   'wall_share_coming_soon': 'Share functionality coming soon',
   'wall_delete_confirm': 'Are you sure you want to delete this post?',
+  'wall_no_comments': 'No comments yet',
 
   // Meals Screen
   'meals_title': 'Family Meals',

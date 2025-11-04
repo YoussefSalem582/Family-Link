@@ -94,6 +94,7 @@ const Map<String, String> ar = {
   'wall_share': 'مشاركة',
   'wall_share_coming_soon': 'وظيفة المشاركة قريباً',
   'wall_delete_confirm': 'هل أنت متأكد من حذف هذا المنشور؟',
+  'wall_no_comments': 'لا توجد تعليقات بعد',
 
   // Meals Screen
   'meals_title': 'وجبات العائلة',

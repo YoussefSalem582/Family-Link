@@ -62,15 +62,17 @@ class WallView extends GetView<WallViewModel> {
                         itemCount: controller.posts.length,
                         itemBuilder: (context, index) {
                           final post = controller.posts[index];
-                          final hasLiked = post.likes.contains('current_user');
+                          final hasLiked = post.likes.contains('demo_user_1');
 
                           return PostCard(
                             post: post,
                             hasLiked: hasLiked,
-                            onLike: () => _handleLike(hasLiked),
+                            onLike: () => _handleLike(post.id, hasLiked),
                             onComment: () => _showCommentsSheet(context, post),
                             onShare: () => _handleShare(),
-                            onDelete: controller.isDemoMode.value
+                            onDelete:
+                                controller.isDemoMode.value ||
+                                    post.userId == 'demo_user_1'
                                 ? () => _showDeleteConfirmation(context, post)
                                 : null,
                           );
@@ -89,14 +91,8 @@ class WallView extends GetView<WallViewModel> {
     );
   }
 
-  void _handleLike(bool hasLiked) {
-    Get.snackbar(
-      'demo_mode'.tr,
-      hasLiked ? 'wall_unliked'.tr : 'wall_liked'.tr,
-      snackPosition: SnackPosition.BOTTOM,
-      duration: Duration(seconds: 1),
-      backgroundColor: Colors.red.withOpacity(0.1),
-    );
+  void _handleLike(String postId, bool hasLiked) {
+    controller.toggleLike(postId, 'demo_user_1');
   }
 
   void _handleShare() {
@@ -118,14 +114,7 @@ class WallView extends GetView<WallViewModel> {
       builder: (context) => CreatePostDialog(
         onPost: (text) {
           Get.back();
-          Get.snackbar(
-            'demo_mode'.tr,
-            'wall_post_created'.tr + ': "$text"',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.green.withOpacity(0.8),
-            colorText: Colors.white,
-            duration: Duration(seconds: 3),
-          );
+          controller.createPost('demo_user_1', 'You', null, text);
         },
       ),
     );
@@ -152,14 +141,7 @@ class WallView extends GetView<WallViewModel> {
           TextButton(
             onPressed: () {
               Get.back();
-              Get.snackbar(
-                'demo_mode'.tr,
-                'wall_post_deleted'.tr,
-                snackPosition: SnackPosition.BOTTOM,
-                backgroundColor: Colors.red.withOpacity(0.8),
-                colorText: Colors.white,
-                duration: Duration(seconds: 2),
-              );
+              controller.deletePost(post.id, 'demo_user_1');
             },
             child: Text('delete'.tr, style: TextStyle(color: Colors.red)),
           ),

@@ -43,16 +43,7 @@ class ProfileView extends GetView<ProfileViewModel> {
             // Content
             Expanded(
               child: RefreshIndicator(
-                onRefresh: () async {
-                  // Refresh profile data
-                  await Future.delayed(Duration(milliseconds: 500));
-                  Get.snackbar(
-                    'profile_refreshed'.tr,
-                    'profile_refreshed'.tr,
-                    snackPosition: SnackPosition.BOTTOM,
-                    duration: Duration(seconds: 2),
-                  );
-                },
+                onRefresh: () => controller.refreshProfile(),
                 child: ListView(
                   padding: EdgeInsets.all(16),
                   children: [
@@ -64,20 +55,24 @@ class ProfileView extends GetView<ProfileViewModel> {
                     Row(
                       children: [
                         Expanded(
-                          child: StatCard(
-                            icon: Icons.article,
-                            value: '12',
-                            label: 'profile_posts'.tr,
-                            color: Colors.blue,
+                          child: Obx(
+                            () => StatCard(
+                              icon: Icons.article,
+                              value: '${controller.postsCount.value}',
+                              label: 'profile_posts'.tr,
+                              color: Colors.blue,
+                            ),
                           ),
                         ),
                         SizedBox(width: 12),
                         Expanded(
-                          child: StatCard(
-                            icon: Icons.mood,
-                            value: '24',
-                            label: 'profile_moods'.tr,
-                            color: Colors.purple,
+                          child: Obx(
+                            () => StatCard(
+                              icon: Icons.mood,
+                              value: '${controller.moodsCount.value}',
+                              label: 'profile_moods'.tr,
+                              color: Colors.purple,
+                            ),
                           ),
                         ),
                       ],
@@ -86,20 +81,24 @@ class ProfileView extends GetView<ProfileViewModel> {
                     Row(
                       children: [
                         Expanded(
-                          child: StatCard(
-                            icon: Icons.restaurant,
-                            value: '36',
-                            label: 'profile_meals'.tr,
-                            color: Colors.orange,
+                          child: Obx(
+                            () => StatCard(
+                              icon: Icons.restaurant,
+                              value: '${controller.mealsCount.value}',
+                              label: 'profile_meals'.tr,
+                              color: Colors.orange,
+                            ),
                           ),
                         ),
                         SizedBox(width: 12),
                         Expanded(
-                          child: StatCard(
-                            icon: Icons.star,
-                            value: '5',
-                            label: 'profile_days_active'.tr,
-                            color: Colors.green,
+                          child: Obx(
+                            () => StatCard(
+                              icon: Icons.star,
+                              value: '${controller.daysActive.value}',
+                              label: 'profile_days_active'.tr,
+                              color: Colors.green,
+                            ),
                           ),
                         ),
                       ],

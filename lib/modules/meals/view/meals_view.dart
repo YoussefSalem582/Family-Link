@@ -123,9 +123,18 @@ class MealsView extends GetView<MealsViewModel> {
   }
 
   String _formatTime(DateTime date) {
-    final hour = date.hour.toString().padLeft(2, '0');
+    int hour = date.hour;
     final minute = date.minute.toString().padLeft(2, '0');
-    return '$hour:$minute';
+    final period = hour >= 12 ? 'PM' : 'AM';
+
+    // Convert to 12-hour format
+    if (hour > 12) {
+      hour = hour - 12;
+    } else if (hour == 0) {
+      hour = 12;
+    }
+
+    return '$hour:$minute $period';
   }
 
   String _capitalizeFirst(String text) {
@@ -140,14 +149,7 @@ class MealsView extends GetView<MealsViewModel> {
         capitalizeFirst: _capitalizeFirst,
         onAdd: (mealType, isEaten) {
           Get.back();
-          Get.snackbar(
-            'demo_mode'.tr,
-            'meals_meal_added'.tr + ': "${_capitalizeFirst(mealType)}"',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.green.withOpacity(0.8),
-            colorText: Colors.white,
-            duration: Duration(seconds: 2),
-          );
+          controller.updateMealStatus('demo_user_1', 'You', mealType, isEaten);
         },
       ),
     );

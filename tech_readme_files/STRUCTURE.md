@@ -23,7 +23,9 @@ tech_readme_files/
 │   ├── LOCALIZATION_TESTING_GUIDE.md ...... ✅ Testing translations
 │   ├── TRANSLATION_REFERENCE.md ........... 📖 All 216+ translation keys
 │   ├── DEMO_MODE_IMPROVEMENTS.md .......... 🎮 Demo mode guide
-│   └── BUG_FIXES_AND_FREE_MAP.md .......... 🐛 Known issues & fixes
+│   ├── BUG_FIXES_AND_FREE_MAP.md .......... 🐛 Known issues & fixes
+│   ├── DATA_PERSISTENCE_TEST.md ........... 💾 Storage testing guide
+│   └── QUICK_FEATURE_GUIDE.md ............. ⚡ Visual feature reference
 │
 ├── ✨ 3_features/ ......................... Completed features
 │   ├── README.md .......................... Section guide
@@ -32,7 +34,10 @@ tech_readme_files/
 │   ├── LOCALIZATION_QUICK_START.md ........ ⚡ Quick localization guide
 │   ├── DEMO_MODE_COMPLETE.md .............. 🎮 Demo mode docs
 │   ├── REFACTORING_COMPLETE.md ............ 🔨 Code quality report
-│   └── WIDGET_REFACTORING_COMPLETE.md ..... 🧩 Widget architecture
+│   ├── WIDGET_REFACTORING_COMPLETE.md ..... 🧩 Widget architecture
+│   ├── IMPLEMENTATION_SUMMARY.md .......... 📝 Feature implementations
+│   ├── TESTING_REPORT.md .................. 🧪 Testing comprehensive report
+│   └── PROFILE_STATS_IMPLEMENTATION.md .... 📊 Profile stats feature
 │
 ├── 🗺️ 4_roadmap/ .......................... Future planning
 │   ├── README.md .......................... Section guide
@@ -51,12 +56,12 @@ tech_readme_files/
 | Category | Files | Total Size | Purpose |
 |----------|-------|------------|---------|
 | 🚀 Getting Started | 3 | ~60KB | Onboarding |
-| 🛠️ Development | 6 | ~120KB | Active work |
-| ✨ Features | 7 | ~180KB | Completions |
+| 🛠️ Development | 8 | ~180KB | Active work |
+| ✨ Features | 10 | ~280KB | Completions |
 | 🗺️ Roadmap | 3 | ~95KB | Planning |
 | 📦 Archive | 2 | ~50KB | History |
 | 📖 Root | 2 | ~40KB | Navigation |
-| **TOTAL** | **23** | **~545KB** | **Complete** |
+| **TOTAL** | **28** | **~705KB** | **Complete** |
 
 ---
 
@@ -155,7 +160,11 @@ Done! ✅
 | 🌍 Add translation | `2_development/LOCALIZATION_IMPLEMENTATION.md` |
 | 🔑 Find translation key | `2_development/TRANSLATION_REFERENCE.md` |
 | 🐛 Fix a bug | `2_development/BUG_FIXES_AND_FREE_MAP.md` |
-| 📊 Check feature status | `3_features/LOCALIZATION_FINAL_REPORT.md` |
+| � Test data storage | `2_development/DATA_PERSISTENCE_TEST.md` |
+| ⚡ Quick feature guide | `2_development/QUICK_FEATURE_GUIDE.md` |
+| �📊 Check feature status | `3_features/IMPLEMENTATION_SUMMARY.md` |
+| 🧪 View test results | `3_features/TESTING_REPORT.md` |
+| 📈 Profile stats info | `3_features/PROFILE_STATS_IMPLEMENTATION.md` |
 | 🎮 Understand demo | `3_features/DEMO_MODE_COMPLETE.md` |
 | 🚀 See future features | `4_roadmap/FEATURE_ROADMAP.md` |
 | 📅 Check next phase | `4_roadmap/PHASE_2_PLAN.md` |

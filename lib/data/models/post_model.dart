@@ -11,6 +11,7 @@ class PostModel {
   final DateTime createdAt;
   final List<String> likes;
   final int likeCount;
+  final int commentCount;
 
   PostModel({
     required this.id,
@@ -23,6 +24,7 @@ class PostModel {
     required this.createdAt,
     this.likes = const [],
     this.likeCount = 0,
+    this.commentCount = 0,
   });
 
   // Convert to JSON
@@ -38,6 +40,7 @@ class PostModel {
       'createdAt': Timestamp.fromDate(createdAt),
       'likes': likes,
       'likeCount': likeCount,
+      'commentCount': commentCount,
     };
   }
 
@@ -54,6 +57,7 @@ class PostModel {
       createdAt: (json['createdAt'] as Timestamp).toDate(),
       likes: List<String>.from(json['likes'] ?? []),
       likeCount: json['likeCount'] ?? 0,
+      commentCount: json['commentCount'] ?? 0,
     );
   }
 
@@ -69,6 +73,7 @@ class PostModel {
     DateTime? createdAt,
     List<String>? likes,
     int? likeCount,
+    int? commentCount,
   }) {
     return PostModel(
       id: id ?? this.id,
@@ -81,6 +86,7 @@ class PostModel {
       createdAt: createdAt ?? this.createdAt,
       likes: likes ?? this.likes,
       likeCount: likeCount ?? this.likeCount,
+      commentCount: commentCount ?? this.commentCount,
     );
   }
 }
