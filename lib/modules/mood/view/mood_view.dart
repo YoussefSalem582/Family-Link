@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../viewmodel/mood_viewmodel.dart';
+import '../../../widgets/demo_banner_widget.dart';
+import 'widgets/mood_stats_card.dart';
+import 'widgets/mood_selector_sheet.dart';
+import 'widgets/mood_card.dart';
+import 'widgets/empty_moods_widget.dart';
 
 class MoodView extends GetView<MoodViewModel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Family Moods')),
+      appBar: AppBar(
+        title: Text('Family Moods'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add_reaction_outlined),
+            onPressed: () => _showMoodSelector(context),
+            tooltip: 'Share Mood',
+          ),
+        ],
+      ),
       body: Obx(() {
         if (controller.isLoading.value) {
           return Center(child: CircularProgressIndicator());
@@ -16,81 +30,140 @@ class MoodView extends GetView<MoodViewModel> {
           children: [
             // Demo Mode Banner
             if (controller.isDemoMode.value)
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(12),
-                color: Colors.orange.shade100,
-                child: Row(
-                  children: [
-                    Icon(Icons.info_outline, color: Colors.orange.shade900),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        'Demo Mode - Showing sample mood data',
-                        style: TextStyle(color: Colors.orange.shade900),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              DemoBannerWidget(message: 'Demo Mode - Showing sample mood data'),
 
             // Content
             Expanded(
-              child: ListView(
-                padding: EdgeInsets.all(16),
-                children: [
-                  Text(
-                    'How is everyone feeling?',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  SizedBox(height: 16),
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  controller.loadTodaysMoods();
+                },
+                child: ListView(
+                  padding: EdgeInsets.all(16),
+                  children: [
+                    // Mood Stats
+                    MoodStatsCard(getMoodCount: _getMoodCount),
+                    SizedBox(height: 24),
 
-                  // Family Moods
-                  if (controller.todaysMoods.isNotEmpty) ...[
-                    ...controller.todaysMoods.map(
-                      (mood) => Card(
-                        margin: EdgeInsets.only(bottom: 12),
-                        child: ListTile(
-                          leading: Text(
-                            mood.emoji,
-                            style: TextStyle(fontSize: 32),
-                          ),
-                          title: Text(mood.userName),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                mood.mood.toUpperCase(),
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              if (mood.note != null && mood.note!.isNotEmpty)
-                                Text(
-                                  mood.note!,
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                            ],
-                          ),
-                          trailing: Text(
-                            '${mood.date.hour}:${mood.date.minute.toString().padLeft(2, '0')}',
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Family Moods Today',
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                        TextButton.icon(
+                          onPressed: () => _showMoodSelector(context),
+                          icon: Icon(Icons.add),
+                          label: Text('Share'),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+
+                    // Family Moods
+                    if (controller.todaysMoods.isNotEmpty) ...[
+                      ...controller.todaysMoods.map(
+                        (mood) => MoodCard(
+                          mood: mood,
+                          getMoodColor: _getMoodColor,
+                          getMoodEmoji: _getMoodEmoji,
+                          formatTime: _formatTime,
                         ),
                       ),
-                    ),
-                  ] else ...[
-                    Center(
-                      child: Padding(
-                        padding: EdgeInsets.all(32),
-                        child: Text('No moods shared today'),
+                    ] else ...[
+                      EmptyMoodsWidget(
+                        onShareMood: () => _showMoodSelector(context),
                       ),
-                    ),
+                    ],
                   ],
-                ],
+                ),
               ),
             ),
           ],
         );
       }),
+    );
+  }
+
+  int _getMoodCount(String moodType) {
+    return controller.todaysMoods
+        .where((mood) => mood.mood.toLowerCase() == moodType)
+        .length;
+  }
+
+  Color _getMoodColor(String mood) {
+    switch (mood.toLowerCase()) {
+      case 'happy':
+        return Colors.green;
+      case 'excited':
+        return Colors.purple;
+      case 'sad':
+        return Colors.blue;
+      case 'angry':
+        return Colors.red;
+      case 'neutral':
+        return Colors.grey;
+      case 'tired':
+        return Colors.orange;
+      case 'anxious':
+        return Colors.amber;
+      case 'calm':
+        return Colors.teal;
+      default:
+        return Colors.grey;
+    }
+  }
+
+  String _getMoodEmoji(String mood) {
+    switch (mood.toLowerCase()) {
+      case 'happy':
+        return '😊';
+      case 'sad':
+        return '😢';
+      case 'angry':
+        return '😠';
+      case 'anxious':
+        return '😰';
+      case 'tired':
+        return '😴';
+      case 'excited':
+        return '😎';
+      case 'calm':
+        return '😌';
+      case 'neutral':
+        return '😐';
+      default:
+        return '😊';
+    }
+  }
+
+  String _formatTime(DateTime date) {
+    final hour = date.hour.toString().padLeft(2, '0');
+    final minute = date.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
+  }
+
+  void _showMoodSelector(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => MoodSelectorSheet(
+        onMoodSelected: (mood, note) {
+          Get.back();
+          Get.snackbar(
+            'Demo Mode',
+            'Mood "$mood" would be shared',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.purple.withOpacity(0.8),
+            colorText: Colors.white,
+            duration: Duration(seconds: 2),
+          );
+        },
+      ),
     );
   }
 }

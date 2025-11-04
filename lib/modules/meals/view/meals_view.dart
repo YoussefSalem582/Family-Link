@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../viewmodel/meals_viewmodel.dart';
+import '../../home/view/widgets/demo_banner_widget.dart';
+import 'widgets/meal_type_card.dart';
+import 'widgets/meal_card.dart';
+import 'widgets/add_meal_dialog.dart';
+import 'widgets/empty_meals_widget.dart';
 
 class MealsView extends GetView<MealsViewModel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Family Meals')),
+      appBar: AppBar(
+        title: Text('Family Meals'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add_circle_outline),
+            onPressed: () => _showAddMealDialog(context),
+            tooltip: 'Add Meal',
+          ),
+        ],
+      ),
       body: Obx(() {
         if (controller.isLoading.value) {
           return Center(child: CircularProgressIndicator());
@@ -16,55 +30,126 @@ class MealsView extends GetView<MealsViewModel> {
           children: [
             // Demo Mode Banner
             if (controller.isDemoMode.value)
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(12),
-                color: Colors.orange.shade100,
-                child: Row(
-                  children: [
-                    Icon(Icons.info_outline, color: Colors.orange.shade900),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        'Demo Mode - Showing sample meal data',
-                        style: TextStyle(color: Colors.orange.shade900),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              DemoBannerWidget(message: 'Demo Mode - Showing sample meal data'),
 
             // Content
             Expanded(
-              child: ListView(
-                padding: EdgeInsets.all(16),
-                children: [
-                  Text(
-                    'Today\'s Meals',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                  SizedBox(height: 16),
-                  // Display meals
-                  ...controller.todaysMeals.map(
-                    (meal) => Card(
-                      child: ListTile(
-                        leading: Icon(
-                          meal.isEaten ? Icons.check_circle : Icons.cancel,
-                          color: meal.isEaten ? Colors.green : Colors.red,
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  controller.loadTodaysMeals();
+                },
+                child: ListView(
+                  padding: EdgeInsets.all(16),
+                  children: [
+                    // Meal Type Cards
+                    Row(
+                      children: [
+                        Expanded(
+                          child: MealTypeCard(
+                            type: 'Breakfast',
+                            icon: Icons.free_breakfast,
+                            color: Colors.orange,
+                            count: _getMealCountByType('breakfast'),
+                          ),
                         ),
-                        title: Text(meal.userName),
-                        subtitle: Text(
-                          '${meal.mealType} - ${meal.isEaten ? "Eaten" : "Skipped"}',
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: MealTypeCard(
+                            type: 'Lunch',
+                            icon: Icons.lunch_dining,
+                            color: Colors.green,
+                            count: _getMealCountByType('lunch'),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: MealTypeCard(
+                            type: 'Dinner',
+                            icon: Icons.dinner_dining,
+                            color: Colors.blue,
+                            count: _getMealCountByType('dinner'),
+                          ),
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: MealTypeCard(
+                            type: 'Snack',
+                            icon: Icons.emoji_food_beverage,
+                            color: Colors.purple,
+                            count: _getMealCountByType('snack'),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 24),
+
+                    Text(
+                      'Today\'s Meals',
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                    SizedBox(height: 16),
+
+                    // Display meals
+                    if (controller.todaysMeals.isEmpty)
+                      EmptyMealsWidget(
+                        onAddMeal: () => _showAddMealDialog(context),
+                      )
+                    else
+                      ...controller.todaysMeals.map(
+                        (meal) => MealCard(
+                          meal: meal,
+                          formatTime: _formatTime,
+                          capitalizeFirst: _capitalizeFirst,
                         ),
                       ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],
         );
       }),
+    );
+  }
+
+  int _getMealCountByType(String type) {
+    return controller.todaysMeals
+        .where((meal) => meal.mealType.toLowerCase() == type && meal.isEaten)
+        .length;
+  }
+
+  String _formatTime(DateTime date) {
+    final hour = date.hour.toString().padLeft(2, '0');
+    final minute = date.minute.toString().padLeft(2, '0');
+    return '$hour:$minute';
+  }
+
+  String _capitalizeFirst(String text) {
+    if (text.isEmpty) return text;
+    return text[0].toUpperCase() + text.substring(1);
+  }
+
+  void _showAddMealDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AddMealDialog(
+        capitalizeFirst: _capitalizeFirst,
+        onAdd: (mealType, isEaten) {
+          Get.back();
+          Get.snackbar(
+            'Demo Mode',
+            'Meal "${_capitalizeFirst(mealType)}" would be added',
+            snackPosition: SnackPosition.BOTTOM,
+            backgroundColor: Colors.green.withOpacity(0.8),
+            colorText: Colors.white,
+            duration: Duration(seconds: 2),
+          );
+        },
+      ),
     );
   }
 }

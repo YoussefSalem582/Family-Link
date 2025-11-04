@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:latlong2/latlong.dart';
 import '../../../data/models/user_model.dart';
 import '../../../data/repositories/user_repository.dart';
 import '../../../core/services/firebase_service.dart';
@@ -9,7 +9,6 @@ class MapViewModel extends GetxController {
   late UserRepository _userRepository;
 
   RxList<UserModel> familyMembers = <UserModel>[].obs;
-  RxSet<Marker> markers = <Marker>{}.obs;
   Rx<LatLng> initialPosition = LatLng(30.0444, 31.2357).obs; // Cairo default
   RxBool isDemoMode = false.obs;
 
@@ -63,7 +62,6 @@ class MapViewModel extends GetxController {
         longitude: 29.9187,
       ),
     ];
-    _updateMarkers();
   }
 
   void loadFamilyLocations() {
@@ -74,22 +72,6 @@ class MapViewModel extends GetxController {
 
     _userRepository.getAllUsers().listen((users) {
       familyMembers.value = users;
-      _updateMarkers();
     });
-  }
-
-  void _updateMarkers() {
-    markers.clear();
-    for (var user in familyMembers) {
-      if (user.latitude != null && user.longitude != null) {
-        markers.add(
-          Marker(
-            markerId: MarkerId(user.id),
-            position: LatLng(user.latitude!, user.longitude!),
-            infoWindow: InfoWindow(title: user.name, snippet: user.location),
-          ),
-        );
-      }
-    }
   }
 }

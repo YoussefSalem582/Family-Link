@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../viewmodel/home_viewmodel.dart';
+import '../../main_container/viewmodel/main_container_viewmodel.dart';
 import '../../../core/routes/app_routes.dart';
-import '../../../widgets/avatar_widget.dart';
-import '../../../widgets/custom_card.dart';
+import '../../../widgets/demo_banner_widget.dart';
+import 'widgets/family_status_card.dart';
+import 'widgets/quick_action_button.dart';
+import 'widgets/family_member_card.dart';
+import 'widgets/member_details_sheet.dart';
 
 class HomeView extends GetView<HomeViewModel> {
   @override
@@ -31,50 +35,47 @@ class HomeView extends GetView<HomeViewModel> {
             padding: EdgeInsets.all(16),
             children: [
               // Demo Mode Banner
-              if (controller.isDemoMode.value)
-                Container(
-                  margin: EdgeInsets.only(bottom: 16),
-                  padding: EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.orange.shade100,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: Colors.orange.shade300),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.info_outline, color: Colors.orange.shade900),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          'Demo Mode - Firebase not configured.\nShowing sample data.',
-                          style: TextStyle(color: Colors.orange.shade900),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              if (controller.isDemoMode.value) DemoBannerWidget(),
 
-              // Summary Card
-              CustomCard(
-                child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _buildStat(
-                        '🏠 Home',
-                        controller.membersAtHome.toString(),
-                      ),
-                      _buildStat('🚶 Out', controller.membersOut.toString()),
-                      _buildStat(
-                        '👨‍👩‍👧‍👦 Total',
-                        controller.familyMembers.length.toString(),
-                      ),
-                    ],
-                  ),
-                ),
+              // Summary Card with gradient
+              FamilyStatusCard(
+                membersAtHome: controller.membersAtHome,
+                membersOut: controller.membersOut,
+                totalMembers: controller.familyMembers.length,
               ),
-              SizedBox(height: 20),
+              // SizedBox(height: 24),
+
+              // // Quick Actions Row
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //   children: [
+              //     QuickActionButton(
+              //       icon: Icons.restaurant,
+              //       label: 'Meals',
+              //       color: Colors.orange,
+              //       onTap: () => _navigateToTab(1),
+              //     ),
+              //     QuickActionButton(
+              //       icon: Icons.mood,
+              //       label: 'Mood',
+              //       color: Colors.purple,
+              //       onTap: () => _navigateToTab(2),
+              //     ),
+              //     QuickActionButton(
+              //       icon: Icons.map,
+              //       label: 'Map',
+              //       color: Colors.blue,
+              //       onTap: () => _navigateToTab(3),
+              //     ),
+              //     QuickActionButton(
+              //       icon: Icons.forum,
+              //       label: 'Wall',
+              //       color: Colors.green,
+              //       onTap: () => _navigateToTab(4),
+              //     ),
+              //   ],
+              // ),
+              SizedBox(height: 24),
 
               // Family Members List
               Text(
@@ -84,7 +85,10 @@ class HomeView extends GetView<HomeViewModel> {
               SizedBox(height: 12),
 
               ...controller.familyMembers.map(
-                (member) => _buildMemberCard(context, member),
+                (member) => FamilyMemberCard(
+                  member: member,
+                  onTap: () => _showMemberDetails(context, member),
+                ),
               ),
             ],
           ),
@@ -93,34 +97,23 @@ class HomeView extends GetView<HomeViewModel> {
     );
   }
 
-  Widget _buildStat(String label, String value) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(height: 4),
-        Text(label, style: TextStyle(color: Colors.grey)),
-      ],
-    );
+  void _navigateToTab(int index) {
+    try {
+      Get.find<MainContainerViewModel>().changeTab(index);
+    } catch (e) {
+      Get.snackbar('Demo', 'Navigation feature');
+    }
   }
 
-  Widget _buildMemberCard(BuildContext context, member) {
-    return Card(
-      margin: EdgeInsets.only(bottom: 12),
-      child: ListTile(
-        leading: AvatarWidget(
-          name: member.name,
-          photoUrl: member.photoUrl,
-          size: 50,
-        ),
-        title: Text(member.name),
-        subtitle: Text('${member.location} • ${member.status}'),
-        trailing: Icon(
-          member.isHome ? Icons.home : Icons.near_me,
-          color: member.isHome ? Colors.green : Colors.orange,
-        ),
+  void _showMemberDetails(BuildContext context, dynamic member) {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => MemberDetailsSheet(
+        member: member,
+        isDemoMode: controller.isDemoMode.value,
       ),
     );
   }
