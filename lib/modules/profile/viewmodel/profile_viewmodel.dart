@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import '../../../data/models/user_model.dart';
@@ -14,6 +15,8 @@ class ProfileViewModel extends GetxController {
   Rx<UserModel?> currentUser = Rx<UserModel?>(null);
   RxBool isLoading = true.obs;
   RxBool isDemoMode = false.obs;
+  RxBool isLocationSharingEnabled = true.obs;
+  RxBool isLiveLocationEnabled = false.obs;
 
   // Stats from other modules
   RxInt postsCount = 0.obs;
@@ -26,6 +29,19 @@ class ProfileViewModel extends GetxController {
     super.onInit();
     _initializeRepository();
     _loadStats();
+    _loadLocationSharingState();
+  }
+
+  void _loadLocationSharingState() {
+    final savedState = _storage.read<bool>('location_sharing_enabled');
+    if (savedState != null) {
+      isLocationSharingEnabled.value = savedState;
+    }
+
+    final savedLiveState = _storage.read<bool>('live_location_enabled');
+    if (savedLiveState != null) {
+      isLiveLocationEnabled.value = savedLiveState;
+    }
   }
 
   void _loadStats() {
@@ -165,6 +181,72 @@ class ProfileViewModel extends GetxController {
 
   void toggleTheme() {
     _themeService.switchTheme();
+  }
+
+  void toggleLocationSharing(bool value) {
+    isLocationSharingEnabled.value = value;
+    _storage.write('location_sharing_enabled', value);
+
+    // If disabling location sharing, also disable live location
+    if (!value) {
+      isLiveLocationEnabled.value = false;
+      _storage.write('live_location_enabled', false);
+    }
+
+    Get.snackbar(
+      'Location Sharing',
+      value
+          ? 'Your location is now visible to family members'
+          : 'Your location is now hidden from family members',
+      snackPosition: SnackPosition.BOTTOM,
+      duration: Duration(seconds: 3),
+      backgroundColor: value ? Colors.green : Colors.orange,
+      colorText: Colors.white,
+      icon: Icon(
+        value ? Icons.location_on : Icons.location_off,
+        color: Colors.white,
+      ),
+      margin: EdgeInsets.all(16),
+      borderRadius: 12,
+    );
+  }
+
+  void toggleLiveLocation(bool value) {
+    // Can only enable live location if location sharing is enabled
+    if (value && !isLocationSharingEnabled.value) {
+      Get.snackbar(
+        'Enable Location Sharing',
+        'Please enable location sharing first to use live location',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: Duration(seconds: 3),
+        backgroundColor: Colors.orange,
+        colorText: Colors.white,
+        icon: Icon(Icons.warning, color: Colors.white),
+        margin: EdgeInsets.all(16),
+        borderRadius: 12,
+      );
+      return;
+    }
+
+    isLiveLocationEnabled.value = value;
+    _storage.write('live_location_enabled', value);
+
+    Get.snackbar(
+      'Live Location',
+      value
+          ? '🟢 Broadcasting your real-time location'
+          : '🔴 Live location stopped',
+      snackPosition: SnackPosition.BOTTOM,
+      duration: Duration(seconds: 3),
+      backgroundColor: value ? Colors.green : Colors.red,
+      colorText: Colors.white,
+      icon: Icon(
+        value ? Icons.navigation : Icons.location_disabled,
+        color: Colors.white,
+      ),
+      margin: EdgeInsets.all(16),
+      borderRadius: 12,
+    );
   }
 
   Future<void> signOut() async {

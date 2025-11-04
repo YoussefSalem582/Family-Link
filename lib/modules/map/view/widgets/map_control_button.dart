@@ -2,29 +2,55 @@ import 'package:flutter/material.dart';
 
 class MapControlButton extends StatelessWidget {
   final IconData icon;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
+  final Color? backgroundColor;
+  final Color? iconColor;
 
   const MapControlButton({
     super.key,
     required this.icon,
     required this.onPressed,
+    this.backgroundColor,
+    this.iconColor,
   });
 
   @override
   Widget build(BuildContext context) {
+    final isDisabled = onPressed == null;
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        color: isDisabled
+            ? Colors.grey[300]
+            : (backgroundColor ?? Colors.white),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 4,
-            offset: Offset(0, 2),
+            color: Colors.black.withOpacity(0.15),
+            blurRadius: 8,
+            offset: Offset(0, 3),
           ),
         ],
       ),
-      child: IconButton(icon: Icon(icon), onPressed: onPressed, iconSize: 24),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onPressed,
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            width: 48,
+            height: 48,
+            alignment: Alignment.center,
+            child: Icon(
+              icon,
+              color: isDisabled
+                  ? Colors.grey[500]
+                  : (iconColor ?? Colors.grey[800]),
+              size: 24,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

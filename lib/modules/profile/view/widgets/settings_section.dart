@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../core/controllers/language_controller.dart';
+import '../../viewmodel/profile_viewmodel.dart';
 
 class SettingsSection extends StatelessWidget {
   final bool isDarkMode;
@@ -15,6 +16,7 @@ class SettingsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final languageController = Get.find<LanguageController>();
+    final profileController = Get.find<ProfileViewModel>();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,19 +83,35 @@ class SettingsSection extends StatelessWidget {
                 ),
               ),
               Divider(height: 1),
-              ListTile(
-                leading: Icon(Icons.location_on),
-                title: Text('profile_location_sharing'.tr),
-                trailing: Switch(
-                  value: true,
-                  onChanged: (value) {
-                    Get.snackbar(
-                      'settings_location_changed'.tr,
-                      '${value ? 'profile_enabled'.tr : 'profile_disabled'.tr}',
-                      snackPosition: SnackPosition.BOTTOM,
-                      duration: Duration(seconds: 2),
-                    );
-                  },
+              // Location Sharing
+              Obx(
+                () => ListTile(
+                  leading: Icon(
+                    profileController.isLocationSharingEnabled.value
+                        ? Icons.location_on
+                        : Icons.location_off,
+                    color: profileController.isLocationSharingEnabled.value
+                        ? Colors.green
+                        : Colors.grey,
+                  ),
+                  title: Text('profile_location_sharing'.tr),
+                  subtitle: Text(
+                    profileController.isLocationSharingEnabled.value
+                        ? 'Visible to family members'
+                        : 'Hidden from family members',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: profileController.isLocationSharingEnabled.value
+                          ? Colors.green[700]
+                          : Colors.grey[600],
+                    ),
+                  ),
+                  trailing: Switch(
+                    value: profileController.isLocationSharingEnabled.value,
+                    onChanged: (value) {
+                      profileController.toggleLocationSharing(value);
+                    },
+                  ),
                 ),
               ),
             ],
