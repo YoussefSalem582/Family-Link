@@ -118,6 +118,8 @@ const Map<String, String> en = {
   'meals_eaten': 'Eaten',
   'meals_mark_eaten': 'Mark as eaten',
   'meals_mark_skipped': 'Mark as skipped',
+  'meals_skipped': 'Skipped',
+  'meals_select_status': 'Select meal status',
   'meals_eaten_count': 'eaten',
   'meals_eaten_status': 'Eaten',
   'meals_skipped_status': 'Skipped',

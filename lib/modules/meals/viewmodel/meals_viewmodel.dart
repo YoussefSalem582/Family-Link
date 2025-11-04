@@ -15,6 +15,21 @@ class MealsViewModel extends GetxController {
   RxBool isDemoMode = false.obs;
   Rx<DateTime> selectedDate = DateTime.now().obs;
 
+  // Current user (demo mode)
+  final Map<String, String> currentUser = {
+    'id': 'demo_user_1',
+    'name': 'You',
+    'location': 'Current Location',
+  };
+
+  // Demo family members
+  final List<Map<String, String>> familyMembers = [
+    {'id': '1', 'name': 'Ahmed', 'location': 'Home in Riyadh'},
+    {'id': '2', 'name': 'Fatima', 'location': 'Traveling to Cairo'},
+    {'id': '3', 'name': 'Youssef', 'location': 'Out in Jeddah'},
+    {'id': '4', 'name': 'Layla', 'location': 'Home in Alexandria'},
+  ];
+
   @override
   void onInit() {
     super.onInit();
@@ -26,17 +41,46 @@ class MealsViewModel extends GetxController {
   void _loadSavedMeals() {
     final savedMeals = _storage.read<List>('meals_data');
     if (savedMeals != null) {
-      todaysMeals.value = savedMeals
+      final allMeals = savedMeals
           .map((m) => _mealFromStorage(Map<String, dynamic>.from(m)))
           .toList();
+
+      // Filter meals for selected date
+      todaysMeals.value = _filterMealsByDate(allMeals, selectedDate.value);
+      print(
+        '✅ Loaded ${todaysMeals.length} saved meals for ${_formatDate(selectedDate.value)}',
+      );
     }
   }
 
   void _saveMeals() {
+    // Get all saved meals
+    final savedMeals = _storage.read<List>('meals_data');
+    List<MealModel> allMeals = [];
+
+    if (savedMeals != null) {
+      allMeals = savedMeals
+          .map((m) => _mealFromStorage(Map<String, dynamic>.from(m)))
+          .toList();
+    }
+
+    // Remove meals for current date
+    allMeals.removeWhere(
+      (m) =>
+          m.date.year == selectedDate.value.year &&
+          m.date.month == selectedDate.value.month &&
+          m.date.day == selectedDate.value.day,
+    );
+
+    // Add current meals
+    allMeals.addAll(todaysMeals);
+
+    // Save all meals
     _storage.write(
       'meals_data',
-      todaysMeals.map((m) => _mealToStorage(m)).toList(),
+      allMeals.map((m) => _mealToStorage(m)).toList(),
     );
+    print('💾 Saved ${allMeals.length} total meals to storage');
   }
 
   // Storage serialization helpers
@@ -158,22 +202,24 @@ class MealsViewModel extends GetxController {
     if (isDemoMode.value) {
       // In demo mode, update meal status locally
       final mealId =
-          '${userId}_${mealType}_${DateTime.now().millisecondsSinceEpoch}';
+          '${userId}_${mealType}_${selectedDate.value.millisecondsSinceEpoch}';
       final newMeal = MealModel(
         id: mealId,
         userId: userId,
         userName: userName,
         mealType: mealType,
         isEaten: isEaten,
-        date: DateTime.now(),
+        date: selectedDate.value,
       );
 
-      // Remove existing meal of same type for same user today
+      // Remove existing meal of same type for same user on selected date
       todaysMeals.removeWhere(
         (m) =>
             m.userId == userId &&
             m.mealType == mealType &&
-            m.date.day == DateTime.now().day,
+            m.date.year == selectedDate.value.year &&
+            m.date.month == selectedDate.value.month &&
+            m.date.day == selectedDate.value.day,
       );
 
       todaysMeals.insert(0, newMeal);
@@ -217,5 +263,47 @@ class MealsViewModel extends GetxController {
 
   List<MealModel> getMealsForUser(String userId) {
     return todaysMeals.where((meal) => meal.userId == userId).toList();
+  }
+
+  // Filter meals by date (same day)
+  List<MealModel> _filterMealsByDate(List<MealModel> meals, DateTime date) {
+    return meals.where((meal) {
+      return meal.date.year == date.year &&
+          meal.date.month == date.month &&
+          meal.date.day == date.day;
+    }).toList();
+  }
+
+  // Format date for display
+  String _formatDate(DateTime date) {
+    return '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+  }
+
+  // Change selected date
+  void changeDate(DateTime newDate) {
+    selectedDate.value = newDate;
+
+    // Load meals from storage for this date
+    final savedMeals = _storage.read<List>('meals_data');
+    if (savedMeals != null) {
+      final allMeals = savedMeals
+          .map((m) => _mealFromStorage(Map<String, dynamic>.from(m)))
+          .toList();
+      todaysMeals.value = _filterMealsByDate(allMeals, newDate);
+    } else {
+      todaysMeals.clear();
+    }
+
+    print(
+      '📅 Changed date to ${_formatDate(newDate)}, showing ${todaysMeals.length} meals',
+    );
+  }
+
+  // Check if date is today
+  bool isToday(DateTime date) {
+    final now = DateTime.now();
+    return date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day;
   }
 }

@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../viewmodel/meals_viewmodel.dart';
 import '../../home/view/widgets/demo_banner_widget.dart';
-import 'widgets/meal_type_card.dart';
-import 'widgets/meal_card.dart';
-import 'widgets/add_meal_dialog.dart';
-import 'widgets/empty_meals_widget.dart';
+import 'widgets/family_member_meal_card.dart';
+import 'widgets/calendar_header.dart';
+import 'widgets/modern_date_picker.dart';
 
 class MealsView extends GetView<MealsViewModel> {
   @override
@@ -15,9 +14,9 @@ class MealsView extends GetView<MealsViewModel> {
         title: Text('meals_title'.tr),
         actions: [
           IconButton(
-            icon: Icon(Icons.add_circle_outline),
-            onPressed: () => _showAddMealDialog(context),
-            tooltip: 'meals_add_meal'.tr,
+            icon: Icon(Icons.event),
+            onPressed: () => _showDatePicker(context),
+            tooltip: 'Select Date',
           ),
         ],
       ),
@@ -32,81 +31,128 @@ class MealsView extends GetView<MealsViewModel> {
             if (controller.isDemoMode.value)
               DemoBannerWidget(message: 'demo_meals'.tr),
 
+            // Calendar Header
+            CalendarHeader(
+              selectedDate: controller.selectedDate.value,
+              isToday: controller.isToday(controller.selectedDate.value),
+              onPreviousDay: () {
+                final previousDay = controller.selectedDate.value.subtract(
+                  Duration(days: 1),
+                );
+                controller.changeDate(previousDay);
+              },
+              onNextDay: () {
+                final nextDay = controller.selectedDate.value.add(
+                  Duration(days: 1),
+                );
+                controller.changeDate(nextDay);
+              },
+              onCalendarTap: () => _showDatePicker(context),
+              onTodayTap: () {
+                controller.changeDate(DateTime.now());
+              },
+            ),
+
             // Content
             Expanded(
               child: RefreshIndicator(
                 onRefresh: () async {
-                  controller.loadTodaysMeals();
+                  controller.changeDate(controller.selectedDate.value);
                 },
-                child: ListView(
+                child: ListView.builder(
                   padding: EdgeInsets.all(16),
-                  children: [
-                    // Meal Type Cards
-                    Row(
-                      children: [
-                        Expanded(
-                          child: MealTypeCard(
-                            type: 'meals_breakfast'.tr,
-                            icon: Icons.free_breakfast,
-                            color: Colors.orange,
-                            count: _getMealCountByType('breakfast'),
-                          ),
-                        ),
-                        SizedBox(width: 12),
-                        Expanded(
-                          child: MealTypeCard(
-                            type: 'meals_lunch'.tr,
-                            icon: Icons.lunch_dining,
-                            color: Colors.green,
-                            count: _getMealCountByType('lunch'),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 12),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: MealTypeCard(
-                            type: 'meals_dinner'.tr,
-                            icon: Icons.dinner_dining,
-                            color: Colors.blue,
-                            count: _getMealCountByType('dinner'),
-                          ),
-                        ),
-                        SizedBox(width: 12),
-                        Expanded(
-                          child: MealTypeCard(
-                            type: 'meals_snack'.tr,
-                            icon: Icons.emoji_food_beverage,
-                            color: Colors.purple,
-                            count: _getMealCountByType('snack'),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 24),
+                  itemCount:
+                      controller.familyMembers.length +
+                      1, // +1 for current user
+                  itemBuilder: (context, index) {
+                    // First item is current user
+                    if (index == 0) {
+                      final userId = controller.currentUser['id']!;
+                      final userName = controller.currentUser['name']!;
+                      final location = controller.currentUser['location']!;
+                      final meals = controller.getMealsForUser(userId);
 
-                    Text(
-                      'meals_today'.tr,
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    SizedBox(height: 16),
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 4, bottom: 8),
+                            child: Text(
+                              'Your Meals',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).primaryColor,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: Theme.of(
+                                  context,
+                                ).primaryColor.withOpacity(0.3),
+                                width: 2,
+                              ),
+                            ),
+                            child: FamilyMemberMealCard(
+                              userId: userId,
+                              userName: userName,
+                              location: location,
+                              meals: meals,
+                              isCurrentUser: true,
+                              onMealTap: (mealType, isEaten) {
+                                controller.updateMealStatus(
+                                  userId,
+                                  userName,
+                                  mealType,
+                                  isEaten,
+                                );
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 24),
+                          Padding(
+                            padding: EdgeInsets.only(left: 4, bottom: 8),
+                            child: Text(
+                              'Family Members',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[600],
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    }
 
-                    // Display meals
-                    if (controller.todaysMeals.isEmpty)
-                      EmptyMealsWidget(
-                        onAddMeal: () => _showAddMealDialog(context),
-                      )
-                    else
-                      ...controller.todaysMeals.map(
-                        (meal) => MealCard(
-                          meal: meal,
-                          formatTime: _formatTime,
-                          capitalizeFirst: _capitalizeFirst,
-                        ),
-                      ),
-                  ],
+                    // Other family members
+                    final member = controller.familyMembers[index - 1];
+                    final userId = member['id']!;
+                    final userName = member['name']!;
+                    final location = member['location']!;
+                    final meals = controller.getMealsForUser(userId);
+
+                    return FamilyMemberMealCard(
+                      userId: userId,
+                      userName: userName,
+                      location: location,
+                      meals: meals,
+                      isCurrentUser: false,
+                      onMealTap: (mealType, isEaten) {
+                        controller.updateMealStatus(
+                          userId,
+                          userName,
+                          mealType,
+                          isEaten,
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
             ),
@@ -116,42 +162,16 @@ class MealsView extends GetView<MealsViewModel> {
     );
   }
 
-  int _getMealCountByType(String type) {
-    return controller.todaysMeals
-        .where((meal) => meal.mealType.toLowerCase() == type && meal.isEaten)
-        .length;
-  }
-
-  String _formatTime(DateTime date) {
-    int hour = date.hour;
-    final minute = date.minute.toString().padLeft(2, '0');
-    final period = hour >= 12 ? 'PM' : 'AM';
-
-    // Convert to 12-hour format
-    if (hour > 12) {
-      hour = hour - 12;
-    } else if (hour == 0) {
-      hour = 12;
-    }
-
-    return '$hour:$minute $period';
-  }
-
-  String _capitalizeFirst(String text) {
-    if (text.isEmpty) return text;
-    return text[0].toUpperCase() + text.substring(1);
-  }
-
-  void _showAddMealDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AddMealDialog(
-        capitalizeFirst: _capitalizeFirst,
-        onAdd: (mealType, isEaten) {
-          Get.back();
-          controller.updateMealStatus('demo_user_1', 'You', mealType, isEaten);
-        },
-      ),
+  void _showDatePicker(BuildContext context) async {
+    final DateTime? picked = await ModernDatePicker.show(
+      context,
+      initialDate: controller.selectedDate.value,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
     );
+
+    if (picked != null && picked != controller.selectedDate.value) {
+      controller.changeDate(picked);
+    }
   }
 }

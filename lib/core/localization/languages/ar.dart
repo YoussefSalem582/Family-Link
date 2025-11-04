@@ -118,6 +118,8 @@ const Map<String, String> ar = {
   'meals_eaten': 'تناولت',
   'meals_mark_eaten': 'وضع علامة كمأكول',
   'meals_mark_skipped': 'وضع علامة كمتخطي',
+  'meals_skipped': 'متخطي',
+  'meals_select_status': 'اختر حالة الوجبة',
   'meals_eaten_count': 'تناولت',
   'meals_eaten_status': 'تناولت',
   'meals_skipped_status': 'متخطي',

@@ -1,9 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import '../../../data/models/user_model.dart';
-import '../../../data/models/post_model.dart';
-import '../../../data/models/mood_model.dart';
-import '../../../data/models/meal_model.dart';
 import '../../../data/repositories/user_repository.dart';
 import '../../../core/services/firebase_service.dart';
 import '../../../core/theme/theme_service.dart';
