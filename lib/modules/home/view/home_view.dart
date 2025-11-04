@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../widgets/custom_app_bar.dart';
 import '../viewmodel/home_viewmodel.dart';
 import '../../../core/routes/app_routes.dart';
 import '../../../widgets/demo_banner_widget.dart';
@@ -11,14 +12,13 @@ class HomeView extends GetView<HomeViewModel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('app_name'.tr),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.person),
-            onPressed: () => Get.toNamed(AppRoutes.profile),
-          ),
-        ],
+      appBar: CustomAppBar(
+        title: 'app_name',
+        icon: Icons.home_rounded,
+        actionIcon: Icons.person_outline,
+        actionTooltip: 'Profile',
+        onActionPressed: () => Get.toNamed(AppRoutes.profile),
+        showBackButton: false,
       ),
       body: Obx(() {
         if (controller.isLoading.value) {

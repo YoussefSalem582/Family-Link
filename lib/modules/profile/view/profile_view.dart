@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../widgets/custom_app_bar.dart';
 import '../viewmodel/profile_viewmodel.dart';
 import '../../../widgets/demo_banner_widget.dart';
 import 'widgets/profile_header.dart';
@@ -14,15 +15,12 @@ class ProfileView extends GetView<ProfileViewModel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('profile_title'.tr),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () => _showEditDialog(context),
-            tooltip: 'profile_edit'.tr,
-          ),
-        ],
+      appBar: CustomAppBar(
+        title: 'profile_title',
+        icon: Icons.person_rounded,
+        actionIcon: Icons.edit_outlined,
+        actionTooltip: 'profile_edit',
+        onActionPressed: () => _showEditDialog(context),
       ),
       body: Obx(() {
         if (controller.isLoading.value) {

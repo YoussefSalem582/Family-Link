@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../widgets/custom_app_bar.dart';
 import '../viewmodel/meals_viewmodel.dart';
 import '../../home/view/widgets/demo_banner_widget.dart';
 import 'widgets/family_member_meal_card.dart';
@@ -10,15 +11,12 @@ class MealsView extends GetView<MealsViewModel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('meals_title'.tr),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.event),
-            onPressed: () => _showDatePicker(context),
-            tooltip: 'Select Date',
-          ),
-        ],
+      appBar: CustomAppBar(
+        title: 'meals_title',
+        icon: Icons.restaurant_menu_rounded,
+        actionIcon: Icons.calendar_month,
+        actionTooltip: 'Select Date',
+        onActionPressed: () => _showDatePicker(context),
       ),
       body: Obx(() {
         if (controller.isLoading.value) {

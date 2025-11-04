@@ -40,9 +40,13 @@ class _CommentsSheetState extends State<CommentsSheet> {
       maxChildSize: 0.95,
       expand: false,
       builder: (context, scrollController) => Container(
-        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
         child: Column(
           children: [
+            SizedBox(height: 12),
             Container(
               width: 40,
               height: 4,
@@ -52,11 +56,68 @@ class _CommentsSheetState extends State<CommentsSheet> {
               ),
             ),
             SizedBox(height: 16),
-            Text(
-              'wall_comments'.tr,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.blue, Colors.blue.shade300],
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.blue.withOpacity(0.3),
+                          blurRadius: 8,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.comment_rounded,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'wall_comments'.tr,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 0.3,
+                      ),
+                    ),
+                  ),
+                  Obx(() {
+                    final comments = _controller.getComments(widget.post.id);
+                    return Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.blue.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        '${comments.length}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue[700],
+                          fontSize: 14,
+                        ),
+                      ),
+                    );
+                  }),
+                ],
+              ),
             ),
             SizedBox(height: 16),
+            Divider(height: 1, thickness: 1),
             Expanded(
               child: Obx(() {
                 final comments = _controller.getComments(widget.post.id);
@@ -66,17 +127,33 @@ class _CommentsSheetState extends State<CommentsSheet> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.comment_outlined,
-                          size: 64,
-                          color: Colors.grey[400],
+                        Container(
+                          padding: EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.chat_bubble_outline_rounded,
+                            size: 64,
+                            color: Colors.grey[400],
+                          ),
                         ),
-                        SizedBox(height: 16),
+                        SizedBox(height: 20),
                         Text(
                           'wall_no_comments'.tr,
                           style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 16,
+                            color: Colors.grey[700],
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Be the first to comment!',
+                          style: TextStyle(
+                            color: Colors.grey[500],
+                            fontSize: 14,
                           ),
                         ),
                       ],
@@ -84,31 +161,85 @@ class _CommentsSheetState extends State<CommentsSheet> {
                   );
                 }
 
-                return ListView.builder(
+                return ListView.separated(
                   controller: scrollController,
+                  padding: EdgeInsets.symmetric(vertical: 8),
                   itemCount: comments.length,
+                  separatorBuilder: (context, index) =>
+                      Divider(height: 1, indent: 68, endIndent: 16),
                   itemBuilder: (context, index) {
                     final comment = comments[index];
-                    return ListTile(
-                      leading: AvatarWidget(
-                        name: comment.userName,
-                        photoUrl: comment.userPhotoUrl,
-                        size: 36,
+                    return Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
                       ),
-                      title: Text(
-                        comment.userName,
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: Column(
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(comment.text),
-                          SizedBox(height: 4),
-                          Text(
-                            _getTimeAgo(comment.createdAt),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[600],
+                          Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.blue.withOpacity(0.2),
+                                  blurRadius: 6,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: AvatarWidget(
+                              name: comment.userName,
+                              photoUrl: comment.userPhotoUrl,
+                              size: 40,
+                            ),
+                          ),
+                          SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[100],
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        comment.userName,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      SizedBox(height: 4),
+                                      Text(
+                                        comment.text,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          height: 1.4,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(height: 6),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 12),
+                                  child: Text(
+                                    _getTimeAgo(comment.createdAt),
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey[600],
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -118,31 +249,61 @@ class _CommentsSheetState extends State<CommentsSheet> {
                 );
               }),
             ),
-            Divider(),
-            Padding(
-              padding: EdgeInsets.all(8),
+            Divider(height: 1, thickness: 1),
+            Container(
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 8,
+                    offset: Offset(0, -2),
+                  ),
+                ],
+              ),
               child: Row(
                 children: [
                   Expanded(
-                    child: TextField(
-                      controller: _commentController,
-                      decoration: InputDecoration(
-                        hintText: 'wall_write_comment'.tr,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(24),
-                        ),
-                        contentPadding: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(color: Colors.grey[300]!),
                       ),
-                      onSubmitted: (_) => _addComment(),
+                      child: TextField(
+                        controller: _commentController,
+                        decoration: InputDecoration(
+                          hintText: 'wall_write_comment'.tr,
+                          hintStyle: TextStyle(color: Colors.grey[400]),
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 20,
+                            vertical: 12,
+                          ),
+                        ),
+                        onSubmitted: (_) => _addComment(),
+                      ),
                     ),
                   ),
-                  SizedBox(width: 8),
-                  CircleAvatar(
+                  SizedBox(width: 12),
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.blue, Colors.blue.shade400],
+                      ),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.blue.withOpacity(0.4),
+                          blurRadius: 8,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
                     child: IconButton(
-                      icon: Icon(Icons.send, size: 20),
+                      icon: Icon(Icons.send_rounded, size: 20),
+                      color: Colors.white,
                       onPressed: _addComment,
                     ),
                   ),

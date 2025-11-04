@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../widgets/custom_bottom_nav.dart';
 import '../viewmodel/main_container_viewmodel.dart';
 import '../../home/view/home_view.dart';
 import '../../meals/view/meals_view.dart';
@@ -20,6 +21,15 @@ class MainContainerView extends GetView<MainContainerViewModel> {
     ProfileView(),
   ];
 
+  final List<BottomNavItem> _navItems = const [
+    BottomNavItem(icon: Icons.home_rounded, label: 'nav_home'),
+    BottomNavItem(icon: Icons.restaurant_menu_rounded, label: 'nav_meals'),
+    BottomNavItem(icon: Icons.emoji_emotions_rounded, label: 'nav_mood'),
+    BottomNavItem(icon: Icons.map_rounded, label: 'nav_map'),
+    BottomNavItem(icon: Icons.forum_rounded, label: 'nav_wall'),
+    BottomNavItem(icon: Icons.person_rounded, label: 'nav_profile'),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -28,44 +38,10 @@ class MainContainerView extends GetView<MainContainerViewModel> {
           index: controller.currentIndex.value,
           children: _pages,
         ),
-        bottomNavigationBar: BottomNavigationBar(
+        bottomNavigationBar: CustomBottomNav(
           currentIndex: controller.currentIndex.value,
           onTap: controller.changeTab,
-          type: BottomNavigationBarType.fixed,
-          selectedItemColor: Theme.of(context).primaryColor,
-          unselectedItemColor: Colors.grey,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              activeIcon: Icon(Icons.home),
-              label: 'nav_home'.tr,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.restaurant_outlined),
-              activeIcon: Icon(Icons.restaurant),
-              label: 'nav_meals'.tr,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.mood_outlined),
-              activeIcon: Icon(Icons.mood),
-              label: 'nav_mood'.tr,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.map_outlined),
-              activeIcon: Icon(Icons.map),
-              label: 'nav_map'.tr,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.forum_outlined),
-              activeIcon: Icon(Icons.forum),
-              label: 'nav_wall'.tr,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_outlined),
-              activeIcon: Icon(Icons.person),
-              label: 'nav_profile'.tr,
-            ),
-          ],
+          items: _navItems,
         ),
       ),
     );

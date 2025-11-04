@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../widgets/custom_app_bar.dart';
 import '../viewmodel/mood_viewmodel.dart';
 import '../../../widgets/demo_banner_widget.dart';
 import 'widgets/mood_stats_card.dart';
@@ -11,15 +12,12 @@ class MoodView extends GetView<MoodViewModel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('mood_title'.tr),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add_reaction_outlined),
-            onPressed: () => _showMoodSelector(context),
-            tooltip: 'mood_share_mood'.tr,
-          ),
-        ],
+      appBar: CustomAppBar(
+        title: 'mood_title',
+        icon: Icons.emoji_emotions_rounded,
+        actionIcon: Icons.add_reaction_outlined,
+        actionTooltip: 'mood_share_mood',
+        onActionPressed: () => _showMoodSelector(context),
       ),
       body: Obx(() {
         if (controller.isLoading.value) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import '../../../widgets/custom_app_bar.dart';
 import '../viewmodel/map_viewmodel.dart';
 import '../../../widgets/demo_banner_widget.dart';
 import 'widgets/map_control_button.dart';
@@ -20,15 +21,12 @@ class _MapViewState extends State<MapView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('map_title'.tr),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.list),
-            onPressed: () => _showMembersList(context),
-            tooltip: 'map_members_list'.tr,
-          ),
-        ],
+      appBar: CustomAppBar(
+        title: 'map_title',
+        icon: Icons.map_rounded,
+        actionIcon: Icons.people_outline,
+        actionTooltip: 'map_members_list',
+        onActionPressed: () => _showMembersList(context),
       ),
       body: Column(
         children: [

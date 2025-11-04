@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../widgets/custom_app_bar.dart';
 import '../viewmodel/wall_viewmodel.dart';
 import 'widgets/post_card.dart';
 import 'widgets/create_post_dialog.dart';
@@ -10,15 +11,13 @@ class WallView extends GetView<WallViewModel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('wall_title'.tr),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.edit_square),
-            onPressed: () => _showCreatePostDialog(context),
-            tooltip: 'wall_create_post'.tr,
-          ),
-        ],
+      backgroundColor: Colors.grey[50],
+      appBar: CustomAppBar(
+        title: 'wall_title',
+        icon: Icons.forum_rounded,
+        actionIcon: Icons.add_circle_outline,
+        actionTooltip: 'wall_create_post',
+        onActionPressed: () => _showCreatePostDialog(context),
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
@@ -31,16 +30,38 @@ class WallView extends GetView<WallViewModel> {
             if (controller.isDemoMode.value)
               Container(
                 width: double.infinity,
-                padding: EdgeInsets.all(12),
-                color: Colors.orange.shade100,
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.orange.shade50, Colors.orange.shade100],
+                  ),
+                  border: Border(
+                    bottom: BorderSide(color: Colors.orange.shade200, width: 1),
+                  ),
+                ),
                 child: Row(
                   children: [
-                    Icon(Icons.info_outline, color: Colors.orange.shade900),
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.shade200,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
+                        Icons.info_outline,
+                        color: Colors.orange.shade900,
+                        size: 20,
+                      ),
+                    ),
                     SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         'demo_wall'.tr,
-                        style: TextStyle(color: Colors.orange.shade900),
+                        style: TextStyle(
+                          color: Colors.orange.shade900,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 13,
+                        ),
                       ),
                     ),
                   ],
@@ -83,10 +104,37 @@ class WallView extends GetView<WallViewModel> {
           ],
         );
       }),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _showCreatePostDialog(context),
-        icon: Icon(Icons.edit),
-        label: Text('wall_post'.tr),
+      floatingActionButton: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Theme.of(context).primaryColor,
+              Theme.of(context).primaryColor.withOpacity(0.8),
+            ],
+          ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).primaryColor.withOpacity(0.4),
+              blurRadius: 12,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+        child: FloatingActionButton.extended(
+          onPressed: () => _showCreatePostDialog(context),
+          icon: Icon(Icons.edit_rounded, size: 22),
+          label: Text(
+            'wall_post'.tr,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 15,
+              letterSpacing: 0.5,
+            ),
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
       ),
     );
   }
