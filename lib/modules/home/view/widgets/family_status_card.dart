@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class FamilyStatusCard extends StatelessWidget {
   final int membersAtHome;
@@ -35,7 +36,7 @@ class FamilyStatusCard extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            'Family Status',
+            'home_family_status'.tr,
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -46,11 +47,15 @@ class FamilyStatusCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildStat('🏠', membersAtHome.toString(), 'At Home'),
+              _buildStat('🏠', membersAtHome.toString(), 'home_at_home'.tr),
               _buildDivider(),
-              _buildStat('🚶', membersOut.toString(), 'Away'),
+              _buildStat('🚶', membersOut.toString(), 'home_away'.tr),
               _buildDivider(),
-              _buildStat('👨‍👩‍👧‍👦', totalMembers.toString(), 'Total'),
+              _buildStat(
+                '👨‍👩‍👧‍👦',
+                totalMembers.toString(),
+                'home_total'.tr,
+              ),
             ],
           ),
         ],

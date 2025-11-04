@@ -12,12 +12,12 @@ class MealsView extends GetView<MealsViewModel> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Family Meals'),
+        title: Text('meals_title'.tr),
         actions: [
           IconButton(
             icon: Icon(Icons.add_circle_outline),
             onPressed: () => _showAddMealDialog(context),
-            tooltip: 'Add Meal',
+            tooltip: 'meals_add_meal'.tr,
           ),
         ],
       ),
@@ -30,7 +30,7 @@ class MealsView extends GetView<MealsViewModel> {
           children: [
             // Demo Mode Banner
             if (controller.isDemoMode.value)
-              DemoBannerWidget(message: 'Demo Mode - Showing sample meal data'),
+              DemoBannerWidget(message: 'demo_meals'.tr),
 
             // Content
             Expanded(
@@ -46,7 +46,7 @@ class MealsView extends GetView<MealsViewModel> {
                       children: [
                         Expanded(
                           child: MealTypeCard(
-                            type: 'Breakfast',
+                            type: 'meals_breakfast'.tr,
                             icon: Icons.free_breakfast,
                             color: Colors.orange,
                             count: _getMealCountByType('breakfast'),
@@ -55,7 +55,7 @@ class MealsView extends GetView<MealsViewModel> {
                         SizedBox(width: 12),
                         Expanded(
                           child: MealTypeCard(
-                            type: 'Lunch',
+                            type: 'meals_lunch'.tr,
                             icon: Icons.lunch_dining,
                             color: Colors.green,
                             count: _getMealCountByType('lunch'),
@@ -68,7 +68,7 @@ class MealsView extends GetView<MealsViewModel> {
                       children: [
                         Expanded(
                           child: MealTypeCard(
-                            type: 'Dinner',
+                            type: 'meals_dinner'.tr,
                             icon: Icons.dinner_dining,
                             color: Colors.blue,
                             count: _getMealCountByType('dinner'),
@@ -77,7 +77,7 @@ class MealsView extends GetView<MealsViewModel> {
                         SizedBox(width: 12),
                         Expanded(
                           child: MealTypeCard(
-                            type: 'Snack',
+                            type: 'meals_snack'.tr,
                             icon: Icons.emoji_food_beverage,
                             color: Colors.purple,
                             count: _getMealCountByType('snack'),
@@ -88,7 +88,7 @@ class MealsView extends GetView<MealsViewModel> {
                     SizedBox(height: 24),
 
                     Text(
-                      'Today\'s Meals',
+                      'meals_today'.tr,
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     SizedBox(height: 16),
@@ -141,8 +141,8 @@ class MealsView extends GetView<MealsViewModel> {
         onAdd: (mealType, isEaten) {
           Get.back();
           Get.snackbar(
-            'Demo Mode',
-            'Meal "${_capitalizeFirst(mealType)}" would be added',
+            'demo_mode'.tr,
+            'meals_meal_added'.tr + ': "${_capitalizeFirst(mealType)}"',
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: Colors.green.withOpacity(0.8),
             colorText: Colors.white,

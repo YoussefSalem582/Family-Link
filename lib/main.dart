@@ -6,6 +6,8 @@ import 'core/routes/app_pages.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_service.dart';
 import 'core/services/firebase_service.dart';
+import 'core/localization/translations.dart';
+import 'core/controllers/language_controller.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +17,7 @@ void main() async {
 
   // Initialize core services early
   Get.put(ThemeService(), permanent: true);
+  Get.put(LanguageController(), permanent: true);
 
   // Initialize Firebase (optional - will show error if not configured)
   try {
@@ -32,9 +35,16 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final languageController = Get.find<LanguageController>();
+
     return GetMaterialApp(
       title: 'FamilyLink',
       debugShowCheckedModeBanner: false,
+
+      // Localization
+      translations: AppTranslations(),
+      locale: Locale(languageController.currentLanguage),
+      fallbackLocale: Locale('en'),
 
       // Theme Configuration
       theme: AppTheme.lightTheme,

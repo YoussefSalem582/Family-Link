@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class MemberCountCard extends StatelessWidget {
   final int memberCount;
@@ -22,11 +23,11 @@ class MemberCountCard extends StatelessWidget {
             Icon(Icons.people, color: Theme.of(context).primaryColor),
             SizedBox(width: 12),
             Text(
-              '$memberCount family members',
+              '$memberCount ${'map_members_count'.tr}',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
             ),
             Spacer(),
-            TextButton(onPressed: onViewPressed, child: Text('View')),
+            TextButton(onPressed: onViewPressed, child: Text('view'.tr)),
           ],
         ),
       ),

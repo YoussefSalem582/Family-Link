@@ -17,7 +17,7 @@ class EditProfileDialog extends StatelessWidget {
     final locationController = TextEditingController(text: currentLocation);
 
     return AlertDialog(
-      title: Text('Edit Profile'),
+      title: Text('profile_edit'.tr),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       content: SingleChildScrollView(
         child: Column(
@@ -26,7 +26,7 @@ class EditProfileDialog extends StatelessWidget {
             TextField(
               controller: nameController,
               decoration: InputDecoration(
-                labelText: 'Name',
+                labelText: 'profile_name'.tr,
                 prefixIcon: Icon(Icons.person),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -37,7 +37,7 @@ class EditProfileDialog extends StatelessWidget {
             TextField(
               controller: locationController,
               decoration: InputDecoration(
-                labelText: 'Location',
+                labelText: 'profile_location'.tr,
                 prefixIcon: Icon(Icons.location_on),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -50,15 +50,15 @@ class EditProfileDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text('Cancel'),
+          child: Text('cancel'.tr),
         ),
         ElevatedButton(
           onPressed: () {
             if (nameController.text.isNotEmpty) {
               Navigator.pop(context);
               Get.snackbar(
-                'Success',
-                'Profile updated successfully',
+                'success'.tr,
+                'profile_updated'.tr,
                 snackPosition: SnackPosition.BOTTOM,
                 backgroundColor: Colors.green,
                 colorText: Colors.white,
@@ -66,7 +66,7 @@ class EditProfileDialog extends StatelessWidget {
               );
             }
           },
-          child: Text('Save'),
+          child: Text('save'.tr),
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),

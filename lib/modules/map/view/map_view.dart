@@ -21,12 +21,12 @@ class _MapViewState extends State<MapView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Family Map'),
+        title: Text('map_title'.tr),
         actions: [
           IconButton(
             icon: Icon(Icons.list),
             onPressed: () => _showMembersList(context),
-            tooltip: 'Members List',
+            tooltip: 'map_members_list'.tr,
           ),
         ],
       ),
@@ -35,9 +35,7 @@ class _MapViewState extends State<MapView> {
           // Demo Mode Banner
           Obx(() {
             if (controller.isDemoMode.value) {
-              return DemoBannerWidget(
-                message: 'Demo Mode - Showing sample location data',
-              );
+              return DemoBannerWidget(message: 'demo_map'.tr);
             }
             return SizedBox.shrink();
           }),
@@ -212,8 +210,8 @@ class _MapViewState extends State<MapView> {
               );
               Navigator.pop(context);
               Get.snackbar(
-                'Location',
-                'Showing ${member.name}\'s location',
+                'map_location'.tr,
+                'map_showing_location'.tr + ' ${member.name}',
                 snackPosition: SnackPosition.BOTTOM,
                 duration: Duration(seconds: 2),
               );

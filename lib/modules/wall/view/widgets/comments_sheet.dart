@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../../widgets/avatar_widget.dart';
 
 class CommentsSheet extends StatelessWidget {
@@ -27,7 +28,7 @@ class CommentsSheet extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Text(
-              'Comments',
+              'wall_comments'.tr,
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 16),
@@ -42,7 +43,7 @@ class CommentsSheet extends StatelessWidget {
                       'User ${index + 1}',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    subtitle: Text('This is a demo comment #${index + 1}'),
+                    subtitle: Text('wall_demo_comment'.tr + ' #${index + 1}'),
                   );
                 },
               ),
@@ -55,7 +56,7 @@ class CommentsSheet extends StatelessWidget {
                   Expanded(
                     child: TextField(
                       decoration: InputDecoration(
-                        hintText: 'Write a comment...',
+                        hintText: 'wall_write_comment'.tr,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(24),
                         ),

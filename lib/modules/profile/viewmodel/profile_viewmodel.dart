@@ -63,7 +63,7 @@ class ProfileViewModel extends GetxController {
 
   Future<void> updateProfile(String name, String location) async {
     if (isDemoMode.value) {
-      Get.snackbar('Demo Mode', 'Profile updated in demo mode');
+      Get.snackbar('demo_mode'.tr, 'demo_profile_updated'.tr);
       currentUser.value = currentUser.value?.copyWith(
         name: name,
         location: location,
@@ -86,7 +86,7 @@ class ProfileViewModel extends GetxController {
 
   Future<void> signOut() async {
     if (isDemoMode.value) {
-      Get.snackbar('Demo Mode', 'Sign out not available in demo mode');
+      Get.snackbar('demo_mode'.tr, 'demo_signout_unavailable'.tr);
       return;
     }
     await _firebaseService.signOut();

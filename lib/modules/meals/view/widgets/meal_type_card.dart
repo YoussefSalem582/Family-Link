@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class MealTypeCard extends StatelessWidget {
   final String type;
@@ -39,7 +40,7 @@ class MealTypeCard extends StatelessWidget {
             ),
             SizedBox(height: 4),
             Text(
-              '$count eaten',
+              '$count ${'meals_eaten_count'.tr}',
               style: TextStyle(fontSize: 12, color: Colors.grey[600]),
             ),
           ],

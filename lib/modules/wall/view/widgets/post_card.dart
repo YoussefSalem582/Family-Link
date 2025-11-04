@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../../widgets/avatar_widget.dart';
 
 class PostCard extends StatelessWidget {
@@ -71,8 +72,8 @@ class PostCard extends StatelessWidget {
             PopupMenuButton(
               icon: Icon(Icons.more_vert),
               itemBuilder: (context) => [
-                PopupMenuItem(child: Text('Edit'), value: 'edit'),
-                PopupMenuItem(child: Text('Delete'), value: 'delete'),
+                PopupMenuItem(child: Text('edit'.tr), value: 'edit'),
+                PopupMenuItem(child: Text('delete'.tr), value: 'delete'),
               ],
               onSelected: (value) {
                 if (value == 'delete' && onDelete != null) {
@@ -105,7 +106,10 @@ class PostCard extends StatelessWidget {
             children: [
               Icon(Icons.image, size: 48, color: Colors.grey[400]),
               SizedBox(height: 8),
-              Text('Image Preview', style: TextStyle(color: Colors.grey[600])),
+              Text(
+                'wall_image_preview'.tr,
+                style: TextStyle(color: Colors.grey[600]),
+              ),
             ],
           ),
         ),
@@ -144,7 +148,7 @@ class PostCard extends StatelessWidget {
                 color: hasLiked ? Colors.red : Colors.grey[700],
               ),
               label: Text(
-                'Like',
+                'wall_like'.tr,
                 style: TextStyle(
                   color: hasLiked ? Colors.red : Colors.grey[700],
                 ),
@@ -155,14 +159,20 @@ class PostCard extends StatelessWidget {
             child: TextButton.icon(
               onPressed: onComment,
               icon: Icon(Icons.comment_outlined, color: Colors.grey[700]),
-              label: Text('Comment', style: TextStyle(color: Colors.grey[700])),
+              label: Text(
+                'wall_comment'.tr,
+                style: TextStyle(color: Colors.grey[700]),
+              ),
             ),
           ),
           Expanded(
             child: TextButton.icon(
               onPressed: onShare,
               icon: Icon(Icons.share_outlined, color: Colors.grey[700]),
-              label: Text('Share', style: TextStyle(color: Colors.grey[700])),
+              label: Text(
+                'wall_share'.tr,
+                style: TextStyle(color: Colors.grey[700]),
+              ),
             ),
           ),
         ],
@@ -175,13 +185,13 @@ class PostCard extends StatelessWidget {
     final difference = now.difference(dateTime);
 
     if (difference.inDays > 0) {
-      return '${difference.inDays}d ago';
+      return '${difference.inDays}${'time_days'.tr} ${'time_ago'.tr}';
     } else if (difference.inHours > 0) {
-      return '${difference.inHours}h ago';
+      return '${difference.inHours}${'time_hours'.tr} ${'time_ago'.tr}';
     } else if (difference.inMinutes > 0) {
-      return '${difference.inMinutes}m ago';
+      return '${difference.inMinutes}${'time_minutes'.tr} ${'time_ago'.tr}';
     } else {
-      return 'Just now';
+      return 'wall_just_now'.tr;
     }
   }
 }

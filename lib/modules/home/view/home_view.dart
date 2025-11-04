@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../viewmodel/home_viewmodel.dart';
-import '../../main_container/viewmodel/main_container_viewmodel.dart';
 import '../../../core/routes/app_routes.dart';
 import '../../../widgets/demo_banner_widget.dart';
 import 'widgets/family_status_card.dart';
-import 'widgets/quick_action_button.dart';
 import 'widgets/family_member_card.dart';
 import 'widgets/member_details_sheet.dart';
 
@@ -14,7 +12,7 @@ class HomeView extends GetView<HomeViewModel> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('FamilyLink'),
+        title: Text('app_name'.tr),
         actions: [
           IconButton(
             icon: Icon(Icons.person),
@@ -35,7 +33,8 @@ class HomeView extends GetView<HomeViewModel> {
             padding: EdgeInsets.all(16),
             children: [
               // Demo Mode Banner
-              if (controller.isDemoMode.value) DemoBannerWidget(),
+              if (controller.isDemoMode.value)
+                DemoBannerWidget(message: 'demo_home'.tr),
 
               // Summary Card with gradient
               FamilyStatusCard(
@@ -79,7 +78,7 @@ class HomeView extends GetView<HomeViewModel> {
 
               // Family Members List
               Text(
-                'Family Members',
+                'home_family_members'.tr,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               SizedBox(height: 12),
@@ -95,14 +94,6 @@ class HomeView extends GetView<HomeViewModel> {
         );
       }),
     );
-  }
-
-  void _navigateToTab(int index) {
-    try {
-      Get.find<MainContainerViewModel>().changeTab(index);
-    } catch (e) {
-      Get.snackbar('Demo', 'Navigation feature');
-    }
   }
 
   void _showMemberDetails(BuildContext context, dynamic member) {

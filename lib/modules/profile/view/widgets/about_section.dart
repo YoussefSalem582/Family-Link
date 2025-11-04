@@ -12,7 +12,7 @@ class AboutSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'ABOUT',
+          'profile_about'.tr,
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.bold,
@@ -29,12 +29,12 @@ class AboutSection extends StatelessWidget {
             children: [
               ListTile(
                 leading: Icon(Icons.help_outline),
-                title: Text('Help & Support'),
+                title: Text('profile_help_support'.tr),
                 trailing: Icon(Icons.chevron_right),
                 onTap: () {
                   Get.snackbar(
-                    'Help',
-                    'Support page coming soon',
+                    'profile_help_support'.tr,
+                    'profile_help_coming'.tr,
                     snackPosition: SnackPosition.BOTTOM,
                   );
                 },
@@ -42,12 +42,12 @@ class AboutSection extends StatelessWidget {
               Divider(height: 1),
               ListTile(
                 leading: Icon(Icons.privacy_tip_outlined),
-                title: Text('Privacy Policy'),
+                title: Text('profile_privacy_policy'.tr),
                 trailing: Icon(Icons.chevron_right),
                 onTap: () {
                   Get.snackbar(
-                    'Privacy',
-                    'Privacy policy coming soon',
+                    'profile_privacy_policy'.tr,
+                    'profile_privacy_coming'.tr,
                     snackPosition: SnackPosition.BOTTOM,
                   );
                 },
@@ -55,8 +55,8 @@ class AboutSection extends StatelessWidget {
               Divider(height: 1),
               ListTile(
                 leading: Icon(Icons.info_outline),
-                title: Text('About FamilyLink'),
-                subtitle: Text('Version 1.0.0'),
+                title: Text('profile_about_app'.tr),
+                subtitle: Text('profile_version'.tr),
                 trailing: Icon(Icons.chevron_right),
                 onTap: onAboutTap,
               ),

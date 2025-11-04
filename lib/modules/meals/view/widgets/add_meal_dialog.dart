@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AddMealDialog extends StatefulWidget {
   final Function(String mealType, bool isEaten) onAdd;
@@ -21,14 +22,14 @@ class _AddMealDialogState extends State<AddMealDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Add Meal'),
+      title: Text('meals_add_meal'.tr),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           DropdownButtonFormField<String>(
             value: selectedMealType,
             decoration: InputDecoration(
-              labelText: 'Meal Type',
+              labelText: 'meals_meal_type'.tr,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -37,7 +38,7 @@ class _AddMealDialogState extends State<AddMealDialog> {
                 .map(
                   (type) => DropdownMenuItem(
                     value: type,
-                    child: Text(widget.capitalizeFirst(type)),
+                    child: Text('meals_$type'.tr),
                   ),
                 )
                 .toList(),
@@ -49,8 +50,10 @@ class _AddMealDialogState extends State<AddMealDialog> {
           ),
           SizedBox(height: 16),
           SwitchListTile(
-            title: Text('Eaten'),
-            subtitle: Text(isEaten ? 'Mark as eaten' : 'Mark as skipped'),
+            title: Text('meals_eaten'.tr),
+            subtitle: Text(
+              isEaten ? 'meals_mark_eaten'.tr : 'meals_mark_skipped'.tr,
+            ),
             value: isEaten,
             onChanged: (value) {
               setState(() {
@@ -63,13 +66,13 @@ class _AddMealDialogState extends State<AddMealDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text('Cancel'),
+          child: Text('cancel'.tr),
         ),
         ElevatedButton(
           onPressed: () {
             widget.onAdd(selectedMealType, isEaten);
           },
-          child: Text('Add'),
+          child: Text('add'.tr),
         ),
       ],
     );

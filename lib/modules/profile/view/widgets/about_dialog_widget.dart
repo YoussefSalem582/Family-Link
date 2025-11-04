@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class AboutDialogWidget extends StatelessWidget {
   const AboutDialogWidget({super.key});
@@ -11,22 +12,22 @@ class AboutDialogWidget extends StatelessWidget {
         children: [
           Icon(Icons.family_restroom, color: Colors.blue),
           SizedBox(width: 12),
-          Text('FamilyLink'),
+          Text('app_name'.tr),
         ],
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Version 1.0.0'),
+          Text('profile_version'.tr),
           SizedBox(height: 16),
           Text(
-            'FamilyLink helps families stay connected through shared meals, mood tracking, location sharing, and a family wall.',
+            'profile_description'.tr,
             style: TextStyle(color: Colors.grey.shade700),
           ),
           SizedBox(height: 16),
           Text(
-            'Built with Flutter & GetX',
+            'profile_built_with'.tr,
             style: TextStyle(
               fontSize: 12,
               color: Colors.grey,
@@ -38,7 +39,7 @@ class AboutDialogWidget extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text('Close'),
+          child: Text('close'.tr),
         ),
       ],
     );

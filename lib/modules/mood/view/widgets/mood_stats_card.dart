@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class MoodStatsCard extends StatelessWidget {
   final int Function(String) getMoodCount;
@@ -24,10 +25,10 @@ class MoodStatsCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildMoodStat('😊', 'Happy', getMoodCount('happy')),
-            _buildMoodStat('😐', 'Neutral', getMoodCount('neutral')),
-            _buildMoodStat('😢', 'Sad', getMoodCount('sad')),
-            _buildMoodStat('🤩', 'Excited', getMoodCount('excited')),
+            _buildMoodStat('😊', 'mood_happy'.tr, getMoodCount('happy')),
+            _buildMoodStat('😐', 'mood_neutral'.tr, getMoodCount('neutral')),
+            _buildMoodStat('😢', 'mood_sad'.tr, getMoodCount('sad')),
+            _buildMoodStat('🤩', 'mood_excited'.tr, getMoodCount('excited')),
           ],
         ),
       ),

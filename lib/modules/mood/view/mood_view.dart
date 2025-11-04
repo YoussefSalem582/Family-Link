@@ -12,12 +12,12 @@ class MoodView extends GetView<MoodViewModel> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Family Moods'),
+        title: Text('mood_title'.tr),
         actions: [
           IconButton(
             icon: Icon(Icons.add_reaction_outlined),
             onPressed: () => _showMoodSelector(context),
-            tooltip: 'Share Mood',
+            tooltip: 'mood_share_mood'.tr,
           ),
         ],
       ),
@@ -30,7 +30,7 @@ class MoodView extends GetView<MoodViewModel> {
           children: [
             // Demo Mode Banner
             if (controller.isDemoMode.value)
-              DemoBannerWidget(message: 'Demo Mode - Showing sample mood data'),
+              DemoBannerWidget(message: 'demo_mood'.tr),
 
             // Content
             Expanded(
@@ -49,13 +49,13 @@ class MoodView extends GetView<MoodViewModel> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Family Moods Today',
+                          'mood_family_today'.tr,
                           style: Theme.of(context).textTheme.headlineSmall,
                         ),
                         TextButton.icon(
                           onPressed: () => _showMoodSelector(context),
                           icon: Icon(Icons.add),
-                          label: Text('Share'),
+                          label: Text('mood_share'.tr),
                         ),
                       ],
                     ),
@@ -155,8 +155,8 @@ class MoodView extends GetView<MoodViewModel> {
         onMoodSelected: (mood, note) {
           Get.back();
           Get.snackbar(
-            'Demo Mode',
-            'Mood "$mood" would be shared',
+            'demo_mode'.tr,
+            'mood_shared'.tr + ': "$mood"',
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: Colors.purple.withOpacity(0.8),
             colorText: Colors.white,

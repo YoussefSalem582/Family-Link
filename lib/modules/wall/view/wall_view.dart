@@ -11,12 +11,12 @@ class WallView extends GetView<WallViewModel> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Family Wall'),
+        title: Text('wall_title'.tr),
         actions: [
           IconButton(
             icon: Icon(Icons.edit_square),
             onPressed: () => _showCreatePostDialog(context),
-            tooltip: 'Create Post',
+            tooltip: 'wall_create_post'.tr,
           ),
         ],
       ),
@@ -39,7 +39,7 @@ class WallView extends GetView<WallViewModel> {
                     SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'Demo Mode - Showing sample posts',
+                        'demo_wall'.tr,
                         style: TextStyle(color: Colors.orange.shade900),
                       ),
                     ),
@@ -84,15 +84,15 @@ class WallView extends GetView<WallViewModel> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _showCreatePostDialog(context),
         icon: Icon(Icons.edit),
-        label: Text('Post'),
+        label: Text('wall_post'.tr),
       ),
     );
   }
 
   void _handleLike(bool hasLiked) {
     Get.snackbar(
-      'Demo Mode',
-      hasLiked ? 'Post unliked' : 'Post liked',
+      'demo_mode'.tr,
+      hasLiked ? 'wall_unliked'.tr : 'wall_liked'.tr,
       snackPosition: SnackPosition.BOTTOM,
       duration: Duration(seconds: 1),
       backgroundColor: Colors.red.withOpacity(0.1),
@@ -101,8 +101,8 @@ class WallView extends GetView<WallViewModel> {
 
   void _handleShare() {
     Get.snackbar(
-      'Demo Mode',
-      'Share functionality coming soon',
+      'demo_mode'.tr,
+      'wall_share_coming_soon'.tr,
       snackPosition: SnackPosition.BOTTOM,
       duration: Duration(seconds: 1),
     );
@@ -119,8 +119,8 @@ class WallView extends GetView<WallViewModel> {
         onPost: (text) {
           Get.back();
           Get.snackbar(
-            'Demo Mode',
-            'Post would be created: "$text"',
+            'demo_mode'.tr,
+            'wall_post_created'.tr + ': "$text"',
             snackPosition: SnackPosition.BOTTOM,
             backgroundColor: Colors.green.withOpacity(0.8),
             colorText: Colors.white,
@@ -145,23 +145,23 @@ class WallView extends GetView<WallViewModel> {
   void _showDeleteConfirmation(BuildContext context, dynamic post) {
     Get.dialog(
       AlertDialog(
-        title: Text('Delete Post'),
-        content: Text('Are you sure you want to delete this post?'),
+        title: Text('wall_delete_post'.tr),
+        content: Text('wall_delete_confirm'.tr),
         actions: [
-          TextButton(onPressed: () => Get.back(), child: Text('Cancel')),
+          TextButton(onPressed: () => Get.back(), child: Text('cancel'.tr)),
           TextButton(
             onPressed: () {
               Get.back();
               Get.snackbar(
-                'Demo Mode',
-                'Post would be deleted',
+                'demo_mode'.tr,
+                'wall_post_deleted'.tr,
                 snackPosition: SnackPosition.BOTTOM,
                 backgroundColor: Colors.red.withOpacity(0.8),
                 colorText: Colors.white,
                 duration: Duration(seconds: 2),
               );
             },
-            child: Text('Delete', style: TextStyle(color: Colors.red)),
+            child: Text('delete'.tr, style: TextStyle(color: Colors.red)),
           ),
         ],
       ),

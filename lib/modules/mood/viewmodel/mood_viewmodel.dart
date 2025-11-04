@@ -88,7 +88,7 @@ class MoodViewModel extends GetxController {
     String? note,
   ) async {
     if (isDemoMode.value) {
-      Get.snackbar('Demo Mode', 'Mood saved in demo mode');
+      Get.snackbar('demo_mode'.tr, 'demo_mood_saved'.tr);
       return;
     }
 

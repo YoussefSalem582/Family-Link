@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../../data/models/user_model.dart';
 
 class MemberListSheet extends StatelessWidget {
@@ -30,7 +31,7 @@ class MemberListSheet extends StatelessWidget {
           ),
           SizedBox(height: 16),
           Text(
-            'Family Members',
+            'map_family_members'.tr,
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 16),
@@ -85,7 +86,7 @@ class MemberListSheet extends StatelessWidget {
             Padding(
               padding: EdgeInsets.all(8),
               child: Text(
-                'Demo Mode - These are sample locations',
+                'map_demo_locations'.tr,
                 style: TextStyle(
                   fontSize: 12,
                   color: Colors.orange,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../../core/controllers/language_controller.dart';
 
 class SettingsSection extends StatelessWidget {
   final bool isDarkMode;
@@ -13,11 +14,13 @@ class SettingsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final languageController = Get.find<LanguageController>();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'SETTINGS',
+          'profile_settings'.tr,
           style: TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.bold,
@@ -32,9 +35,30 @@ class SettingsSection extends StatelessWidget {
           ),
           child: Column(
             children: [
+              // Language Setting
+              Obx(
+                () => ListTile(
+                  leading: Icon(Icons.language),
+                  title: Text('language_select'.tr),
+                  trailing: DropdownButton<String>(
+                    value: languageController.currentLanguage,
+                    underline: SizedBox(),
+                    items: [
+                      DropdownMenuItem(value: 'en', child: Text('English')),
+                      DropdownMenuItem(value: 'ar', child: Text('العربية')),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) {
+                        languageController.changeLanguage(value);
+                      }
+                    },
+                  ),
+                ),
+              ),
+              Divider(height: 1),
               ListTile(
                 leading: Icon(Icons.dark_mode),
-                title: Text('Dark Mode'),
+                title: Text('profile_dark_mode'.tr),
                 trailing: Switch(
                   value: isDarkMode,
                   onChanged: (_) => onThemeToggle(),
@@ -43,13 +67,13 @@ class SettingsSection extends StatelessWidget {
               Divider(height: 1),
               ListTile(
                 leading: Icon(Icons.notifications),
-                title: Text('Notifications'),
+                title: Text('profile_notifications'.tr),
                 trailing: Switch(
                   value: true,
                   onChanged: (value) {
                     Get.snackbar(
-                      'Settings',
-                      'Notifications ${value ? 'enabled' : 'disabled'}',
+                      'settings_notifications_changed'.tr,
+                      '${value ? 'profile_enabled'.tr : 'profile_disabled'.tr}',
                       snackPosition: SnackPosition.BOTTOM,
                       duration: Duration(seconds: 2),
                     );
@@ -59,13 +83,13 @@ class SettingsSection extends StatelessWidget {
               Divider(height: 1),
               ListTile(
                 leading: Icon(Icons.location_on),
-                title: Text('Location Sharing'),
+                title: Text('profile_location_sharing'.tr),
                 trailing: Switch(
                   value: true,
                   onChanged: (value) {
                     Get.snackbar(
-                      'Settings',
-                      'Location sharing ${value ? 'enabled' : 'disabled'}',
+                      'settings_location_changed'.tr,
+                      '${value ? 'profile_enabled'.tr : 'profile_disabled'.tr}',
                       snackPosition: SnackPosition.BOTTOM,
                       duration: Duration(seconds: 2),
                     );

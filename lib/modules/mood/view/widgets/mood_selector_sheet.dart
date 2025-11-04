@@ -27,7 +27,7 @@ class MoodSelectorSheet extends StatelessWidget {
           ),
           SizedBox(height: 16),
           Text(
-            'How are you feeling?',
+            'mood_how_feeling'.tr,
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 24),
@@ -41,49 +41,49 @@ class MoodSelectorSheet extends StatelessWidget {
               _buildMoodOption(
                 context,
                 '😊',
-                'Happy',
+                'mood_happy'.tr,
                 (mood) => selectedMood = mood,
               ),
               _buildMoodOption(
                 context,
                 '😢',
-                'Sad',
+                'mood_sad'.tr,
                 (mood) => selectedMood = mood,
               ),
               _buildMoodOption(
                 context,
                 '😠',
-                'Angry',
+                'mood_angry'.tr,
                 (mood) => selectedMood = mood,
               ),
               _buildMoodOption(
                 context,
                 '😰',
-                'Anxious',
+                'mood_anxious'.tr,
                 (mood) => selectedMood = mood,
               ),
               _buildMoodOption(
                 context,
                 '😴',
-                'Tired',
+                'mood_tired'.tr,
                 (mood) => selectedMood = mood,
               ),
               _buildMoodOption(
                 context,
                 '😎',
-                'Excited',
+                'mood_excited'.tr,
                 (mood) => selectedMood = mood,
               ),
               _buildMoodOption(
                 context,
                 '😌',
-                'Calm',
+                'mood_calm'.tr,
                 (mood) => selectedMood = mood,
               ),
               _buildMoodOption(
                 context,
                 '😐',
-                'Neutral',
+                'mood_neutral'.tr,
                 (mood) => selectedMood = mood,
               ),
             ],
@@ -92,7 +92,7 @@ class MoodSelectorSheet extends StatelessWidget {
           TextField(
             controller: noteController,
             decoration: InputDecoration(
-              labelText: 'Add a note (optional)',
+              labelText: 'mood_add_note'.tr,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -112,8 +112,8 @@ class MoodSelectorSheet extends StatelessWidget {
                   );
                 } else {
                   Get.snackbar(
-                    'Error',
-                    'Please select a mood',
+                    'error'.tr,
+                    'mood_select_mood'.tr,
                     snackPosition: SnackPosition.BOTTOM,
                   );
                 }
@@ -124,7 +124,7 @@ class MoodSelectorSheet extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: Text('Share Mood', style: TextStyle(fontSize: 16)),
+              child: Text('mood_share_mood'.tr, style: TextStyle(fontSize: 16)),
             ),
           ),
         ],

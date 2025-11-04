@@ -34,36 +34,36 @@ class MainContainerView extends GetView<MainContainerViewModel> {
           type: BottomNavigationBarType.fixed,
           selectedItemColor: Theme.of(context).primaryColor,
           unselectedItemColor: Colors.grey,
-          items: const [
+          items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.home_outlined),
               activeIcon: Icon(Icons.home),
-              label: 'Home',
+              label: 'nav_home'.tr,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.restaurant_outlined),
               activeIcon: Icon(Icons.restaurant),
-              label: 'Meals',
+              label: 'nav_meals'.tr,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.mood_outlined),
               activeIcon: Icon(Icons.mood),
-              label: 'Mood',
+              label: 'nav_mood'.tr,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.map_outlined),
               activeIcon: Icon(Icons.map),
-              label: 'Map',
+              label: 'nav_map'.tr,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.forum_outlined),
               activeIcon: Icon(Icons.forum),
-              label: 'Wall',
+              label: 'nav_wall'.tr,
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person_outlined),
               activeIcon: Icon(Icons.person),
-              label: 'Profile',
+              label: 'nav_profile'.tr,
             ),
           ],
         ),

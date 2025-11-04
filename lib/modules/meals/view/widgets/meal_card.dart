@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class MealCard extends StatelessWidget {
   final dynamic meal;
@@ -41,7 +42,7 @@ class MealCard extends StatelessWidget {
         ),
         trailing: Chip(
           label: Text(
-            isEaten ? 'Eaten' : 'Skipped',
+            isEaten ? 'meals_eaten_status'.tr : 'meals_skipped_status'.tr,
             style: TextStyle(
               color: color,
               fontSize: 11,

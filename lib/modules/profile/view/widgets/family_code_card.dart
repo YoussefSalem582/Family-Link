@@ -20,7 +20,7 @@ class FamilyCodeCard extends StatelessWidget {
                 Icon(Icons.family_restroom, color: Colors.blue),
                 SizedBox(width: 12),
                 Text(
-                  'Family Code',
+                  'profile_family_code'.tr,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ],
@@ -48,8 +48,8 @@ class FamilyCodeCard extends StatelessWidget {
                     icon: Icon(Icons.copy, size: 20),
                     onPressed: () {
                       Get.snackbar(
-                        'Copied',
-                        'Family code copied to clipboard',
+                        'profile_copy_code'.tr,
+                        'profile_code_copied'.tr,
                         snackPosition: SnackPosition.BOTTOM,
                         backgroundColor: Colors.green,
                         colorText: Colors.white,
@@ -62,7 +62,7 @@ class FamilyCodeCard extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'Share this code with family members to join',
+              'profile_share_code'.tr,
               style: TextStyle(fontSize: 12, color: Colors.grey),
               textAlign: TextAlign.center,
             ),

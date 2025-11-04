@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CreatePostDialog extends StatelessWidget {
   final Function(String) onPost;
@@ -31,14 +32,14 @@ class CreatePostDialog extends StatelessWidget {
             ),
             SizedBox(height: 16),
             Text(
-              'Create Post',
+              'wall_create_post'.tr,
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),
             TextField(
               controller: textController,
               decoration: InputDecoration(
-                hintText: 'What\'s on your mind?',
+                hintText: 'wall_whats_on_mind'.tr,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -61,7 +62,7 @@ class CreatePostDialog extends StatelessWidget {
                   Icon(Icons.image_outlined, color: Colors.grey[600]),
                   SizedBox(width: 12),
                   Text(
-                    'Add photo (coming soon)',
+                    'wall_add_photo'.tr,
                     style: TextStyle(color: Colors.grey[600]),
                   ),
                 ],
@@ -83,7 +84,7 @@ class CreatePostDialog extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: Text('Post', style: TextStyle(fontSize: 16)),
+                child: Text('wall_post'.tr, style: TextStyle(fontSize: 16)),
               ),
             ),
           ],

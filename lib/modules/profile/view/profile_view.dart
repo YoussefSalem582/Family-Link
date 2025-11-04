@@ -15,12 +15,12 @@ class ProfileView extends GetView<ProfileViewModel> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: Text('profile_title'.tr),
         actions: [
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () => _showEditDialog(context),
-            tooltip: 'Edit Profile',
+            tooltip: 'profile_edit'.tr,
           ),
         ],
       ),
@@ -31,14 +31,14 @@ class ProfileView extends GetView<ProfileViewModel> {
 
         final user = controller.currentUser.value;
         if (user == null) {
-          return Center(child: Text('No user data'));
+          return Center(child: Text('profile_no_data'.tr));
         }
 
         return Column(
           children: [
             // Demo Mode Banner
             if (controller.isDemoMode.value)
-              DemoBannerWidget(message: 'Demo Mode - Showing sample profile'),
+              DemoBannerWidget(message: 'demo_profile'.tr),
 
             // Content
             Expanded(
@@ -47,8 +47,8 @@ class ProfileView extends GetView<ProfileViewModel> {
                   // Refresh profile data
                   await Future.delayed(Duration(milliseconds: 500));
                   Get.snackbar(
-                    'Refreshed',
-                    'Profile data refreshed',
+                    'profile_refreshed'.tr,
+                    'profile_refreshed'.tr,
                     snackPosition: SnackPosition.BOTTOM,
                     duration: Duration(seconds: 2),
                   );
@@ -67,7 +67,7 @@ class ProfileView extends GetView<ProfileViewModel> {
                           child: StatCard(
                             icon: Icons.article,
                             value: '12',
-                            label: 'Posts',
+                            label: 'profile_posts'.tr,
                             color: Colors.blue,
                           ),
                         ),
@@ -76,7 +76,7 @@ class ProfileView extends GetView<ProfileViewModel> {
                           child: StatCard(
                             icon: Icons.mood,
                             value: '24',
-                            label: 'Moods',
+                            label: 'profile_moods'.tr,
                             color: Colors.purple,
                           ),
                         ),
@@ -89,7 +89,7 @@ class ProfileView extends GetView<ProfileViewModel> {
                           child: StatCard(
                             icon: Icons.restaurant,
                             value: '36',
-                            label: 'Meals',
+                            label: 'profile_meals'.tr,
                             color: Colors.orange,
                           ),
                         ),
@@ -98,7 +98,7 @@ class ProfileView extends GetView<ProfileViewModel> {
                           child: StatCard(
                             icon: Icons.star,
                             value: '5',
-                            label: 'Days Active',
+                            label: 'profile_days_active'.tr,
                             color: Colors.green,
                           ),
                         ),
@@ -124,10 +124,10 @@ class ProfileView extends GetView<ProfileViewModel> {
                     ElevatedButton(
                       onPressed: () {
                         Get.defaultDialog(
-                          title: 'Sign Out',
-                          middleText: 'Are you sure you want to sign out?',
-                          textConfirm: 'Sign Out',
-                          textCancel: 'Cancel',
+                          title: 'profile_sign_out'.tr,
+                          middleText: 'profile_sign_out_confirm'.tr,
+                          textConfirm: 'profile_sign_out'.tr,
+                          textCancel: 'cancel'.tr,
                           confirmTextColor: Colors.white,
                           buttonColor: Colors.red,
                           onConfirm: () {
@@ -136,7 +136,7 @@ class ProfileView extends GetView<ProfileViewModel> {
                           },
                         );
                       },
-                      child: Text('Sign Out'),
+                      child: Text('profile_sign_out'.tr),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
                         foregroundColor: Colors.white,
