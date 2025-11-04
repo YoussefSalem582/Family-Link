@@ -9,6 +9,10 @@ class EmptyPostsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final titleColor = isDark ? Colors.grey[200] : Colors.grey[800];
+    final subtitleColor = isDark ? Colors.grey[400] : Colors.grey[600];
+
     return Center(
       child: Padding(
         padding: EdgeInsets.all(32),
@@ -39,7 +43,7 @@ class EmptyPostsWidget extends StatelessWidget {
               'wall_no_posts'.tr,
               style: TextStyle(
                 fontSize: 24,
-                color: Colors.grey[800],
+                color: titleColor,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 0.3,
               ),
@@ -47,11 +51,7 @@ class EmptyPostsWidget extends StatelessWidget {
             SizedBox(height: 12),
             Text(
               'wall_be_first'.tr,
-              style: TextStyle(
-                fontSize: 15,
-                color: Colors.grey[600],
-                height: 1.5,
-              ),
+              style: TextStyle(fontSize: 15, color: subtitleColor, height: 1.5),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 32),

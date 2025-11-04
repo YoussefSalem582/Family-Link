@@ -21,13 +21,18 @@ class CalendarHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final dayNameColor = isDark ? Colors.grey[400] : Colors.grey[600];
+    final yearColor = isDark ? Colors.grey[500] : Colors.grey[600];
+    final hintColor = isDark ? Colors.grey[600] : Colors.grey[400];
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withOpacity(isDark ? 0.3 : 0.05),
             blurRadius: 8,
             offset: Offset(0, 2),
           ),
@@ -60,7 +65,7 @@ class CalendarHeader extends StatelessWidget {
                           DateFormat('EEEE').format(selectedDate),
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.grey[600],
+                            color: dayNameColor,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -96,7 +101,7 @@ class CalendarHeader extends StatelessWidget {
                                   DateFormat('yyyy').format(selectedDate),
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: Colors.grey[600],
+                                    color: yearColor,
                                   ),
                                 ),
                               ],
@@ -111,15 +116,12 @@ class CalendarHeader extends StatelessWidget {
                             Icon(
                               Icons.calendar_today,
                               size: 12,
-                              color: Colors.grey[400],
+                              color: hintColor,
                             ),
                             SizedBox(width: 4),
                             Text(
                               'Tap to select date',
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.grey[400],
-                              ),
+                              style: TextStyle(fontSize: 10, color: hintColor),
                             ),
                           ],
                         ),

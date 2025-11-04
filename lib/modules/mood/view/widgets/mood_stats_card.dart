@@ -36,16 +36,23 @@ class MoodStatsCard extends StatelessWidget {
   }
 
   Widget _buildMoodStat(String emoji, String label, int count) {
-    return Column(
-      children: [
-        Text(emoji, style: TextStyle(fontSize: 28)),
-        SizedBox(height: 4),
-        Text(
-          '$count',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        Text(label, style: TextStyle(fontSize: 11, color: Colors.grey[600])),
-      ],
+    return Builder(
+      builder: (context) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        final labelColor = isDark ? Colors.grey[400] : Colors.grey[600];
+
+        return Column(
+          children: [
+            Text(emoji, style: TextStyle(fontSize: 28)),
+            SizedBox(height: 4),
+            Text(
+              '$count',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            Text(label, style: TextStyle(fontSize: 11, color: labelColor)),
+          ],
+        );
+      },
     );
   }
 }

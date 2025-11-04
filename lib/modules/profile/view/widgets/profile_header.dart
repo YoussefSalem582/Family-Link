@@ -9,6 +9,11 @@ class ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final badgeBg = isDark ? Color(0xFF2A2A2A) : Colors.white;
+    final badgeBorder = isDark ? Colors.grey[800]! : Colors.white;
+    final textColor = isDark ? Colors.white : Colors.grey[700]!;
+
     return Container(
       padding: EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -58,7 +63,7 @@ class ProfileHeader extends StatelessWidget {
                         colors: [Colors.green, Colors.green.shade300],
                       ),
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 3),
+                      border: Border.all(color: badgeBorder, width: 3),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.green.withOpacity(0.4),
@@ -87,11 +92,11 @@ class ProfileHeader extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: badgeBg,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
+                  color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
                   blurRadius: 8,
                   offset: Offset(0, 2),
                 ),
@@ -104,7 +109,7 @@ class ProfileHeader extends StatelessWidget {
                 SizedBox(width: 8),
                 Text(
                   user.email,
-                  style: TextStyle(color: Colors.grey[700], fontSize: 14),
+                  style: TextStyle(color: textColor, fontSize: 14),
                 ),
               ],
             ),
@@ -113,11 +118,11 @@ class ProfileHeader extends StatelessWidget {
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: badgeBg,
               borderRadius: BorderRadius.circular(12),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.04),
+                  color: Colors.black.withOpacity(isDark ? 0.2 : 0.04),
                   blurRadius: 8,
                   offset: Offset(0, 2),
                 ),
@@ -130,7 +135,7 @@ class ProfileHeader extends StatelessWidget {
                 SizedBox(width: 8),
                 Text(
                   user.location,
-                  style: TextStyle(color: Colors.grey[700], fontSize: 14),
+                  style: TextStyle(color: textColor, fontSize: 14),
                 ),
               ],
             ),

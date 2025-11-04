@@ -18,6 +18,10 @@ class MoodCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = getMoodColor(mood.mood);
     final emoji = getMoodEmoji(mood.mood);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final gradEnd = isDark ? Color(0xFF2A2A2A) : Colors.white;
+    final noteColor = isDark ? Colors.grey[300] : Colors.grey[700];
+    final timeColor = isDark ? Colors.grey[600] : Colors.grey[500];
 
     return Card(
       margin: EdgeInsets.only(bottom: 12),
@@ -28,7 +32,7 @@ class MoodCard extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           gradient: LinearGradient(
-            colors: [color.withOpacity(0.05), Colors.white],
+            colors: [color.withOpacity(0.05), gradEnd],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -83,13 +87,13 @@ class MoodCard extends StatelessWidget {
                   if (mood.note != null && mood.note!.isNotEmpty) ...[
                     Text(
                       mood.note!,
-                      style: TextStyle(color: Colors.grey[700], fontSize: 14),
+                      style: TextStyle(color: noteColor, fontSize: 14),
                     ),
                     SizedBox(height: 4),
                   ],
                   Text(
                     formatTime(mood.date),
-                    style: TextStyle(color: Colors.grey[500], fontSize: 12),
+                    style: TextStyle(color: timeColor, fontSize: 12),
                   ),
                 ],
               ),

@@ -19,13 +19,16 @@ class MemberListSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final mapController = Get.find<MapViewModel>();
     final screenHeight = MediaQuery.of(context).size.height;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final sheetBg = isDark ? Color(0xFF2A2A2A) : Colors.white;
+    final handleColor = isDark ? Colors.grey[700] : Colors.grey[300];
 
     return Container(
       constraints: BoxConstraints(
         maxHeight: screenHeight * 0.85, // Show up to 85% of screen height
       ),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: sheetBg,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
@@ -37,7 +40,7 @@ class MemberListSheet extends StatelessWidget {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: Colors.grey[300],
+              color: handleColor,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -84,7 +87,9 @@ class MemberListSheet extends StatelessWidget {
                                   '${(mapController.isLocationSharingEnabled.value ? 1 : 0) + members.length} members on map',
                                   style: TextStyle(
                                     fontSize: 13,
-                                    color: Colors.grey[600],
+                                    color: isDark
+                                        ? Colors.grey[400]
+                                        : Colors.grey[600],
                                   ),
                                 ),
                               ),
@@ -185,7 +190,9 @@ class MemberListSheet extends StatelessWidget {
                                     style: TextStyle(
                                       fontSize: 13,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.grey[600],
+                                      color: isDark
+                                          ? Colors.grey[400]
+                                          : Colors.grey[600],
                                       letterSpacing: 0.5,
                                     ),
                                   ),
@@ -257,7 +264,9 @@ class MemberListSheet extends StatelessWidget {
                               ),
                               child: Container(
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: isDark
+                                      ? Color(0xFF1E1E1E)
+                                      : Colors.white,
                                   borderRadius: BorderRadius.circular(14),
                                 ),
                                 child: Material(
@@ -330,6 +339,9 @@ class MemberListSheet extends StatelessWidget {
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         fontSize: 15,
+                                                        color: isDark
+                                                            ? Colors.white
+                                                            : Colors.black87,
                                                       ),
                                                     ),
                                                     SizedBox(width: 6),
@@ -405,8 +417,10 @@ class MemberListSheet extends StatelessWidget {
                                                         'Your current location',
                                                         style: TextStyle(
                                                           fontSize: 12,
-                                                          color:
-                                                              Colors.grey[600],
+                                                          color: isDark
+                                                              ? Colors.grey[400]
+                                                              : Colors
+                                                                    .grey[600],
                                                         ),
                                                         overflow: TextOverflow
                                                             .ellipsis,
@@ -505,7 +519,9 @@ class MemberListSheet extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
-                              color: Colors.grey[600],
+                              color: isDark
+                                  ? Colors.grey[400]
+                                  : Colors.grey[600],
                               letterSpacing: 0.5,
                             ),
                           ),
@@ -516,7 +532,9 @@ class MemberListSheet extends StatelessWidget {
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.grey[200],
+                              color: isDark
+                                  ? Color(0xFF1E1E1E)
+                                  : Colors.grey[200],
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
@@ -524,7 +542,9 @@ class MemberListSheet extends StatelessWidget {
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.grey[700],
+                                color: isDark
+                                    ? Colors.grey[300]
+                                    : Colors.grey[700],
                               ),
                             ),
                           ),
@@ -583,15 +603,19 @@ class MemberListSheet extends StatelessWidget {
                         padding: EdgeInsets.only(bottom: 8),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: isDark ? Color(0xFF1E1E1E) : Colors.white,
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
-                              color: Colors.grey[200]!,
+                              color: isDark
+                                  ? Colors.grey[700]!
+                                  : Colors.grey[200]!,
                               width: 1,
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.04),
+                                color: Colors.black.withOpacity(
+                                  isDark ? 0.2 : 0.04,
+                                ),
                                 blurRadius: 8,
                                 offset: Offset(0, 2),
                               ),
@@ -676,7 +700,9 @@ class MemberListSheet extends StatelessWidget {
                                                   member.location,
                                                   style: TextStyle(
                                                     fontSize: 12,
-                                                    color: Colors.grey[600],
+                                                    color: isDark
+                                                        ? Colors.grey[400]
+                                                        : Colors.grey[600],
                                                   ),
                                                   overflow:
                                                       TextOverflow.ellipsis,
@@ -697,7 +723,9 @@ class MemberListSheet extends StatelessWidget {
                                             ? Theme.of(
                                                 context,
                                               ).primaryColor.withOpacity(0.1)
-                                            : Colors.grey[100],
+                                            : (isDark
+                                                  ? Color(0xFF2A2A2A)
+                                                  : Colors.grey[100]),
                                         shape: BoxShape.circle,
                                       ),
                                       child: Icon(

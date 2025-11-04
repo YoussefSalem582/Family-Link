@@ -9,10 +9,16 @@ class CreatePostDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textController = TextEditingController();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final dialogBg = isDark ? Color(0xFF2A2A2A) : Colors.white;
+    final handleColor = isDark ? Colors.grey[700] : Colors.grey[300];
+    final textFieldBg = isDark ? Color(0xFF1E1E1E) : Colors.grey[50];
+    final borderColor = isDark ? Colors.grey[700] : Colors.grey[200];
+    final hintColor = isDark ? Colors.grey[500] : Colors.grey[400];
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: dialogBg,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Padding(
@@ -30,7 +36,7 @@ class CreatePostDialog extends StatelessWidget {
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: Colors.grey[300],
+                    color: handleColor,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -78,15 +84,15 @@ class CreatePostDialog extends StatelessWidget {
               SizedBox(height: 24),
               Container(
                 decoration: BoxDecoration(
-                  color: Colors.grey[50],
+                  color: textFieldBg,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.grey[200]!),
+                  border: Border.all(color: borderColor!),
                 ),
                 child: TextField(
                   controller: textController,
                   decoration: InputDecoration(
                     hintText: 'wall_whats_on_mind'.tr,
-                    hintStyle: TextStyle(color: Colors.grey[400]),
+                    hintStyle: TextStyle(color: hintColor),
                     border: InputBorder.none,
                     contentPadding: EdgeInsets.all(16),
                   ),

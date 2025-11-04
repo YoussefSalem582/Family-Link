@@ -8,6 +8,12 @@ class AboutSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardColor = isDark ? Color(0xFF2A2A2A) : Colors.white;
+    final headerBgColor = isDark ? Colors.grey[800] : Colors.grey[200];
+    final headerTextColor = isDark ? Colors.grey[300] : Colors.grey[700];
+    final subtitleColor = isDark ? Colors.grey[400] : Colors.grey[600];
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -18,10 +24,10 @@ class AboutSection extends StatelessWidget {
               Container(
                 padding: EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                  color: headerBgColor,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(Icons.info, size: 16, color: Colors.grey[700]),
+                child: Icon(Icons.info, size: 16, color: headerTextColor),
               ),
               SizedBox(width: 8),
               Text(
@@ -29,7 +35,7 @@ class AboutSection extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey[700],
+                  color: headerTextColor,
                   letterSpacing: 0.5,
                 ),
               ),
@@ -38,11 +44,11 @@ class AboutSection extends StatelessWidget {
         ),
         Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: cardColor,
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.06),
+                color: Colors.black.withOpacity(isDark ? 0.3 : 0.06),
                 blurRadius: 12,
                 offset: Offset(0, 4),
               ),
@@ -190,7 +196,7 @@ class AboutSection extends StatelessWidget {
                   padding: EdgeInsets.only(top: 4),
                   child: Text(
                     'profile_version'.tr,
-                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                    style: TextStyle(fontSize: 12, color: subtitleColor),
                   ),
                 ),
                 trailing: Icon(

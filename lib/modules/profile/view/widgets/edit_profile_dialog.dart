@@ -17,6 +17,12 @@ class EditProfileDialog extends StatelessWidget {
     final nameController = TextEditingController(text: currentName);
     final locationController = TextEditingController(text: currentLocation);
     final profileController = Get.find<ProfileViewModel>();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final dialogBg = isDark ? Color(0xFF2A2A2A) : Colors.white;
+    final textColor = isDark ? Colors.white : Colors.black87;
+    final subtitleColor = isDark ? Colors.grey[400] : Colors.grey[600];
+    final fieldBg = isDark ? Color(0xFF1E1E1E) : Colors.grey[50]!;
+    final borderColor = isDark ? Colors.grey[700]! : Colors.grey[200]!;
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
@@ -25,11 +31,11 @@ class EditProfileDialog extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: dialogBg,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.15),
+              color: Colors.black.withOpacity(isDark ? 0.5 : 0.15),
               blurRadius: 20,
               offset: Offset(0, 10),
             ),
@@ -65,12 +71,13 @@ class EditProfileDialog extends StatelessWidget {
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 0.5,
+                color: textColor,
               ),
             ),
             SizedBox(height: 8),
             Text(
               'Update your profile information',
-              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              style: TextStyle(fontSize: 14, color: subtitleColor),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 24),
@@ -78,16 +85,20 @@ class EditProfileDialog extends StatelessWidget {
             // Name TextField
             Container(
               decoration: BoxDecoration(
-                color: Colors.grey[50],
+                color: fieldBg,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.grey[200]!),
+                border: Border.all(color: borderColor),
               ),
               child: TextField(
                 controller: nameController,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: textColor,
+                ),
                 decoration: InputDecoration(
                   labelText: 'profile_name'.tr,
-                  labelStyle: TextStyle(color: Colors.grey[600]),
+                  labelStyle: TextStyle(color: subtitleColor),
                   prefixIcon: Container(
                     margin: EdgeInsets.all(12),
                     padding: EdgeInsets.all(8),
@@ -116,16 +127,20 @@ class EditProfileDialog extends StatelessWidget {
             // Location TextField
             Container(
               decoration: BoxDecoration(
-                color: Colors.grey[50],
+                color: fieldBg,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.grey[200]!),
+                border: Border.all(color: borderColor),
               ),
               child: TextField(
                 controller: locationController,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: textColor,
+                ),
                 decoration: InputDecoration(
                   labelText: 'profile_location'.tr,
-                  labelStyle: TextStyle(color: Colors.grey[600]),
+                  labelStyle: TextStyle(color: subtitleColor),
                   prefixIcon: Container(
                     margin: EdgeInsets.all(12),
                     padding: EdgeInsets.all(8),

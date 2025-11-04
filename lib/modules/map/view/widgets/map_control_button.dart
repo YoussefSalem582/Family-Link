@@ -17,16 +17,21 @@ class MapControlButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDisabled = onPressed == null;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final defaultBg = isDark ? Color(0xFF2A2A2A) : Colors.white;
+    final disabledBg = isDark ? Color(0xFF1E1E1E) : Colors.grey[300];
+    final defaultIconColor = isDark ? Colors.grey[300] : Colors.grey[800];
+    final disabledIconColor = isDark ? Colors.grey[700] : Colors.grey[500];
+    final shadowOpacity = isDark ? 0.4 : 0.15;
 
     return Container(
       decoration: BoxDecoration(
-        color: isDisabled
-            ? Colors.grey[300]
-            : (backgroundColor ?? Colors.white),
+        color: isDisabled ? disabledBg : (backgroundColor ?? defaultBg),
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.15),
+            color: Colors.black.withOpacity(shadowOpacity),
             blurRadius: 8,
             offset: Offset(0, 3),
           ),
@@ -44,8 +49,8 @@ class MapControlButton extends StatelessWidget {
             child: Icon(
               icon,
               color: isDisabled
-                  ? Colors.grey[500]
-                  : (iconColor ?? Colors.grey[800]),
+                  ? disabledIconColor
+                  : (iconColor ?? defaultIconColor),
               size: 24,
             ),
           ),

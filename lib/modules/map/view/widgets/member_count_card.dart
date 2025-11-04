@@ -13,6 +13,8 @@ class MemberCountCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -26,8 +28,10 @@ class MemberCountCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).primaryColor.withOpacity(0.4),
-            blurRadius: 12,
+            color: Theme.of(
+              context,
+            ).primaryColor.withOpacity(isDark ? 0.5 : 0.4),
+            blurRadius: isDark ? 16 : 12,
             offset: Offset(0, 4),
           ),
         ],

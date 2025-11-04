@@ -10,8 +10,11 @@ import 'widgets/empty_posts_widget.dart';
 class WallView extends GetView<WallViewModel> {
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? Color(0xFF121212) : Colors.grey[50];
+
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: bgColor,
       appBar: CustomAppBar(
         title: 'wall_title',
         icon: Icons.forum_rounded,

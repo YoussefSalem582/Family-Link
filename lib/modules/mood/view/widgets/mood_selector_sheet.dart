@@ -23,6 +23,9 @@ class _MoodSelectorSheetState extends State<MoodSelectorSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final handleColor = isDark ? Colors.grey[700] : Colors.grey[300];
+
     return Container(
       padding: EdgeInsets.all(24),
       child: Column(
@@ -32,7 +35,7 @@ class _MoodSelectorSheetState extends State<MoodSelectorSheet> {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: Colors.grey[300],
+              color: handleColor,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -159,6 +162,9 @@ class _MoodSelectorSheetState extends State<MoodSelectorSheet> {
     Function(String) onSelect,
   ) {
     final isSelected = selectedMood == moodKey;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final unselectedBg = isDark ? Color(0xFF1E1E1E) : Colors.grey[100];
+    final unselectedBorder = isDark ? Colors.grey[700]! : Colors.grey[300]!;
 
     return InkWell(
       onTap: () {
@@ -171,12 +177,12 @@ class _MoodSelectorSheetState extends State<MoodSelectorSheet> {
         decoration: BoxDecoration(
           color: isSelected
               ? Theme.of(context).primaryColor.withOpacity(0.1)
-              : Colors.grey[100],
+              : unselectedBg,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected
                 ? Theme.of(context).primaryColor
-                : Colors.grey[300]!,
+                : unselectedBorder,
             width: isSelected ? 2 : 1,
           ),
         ),

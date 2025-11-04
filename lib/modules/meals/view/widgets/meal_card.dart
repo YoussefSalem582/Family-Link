@@ -18,6 +18,10 @@ class MealCard extends StatelessWidget {
     final isEaten = meal.isEaten;
     final color = isEaten ? Colors.green : Colors.red;
     final icon = isEaten ? Icons.check_circle : Icons.cancel;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final subtitleColor = isDark
+        ? Colors.grey[400]
+        : Theme.of(context).textTheme.bodySmall?.color;
 
     return Card(
       margin: EdgeInsets.only(bottom: 12),
@@ -38,7 +42,7 @@ class MealCard extends StatelessWidget {
         ),
         subtitle: Text(
           '${capitalizeFirst(meal.mealType)} • ${formatTime(meal.date)}',
-          style: TextStyle(fontSize: 12),
+          style: TextStyle(fontSize: 12, color: subtitleColor),
         ),
         trailing: Chip(
           label: Text(

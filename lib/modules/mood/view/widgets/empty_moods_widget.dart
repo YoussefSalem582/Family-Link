@@ -9,15 +9,19 @@ class EmptyMoodsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final iconColor = isDark ? Colors.grey[700] : Colors.grey[300];
+    final textColor = isDark ? Colors.grey[400] : Colors.grey[600];
+
     return Center(
       child: Column(
         children: [
           SizedBox(height: 32),
-          Icon(Icons.mood, size: 64, color: Colors.grey[300]),
+          Icon(Icons.mood, size: 64, color: iconColor),
           SizedBox(height: 16),
           Text(
             'mood_no_moods'.tr,
-            style: TextStyle(color: Colors.grey[600], fontSize: 16),
+            style: TextStyle(color: textColor, fontSize: 16),
           ),
           SizedBox(height: 8),
           TextButton.icon(

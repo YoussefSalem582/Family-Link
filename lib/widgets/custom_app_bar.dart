@@ -27,10 +27,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor =
+        backgroundColor ?? (isDark ? Color(0xFF121212) : Colors.white);
+
     return AppBar(
       elevation: elevation,
-      backgroundColor: backgroundColor ?? Colors.white,
+      backgroundColor: bgColor,
       automaticallyImplyLeading: showBackButton,
+      iconTheme: IconThemeData(color: isDark ? Colors.white : Colors.black87),
       title: Row(
         children: [
           Container(
@@ -43,6 +48,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ],
               ),
               borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(context).primaryColor.withOpacity(0.3),
+                  blurRadius: 8,
+                  offset: Offset(0, 2),
+                ),
+              ],
             ),
             child: Icon(icon, color: Colors.white, size: 20),
           ),
@@ -53,6 +65,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               fontWeight: FontWeight.bold,
               fontSize: 20,
               letterSpacing: 0.3,
+              color: isDark ? Colors.white : Colors.black87,
             ),
           ),
         ],
@@ -64,7 +77,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   Container(
                     margin: EdgeInsets.only(right: 8),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor.withOpacity(0.1),
+                      color: Theme.of(
+                        context,
+                      ).primaryColor.withOpacity(isDark ? 0.2 : 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: IconButton(

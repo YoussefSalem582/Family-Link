@@ -22,14 +22,19 @@ class PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardBg = isDark ? Color(0xFF2A2A2A) : Colors.white;
+    final shadowOpacity = isDark ? 0.3 : 0.06;
+    final dividerColor = isDark ? Colors.grey[800] : Colors.grey[200];
+
     return Container(
       margin: EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: cardBg,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withOpacity(shadowOpacity),
             blurRadius: 16,
             offset: Offset(0, 4),
           ),
@@ -44,7 +49,7 @@ class PostCard extends StatelessWidget {
             _buildImagePlaceholder(),
           SizedBox(height: 12),
           _buildLikeCount(),
-          Divider(height: 1, thickness: 1, color: Colors.grey[200]),
+          Divider(height: 1, thickness: 1, color: dividerColor),
           _buildActionButtons(context),
         ],
       ),
@@ -52,6 +57,11 @@ class PostCard extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final menuBg = isDark ? Color(0xFF1E1E1E) : Colors.grey[100];
+    final iconColor = isDark ? Colors.grey[400] : Colors.grey[500];
+    final timeColor = isDark ? Colors.grey[500] : Colors.grey[600];
+
     return Container(
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -99,11 +109,11 @@ class PostCard extends StatelessWidget {
                 SizedBox(height: 2),
                 Row(
                   children: [
-                    Icon(Icons.access_time, size: 12, color: Colors.grey[500]),
+                    Icon(Icons.access_time, size: 12, color: iconColor),
                     SizedBox(width: 4),
                     Text(
                       _getTimeAgo(post.createdAt),
-                      style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                      style: TextStyle(color: timeColor, fontSize: 12),
                     ),
                   ],
                 ),
@@ -112,10 +122,7 @@ class PostCard extends StatelessWidget {
           ),
           if (onDelete != null)
             Container(
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                shape: BoxShape.circle,
-              ),
+              decoration: BoxDecoration(color: menuBg, shape: BoxShape.circle),
               child: PopupMenuButton(
                 icon: Icon(Icons.more_vert, size: 20),
                 shape: RoundedRectangleBorder(
@@ -156,62 +163,82 @@ class PostCard extends StatelessWidget {
   }
 
   Widget _buildContent() {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
-      child: Text(
-        post.text!,
-        style: TextStyle(
-          fontSize: 15,
-          height: 1.5,
-          color: Colors.grey[800],
-          letterSpacing: 0.2,
-        ),
-      ),
+    return Builder(
+      builder: (context) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        final textColor = isDark ? Colors.grey[300] : Colors.grey[800];
+
+        return Padding(
+          padding: EdgeInsets.fromLTRB(16, 8, 16, 16),
+          child: Text(
+            post.text!,
+            style: TextStyle(
+              fontSize: 15,
+              height: 1.5,
+              color: textColor,
+              letterSpacing: 0.2,
+            ),
+          ),
+        );
+      },
     );
   }
 
   Widget _buildImagePlaceholder() {
-    return Container(
-      margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
-      width: double.infinity,
-      height: 240,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.grey[200]!, Colors.grey[100]!],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey[300]!, width: 1),
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.8),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(
-                Icons.image_rounded,
-                size: 48,
-                color: Colors.blue.withOpacity(0.6),
-              ),
+    return Builder(
+      builder: (context) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        final gradStart = isDark ? Colors.grey[800]! : Colors.grey[200]!;
+        final gradEnd = isDark ? Colors.grey[900]! : Colors.grey[100]!;
+        final borderColor = isDark ? Colors.grey[700]! : Colors.grey[300]!;
+        final iconBg = isDark
+            ? Colors.grey[800]!.withOpacity(0.5)
+            : Colors.white.withOpacity(0.8);
+        final textColor = isDark ? Colors.grey[400] : Colors.grey[700];
+
+        return Container(
+          margin: EdgeInsets.fromLTRB(16, 0, 16, 16),
+          width: double.infinity,
+          height: 240,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [gradStart, gradEnd],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-            SizedBox(height: 12),
-            Text(
-              'wall_image_preview'.tr,
-              style: TextStyle(
-                color: Colors.grey[700],
-                fontWeight: FontWeight.w500,
-                fontSize: 13,
-              ),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: borderColor, width: 1),
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: iconBg,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.image_rounded,
+                    size: 48,
+                    color: Colors.blue.withOpacity(0.6),
+                  ),
+                ),
+                SizedBox(height: 12),
+                Text(
+                  'wall_image_preview'.tr,
+                  style: TextStyle(
+                    color: textColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 13,
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -275,6 +302,11 @@ class PostCard extends StatelessWidget {
   }
 
   Widget _buildActionButtons(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final dividerColor = isDark ? Colors.grey[800] : Colors.grey[200];
+    final iconColor = isDark ? Colors.grey[400] : Colors.grey[700];
+    final textColor = isDark ? Colors.grey[400] : Colors.grey[700];
+
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 4, vertical: 6),
       child: Row(
@@ -292,14 +324,14 @@ class PostCard extends StatelessWidget {
                     children: [
                       Icon(
                         hasLiked ? Icons.favorite : Icons.favorite_border,
-                        color: hasLiked ? Colors.red : Colors.grey[700],
+                        color: hasLiked ? Colors.red : iconColor,
                         size: 20,
                       ),
                       SizedBox(width: 6),
                       Text(
                         'wall_like'.tr,
                         style: TextStyle(
-                          color: hasLiked ? Colors.red : Colors.grey[700],
+                          color: hasLiked ? Colors.red : textColor,
                           fontWeight: FontWeight.w600,
                           fontSize: 14,
                         ),
@@ -310,7 +342,7 @@ class PostCard extends StatelessWidget {
               ),
             ),
           ),
-          Container(width: 1, height: 24, color: Colors.grey[200]),
+          Container(width: 1, height: 24, color: dividerColor),
           Expanded(
             child: Material(
               color: Colors.transparent,
@@ -322,16 +354,12 @@ class PostCard extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.comment_outlined,
-                        color: Colors.grey[700],
-                        size: 20,
-                      ),
+                      Icon(Icons.comment_outlined, color: iconColor, size: 20),
                       SizedBox(width: 6),
                       Text(
                         'wall_comment'.tr,
                         style: TextStyle(
-                          color: Colors.grey[700],
+                          color: textColor,
                           fontWeight: FontWeight.w600,
                           fontSize: 14,
                         ),
@@ -342,7 +370,7 @@ class PostCard extends StatelessWidget {
               ),
             ),
           ),
-          Container(width: 1, height: 24, color: Colors.grey[200]),
+          Container(width: 1, height: 24, color: dividerColor),
           Expanded(
             child: Material(
               color: Colors.transparent,
@@ -354,16 +382,12 @@ class PostCard extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.share_outlined,
-                        color: Colors.grey[700],
-                        size: 20,
-                      ),
+                      Icon(Icons.share_outlined, color: iconColor, size: 20),
                       SizedBox(width: 6),
                       Text(
                         'wall_share'.tr,
                         style: TextStyle(
-                          color: Colors.grey[700],
+                          color: textColor,
                           fontWeight: FontWeight.w600,
                           fontSize: 14,
                         ),

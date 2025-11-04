@@ -86,7 +86,12 @@ class FamilyMemberMealCard extends StatelessWidget {
                     ),
                     Text(
                       location,
-                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.grey[400]
+                            : Colors.grey[600],
+                      ),
                     ),
                   ],
                 ),
@@ -146,6 +151,16 @@ class FamilyMemberMealCard extends StatelessWidget {
   ) {
     final bool isEaten = meal?.isEaten ?? false;
     final bool hasStatus = meal != null;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final noStatusBg = isDark ? Color(0xFF1E1E1E) : Colors.grey[50];
+    final noStatusBorder = isDark ? Colors.grey[700]! : Colors.grey[300]!;
+    final skippedBg = isDark ? Color(0xFF1E1E1E) : Colors.grey[100];
+    final skippedBorder = isDark ? Colors.grey[600]! : Colors.grey[400]!;
+    final skippedIcon = isDark ? Colors.grey[500] : Colors.grey[600];
+    final skippedText = isDark ? Colors.grey[400] : Colors.grey[700];
+    final noStatusIcon = isDark ? Colors.grey[600] : Colors.grey[400];
+    final noStatusText = isDark ? Colors.grey[500] : Colors.grey[500];
 
     return GestureDetector(
       onTap: () {
@@ -162,13 +177,13 @@ class FamilyMemberMealCard extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
         decoration: BoxDecoration(
           color: hasStatus
-              ? (isEaten ? color.withOpacity(0.15) : Colors.grey[100])
-              : Colors.grey[50],
+              ? (isEaten ? color.withOpacity(0.15) : skippedBg)
+              : noStatusBg,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: hasStatus
-                ? (isEaten ? color : Colors.grey[400]!)
-                : Colors.grey[300]!,
+                ? (isEaten ? color : skippedBorder)
+                : noStatusBorder,
             width: hasStatus ? 2 : 1,
           ),
         ),
@@ -178,9 +193,7 @@ class FamilyMemberMealCard extends StatelessWidget {
             Icon(
               icon,
               size: 28,
-              color: hasStatus
-                  ? (isEaten ? color : Colors.grey[600])
-                  : Colors.grey[400],
+              color: hasStatus ? (isEaten ? color : skippedIcon) : noStatusIcon,
             ),
             SizedBox(height: 4),
             Text(
@@ -191,8 +204,8 @@ class FamilyMemberMealCard extends StatelessWidget {
                     ? FontWeight.bold
                     : FontWeight.normal,
                 color: hasStatus
-                    ? (isEaten ? color : Colors.grey[700])
-                    : Colors.grey[500],
+                    ? (isEaten ? color : skippedText)
+                    : noStatusText,
               ),
               textAlign: TextAlign.center,
             ),

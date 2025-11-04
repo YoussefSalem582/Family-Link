@@ -9,6 +9,9 @@ class LoadingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.grey[400] : Colors.grey;
+
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -20,7 +23,7 @@ class LoadingIndicator extends StatelessWidget {
           ),
           if (message != null) ...[
             SizedBox(height: 16),
-            Text(message!, style: TextStyle(fontSize: 14, color: Colors.grey)),
+            Text(message!, style: TextStyle(fontSize: 14, color: textColor)),
           ],
         ],
       ),

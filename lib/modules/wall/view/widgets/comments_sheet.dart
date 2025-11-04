@@ -34,6 +34,20 @@ class _CommentsSheetState extends State<CommentsSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final sheetBg = isDark ? Color(0xFF2A2A2A) : Colors.white;
+    final handleColor = isDark ? Colors.grey[700] : Colors.grey[300];
+    final dividerColor = isDark ? Colors.grey[800] : Colors.grey[300];
+    final emptyBg = isDark ? Color(0xFF1E1E1E) : Colors.grey[100];
+    final emptyIcon = isDark ? Colors.grey[600] : Colors.grey[400];
+    final emptyText = isDark ? Colors.grey[400] : Colors.grey[700];
+    final emptySubtext = isDark ? Colors.grey[600] : Colors.grey[500];
+    final commentBubbleBg = isDark ? Color(0xFF1E1E1E) : Colors.grey[100];
+    final timeColor = isDark ? Colors.grey[500] : Colors.grey[600];
+    final inputBg = isDark ? Color(0xFF1E1E1E) : Colors.grey[100];
+    final inputBorder = isDark ? Colors.grey[700] : Colors.grey[300];
+    final hintColor = isDark ? Colors.grey[500] : Colors.grey[400];
+
     return DraggableScrollableSheet(
       initialChildSize: 0.7,
       minChildSize: 0.5,
@@ -41,7 +55,7 @@ class _CommentsSheetState extends State<CommentsSheet> {
       expand: false,
       builder: (context, scrollController) => Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: sheetBg,
           borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
         child: Column(
@@ -51,7 +65,7 @@ class _CommentsSheetState extends State<CommentsSheet> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.grey[300],
+                color: handleColor,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -117,7 +131,7 @@ class _CommentsSheetState extends State<CommentsSheet> {
               ),
             ),
             SizedBox(height: 16),
-            Divider(height: 1, thickness: 1),
+            Divider(height: 1, thickness: 1, color: dividerColor),
             Expanded(
               child: Obx(() {
                 final comments = _controller.getComments(widget.post.id);
@@ -130,20 +144,20 @@ class _CommentsSheetState extends State<CommentsSheet> {
                         Container(
                           padding: EdgeInsets.all(24),
                           decoration: BoxDecoration(
-                            color: Colors.grey[100],
+                            color: emptyBg,
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
                             Icons.chat_bubble_outline_rounded,
                             size: 64,
-                            color: Colors.grey[400],
+                            color: emptyIcon,
                           ),
                         ),
                         SizedBox(height: 20),
                         Text(
                           'wall_no_comments'.tr,
                           style: TextStyle(
-                            color: Colors.grey[700],
+                            color: emptyText,
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                           ),
@@ -151,10 +165,7 @@ class _CommentsSheetState extends State<CommentsSheet> {
                         SizedBox(height: 8),
                         Text(
                           'Be the first to comment!',
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                            fontSize: 14,
-                          ),
+                          style: TextStyle(color: emptySubtext, fontSize: 14),
                         ),
                       ],
                     ),
@@ -165,8 +176,12 @@ class _CommentsSheetState extends State<CommentsSheet> {
                   controller: scrollController,
                   padding: EdgeInsets.symmetric(vertical: 8),
                   itemCount: comments.length,
-                  separatorBuilder: (context, index) =>
-                      Divider(height: 1, indent: 68, endIndent: 16),
+                  separatorBuilder: (context, index) => Divider(
+                    height: 1,
+                    indent: 68,
+                    endIndent: 16,
+                    color: dividerColor,
+                  ),
                   itemBuilder: (context, index) {
                     final comment = comments[index];
                     return Container(
@@ -202,7 +217,7 @@ class _CommentsSheetState extends State<CommentsSheet> {
                                 Container(
                                   padding: EdgeInsets.all(12),
                                   decoration: BoxDecoration(
-                                    color: Colors.grey[100],
+                                    color: commentBubbleBg,
                                     borderRadius: BorderRadius.circular(16),
                                   ),
                                   child: Column(
@@ -234,7 +249,7 @@ class _CommentsSheetState extends State<CommentsSheet> {
                                     _getTimeAgo(comment.createdAt),
                                     style: TextStyle(
                                       fontSize: 12,
-                                      color: Colors.grey[600],
+                                      color: timeColor,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -249,11 +264,11 @@ class _CommentsSheetState extends State<CommentsSheet> {
                 );
               }),
             ),
-            Divider(height: 1, thickness: 1),
+            Divider(height: 1, thickness: 1, color: dividerColor),
             Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: sheetBg,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.05),
@@ -267,15 +282,15 @@ class _CommentsSheetState extends State<CommentsSheet> {
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.grey[100],
+                        color: inputBg,
                         borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: Colors.grey[300]!),
+                        border: Border.all(color: inputBorder!),
                       ),
                       child: TextField(
                         controller: _commentController,
                         decoration: InputDecoration(
                           hintText: 'wall_write_comment'.tr,
-                          hintStyle: TextStyle(color: Colors.grey[400]),
+                          hintStyle: TextStyle(color: hintColor),
                           border: InputBorder.none,
                           contentPadding: EdgeInsets.symmetric(
                             horizontal: 20,

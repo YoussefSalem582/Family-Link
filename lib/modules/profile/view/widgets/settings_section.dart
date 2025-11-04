@@ -17,6 +17,10 @@ class SettingsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final languageController = Get.find<LanguageController>();
     final profileController = Get.find<ProfileViewModel>();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardColor = isDark ? Color(0xFF2A2A2A) : Colors.white;
+    final headerBgColor = isDark ? Colors.grey[800] : Colors.grey[200];
+    final headerTextColor = isDark ? Colors.grey[300] : Colors.grey[700];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,10 +32,10 @@ class SettingsSection extends StatelessWidget {
               Container(
                 padding: EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                  color: headerBgColor,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Icon(Icons.settings, size: 16, color: Colors.grey[700]),
+                child: Icon(Icons.settings, size: 16, color: headerTextColor),
               ),
               SizedBox(width: 8),
               Text(
@@ -39,7 +43,7 @@ class SettingsSection extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey[700],
+                  color: headerTextColor,
                   letterSpacing: 0.5,
                 ),
               ),
@@ -48,11 +52,11 @@ class SettingsSection extends StatelessWidget {
         ),
         Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: cardColor,
             borderRadius: BorderRadius.circular(20),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.06),
+                color: Colors.black.withOpacity(isDark ? 0.3 : 0.06),
                 blurRadius: 12,
                 offset: Offset(0, 4),
               ),
@@ -275,6 +279,11 @@ class SettingsSection extends StatelessWidget {
     BuildContext context,
     LanguageController controller,
   ) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final dialogBg = isDark ? Color(0xFF2A2A2A) : Colors.white;
+    final textColor = isDark ? Colors.white : Colors.black87;
+    final subtitleColor = isDark ? Colors.grey[400] : Colors.grey[600];
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -287,11 +296,11 @@ class SettingsSection extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: dialogBg,
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.15),
+                  color: Colors.black.withOpacity(isDark ? 0.5 : 0.15),
                   blurRadius: 20,
                   offset: Offset(0, 10),
                 ),
@@ -331,12 +340,13 @@ class SettingsSection extends StatelessWidget {
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 0.5,
+                    color: textColor,
                   ),
                 ),
                 SizedBox(height: 8),
                 Text(
                   'Choose your preferred language',
-                  style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                  style: TextStyle(fontSize: 14, color: subtitleColor),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 24),
@@ -375,6 +385,14 @@ class SettingsSection extends StatelessWidget {
     IconData icon,
   ) {
     final isSelected = controller.currentLanguage == langCode;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final unselectedBg = isDark ? Color(0xFF1E1E1E) : Colors.grey[50];
+    final borderColor = isDark
+        ? (isSelected ? Colors.blue : Colors.grey[700]!)
+        : (isSelected ? Colors.blue : Colors.grey[200]!);
+    final textColor = isSelected
+        ? Colors.white
+        : (isDark ? Colors.white : Colors.grey[800]!);
 
     return Container(
       decoration: BoxDecoration(
@@ -385,12 +403,9 @@ class SettingsSection extends StatelessWidget {
                 end: Alignment.bottomRight,
               )
             : null,
-        color: isSelected ? null : Colors.grey[50],
+        color: isSelected ? null : unselectedBg,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isSelected ? Colors.blue : Colors.grey[200]!,
-          width: isSelected ? 2 : 1,
-        ),
+        border: Border.all(color: borderColor, width: isSelected ? 2 : 1),
         boxShadow: isSelected
             ? [
                 BoxShadow(
@@ -432,7 +447,7 @@ class SettingsSection extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: isSelected ? Colors.white : Colors.grey[800],
+                      color: textColor,
                     ),
                   ),
                 ),

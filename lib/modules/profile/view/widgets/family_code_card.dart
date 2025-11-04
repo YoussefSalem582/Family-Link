@@ -9,6 +9,11 @@ class FamilyCodeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final codeBg = isDark ? Color(0xFF2A2A2A) : Colors.white;
+    final titleColor = isDark ? Colors.white : Colors.black87;
+    final infoColor = isDark ? Colors.grey[400] : Colors.grey[600];
+
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -23,7 +28,7 @@ class FamilyCodeCard extends StatelessWidget {
         border: Border.all(color: Colors.blue.withOpacity(0.3), width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.15),
+            color: Colors.blue.withOpacity(isDark ? 0.2 : 0.15),
             blurRadius: 12,
             offset: Offset(0, 4),
           ),
@@ -64,6 +69,7 @@ class FamilyCodeCard extends StatelessWidget {
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 0.3,
+                    color: titleColor,
                   ),
                 ),
               ],
@@ -72,7 +78,7 @@ class FamilyCodeCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: codeBg,
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: Colors.blue.withOpacity(0.2),
@@ -80,7 +86,7 @@ class FamilyCodeCard extends StatelessWidget {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.06),
+                    color: Colors.black.withOpacity(isDark ? 0.3 : 0.06),
                     blurRadius: 8,
                     offset: Offset(0, 2),
                   ),
@@ -132,14 +138,14 @@ class FamilyCodeCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.info_outline, size: 14, color: Colors.grey[600]),
+                Icon(Icons.info_outline, size: 14, color: infoColor),
                 SizedBox(width: 6),
                 Expanded(
                   child: Text(
                     'profile_share_code'.tr,
                     style: TextStyle(
                       fontSize: 12,
-                      color: Colors.grey[600],
+                      color: infoColor,
                       fontWeight: FontWeight.w500,
                     ),
                     textAlign: TextAlign.center,

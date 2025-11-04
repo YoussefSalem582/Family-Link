@@ -424,7 +424,7 @@ class _MapViewState extends State<MapView> {
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
-                color: Colors.black87,
+                color: Get.isDarkMode ? Colors.white : Colors.black87,
               ),
             ),
           ),
@@ -434,19 +434,26 @@ class _MapViewState extends State<MapView> {
         padding: EdgeInsets.only(left: 52),
         child: Row(
           children: [
-            Icon(Icons.location_on, size: 14, color: Colors.grey[600]),
+            Icon(
+              Icons.location_on,
+              size: 14,
+              color: Get.isDarkMode ? Colors.grey[500] : Colors.grey[600],
+            ),
             SizedBox(width: 4),
             Expanded(
               child: Text(
                 location,
-                style: TextStyle(fontSize: 13, color: Colors.grey[700]),
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Get.isDarkMode ? Colors.grey[400] : Colors.grey[700],
+                ),
               ),
             ),
           ],
         ),
       ),
       snackPosition: SnackPosition.TOP,
-      backgroundColor: Colors.white,
+      backgroundColor: Get.isDarkMode ? Color(0xFF2A2A2A) : Colors.white,
       duration: Duration(seconds: 3),
       margin: EdgeInsets.all(16),
       borderRadius: 16,

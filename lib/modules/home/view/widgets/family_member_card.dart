@@ -12,6 +12,10 @@ class FamilyMemberCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isHome = member.isHome;
     final statusColor = isHome ? Colors.green : Colors.orange;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final borderColor = isDark ? Colors.white.withOpacity(0.3) : Colors.white;
+    final locationColor = isDark ? Colors.grey[500] : Colors.grey[600];
+    final chevronColor = isDark ? Colors.grey[600] : Colors.grey[400];
 
     return Card(
       margin: EdgeInsets.only(bottom: 12),
@@ -39,7 +43,7 @@ class FamilyMemberCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: statusColor,
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
+                        border: Border.all(color: borderColor, width: 2),
                       ),
                       child: Icon(
                         isHome ? Icons.home : Icons.near_me,
@@ -72,7 +76,7 @@ class FamilyMemberCard extends StatelessWidget {
                             member.location,
                             style: TextStyle(
                               fontSize: 13,
-                              color: Colors.grey[600],
+                              color: locationColor,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -98,7 +102,7 @@ class FamilyMemberCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right, color: Colors.grey[400]),
+              Icon(Icons.chevron_right, color: chevronColor),
             ],
           ),
         ),

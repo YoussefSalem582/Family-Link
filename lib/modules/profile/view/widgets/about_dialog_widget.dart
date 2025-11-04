@@ -6,6 +6,16 @@ class AboutDialogWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final dialogBg = isDark ? Color(0xFF2A2A2A) : Colors.white;
+    final textColor = isDark ? Colors.white : Colors.black87;
+    final descBg = isDark ? Color(0xFF1E1E1E) : Colors.grey[50]!;
+    final descBorder = isDark ? Colors.grey[700]! : Colors.grey[200]!;
+    final featureBg = isDark
+        ? Color(0xFF1E1E1E)
+        : Colors.blue.withOpacity(0.05);
+    final infoColor = isDark ? Colors.grey[400] : Colors.grey[700];
+
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       elevation: 0,
@@ -13,11 +23,11 @@ class AboutDialogWidget extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: dialogBg,
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.15),
+              color: Colors.black.withOpacity(isDark ? 0.5 : 0.15),
               blurRadius: 20,
               offset: Offset(0, 10),
             ),
@@ -55,6 +65,7 @@ class AboutDialogWidget extends StatelessWidget {
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
                 letterSpacing: 0.5,
+                color: textColor,
               ),
             ),
             SizedBox(height: 8),
@@ -97,9 +108,9 @@ class AboutDialogWidget extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: Colors.grey[50],
+                color: descBg,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: Colors.grey[200]!),
+                border: Border.all(color: descBorder),
               ),
               child: Column(
                 children: [
@@ -123,7 +134,7 @@ class AboutDialogWidget extends StatelessWidget {
                           'profile_description'.tr,
                           style: TextStyle(
                             fontSize: 14,
-                            color: Colors.grey[700],
+                            color: infoColor,
                             height: 1.5,
                           ),
                         ),
@@ -139,12 +150,7 @@ class AboutDialogWidget extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.blue.withOpacity(0.05),
-                    Colors.purple.withOpacity(0.05),
-                  ],
-                ),
+                color: featureBg,
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Column(
@@ -224,26 +230,34 @@ class AboutDialogWidget extends StatelessWidget {
   }
 
   Widget _buildFeatureRow(IconData icon, String text) {
-    return Row(
-      children: [
-        Container(
-          padding: EdgeInsets.all(6),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Icon(icon, color: Colors.blue[700], size: 16),
-        ),
-        SizedBox(width: 10),
-        Text(
-          text,
-          style: TextStyle(
-            fontSize: 13,
-            color: Colors.grey[700],
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
+    return Builder(
+      builder: (context) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        final featureIconBg = isDark ? Color(0xFF2A2A2A) : Colors.white;
+        final featureTextColor = isDark ? Colors.grey[300] : Colors.grey[700];
+
+        return Row(
+          children: [
+            Container(
+              padding: EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: featureIconBg,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icon, color: Colors.blue[700], size: 16),
+            ),
+            SizedBox(width: 10),
+            Text(
+              text,
+              style: TextStyle(
+                fontSize: 13,
+                color: featureTextColor,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

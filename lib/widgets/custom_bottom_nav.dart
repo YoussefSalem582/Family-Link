@@ -15,12 +15,14 @@ class CustomBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDark ? Color(0xFF1E1E1E) : Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withOpacity(isDark ? 0.3 : 0.08),
             blurRadius: 16,
             offset: Offset(0, -4),
           ),
@@ -49,6 +51,8 @@ class CustomBottomNav extends StatelessWidget {
   }) {
     final isSelected = currentIndex == index;
     final primaryColor = Theme.of(context).primaryColor;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final unselectedColor = isDark ? Colors.grey[600] : Colors.grey[400];
 
     return Expanded(
       child: Material(
@@ -86,7 +90,7 @@ class CustomBottomNav extends StatelessWidget {
                   ),
                   child: Icon(
                     item.icon,
-                    color: isSelected ? Colors.white : Colors.grey[400],
+                    color: isSelected ? Colors.white : unselectedColor,
                     size: isSelected ? 26 : 24,
                   ),
                 ),
