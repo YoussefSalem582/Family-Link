@@ -1,4 +1,8 @@
 import 'package:get/get.dart';
+import '../../modules/splash/view/splash_view.dart';
+import '../../modules/splash/viewmodel/splash_viewmodel.dart';
+import '../../modules/onboarding/view/onboarding_view.dart';
+import '../../modules/onboarding/viewmodel/onboarding_viewmodel.dart';
 import '../../modules/main_container/view/main_container_view.dart';
 import '../../modules/main_container/binding/main_container_binding.dart';
 import '../../modules/home/view/home_view.dart';
@@ -16,9 +20,25 @@ import '../../modules/profile/viewmodel/profile_viewmodel.dart';
 import 'app_routes.dart';
 
 class AppPages {
-  static const initial = AppRoutes.mainContainer;
+  static const initial = AppRoutes.splash;
 
   static final routes = [
+    GetPage(
+      name: AppRoutes.splash,
+      page: () => SplashView(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => SplashViewModel());
+      }),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: AppRoutes.onboarding,
+      page: () => OnboardingView(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => OnboardingViewModel());
+      }),
+      transition: Transition.fadeIn,
+    ),
     GetPage(
       name: AppRoutes.mainContainer,
       page: () => MainContainerView(),
