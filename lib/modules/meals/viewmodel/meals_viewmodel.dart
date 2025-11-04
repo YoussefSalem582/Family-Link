@@ -110,7 +110,12 @@ class MealsViewModel extends GetxController {
 
   void _initializeRepository() {
     try {
-      _mealRepository = Get.put(MealRepository());
+      // Use Get.find since repository is registered in MainContainerBinding
+      if (Get.isRegistered<MealRepository>()) {
+        _mealRepository = Get.find<MealRepository>();
+      } else {
+        _mealRepository = Get.put(MealRepository());
+      }
     } catch (e) {
       print('⚠️ Repository initialization failed, using demo mode');
       isDemoMode.value = true;

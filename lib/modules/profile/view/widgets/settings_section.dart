@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../core/controllers/language_controller.dart';
+import '../../../../core/theme/theme_service.dart';
 import '../../viewmodel/profile_viewmodel.dart';
 
 class SettingsSection extends StatelessWidget {
@@ -148,28 +149,49 @@ class SettingsSection extends StatelessWidget {
                 ),
               ),
               Divider(height: 1, indent: 68, endIndent: 20),
-              ListTile(
-                contentPadding: EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 8,
-                ),
-                leading: Container(
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.purple.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Icon(Icons.dark_mode, color: Colors.purple, size: 24),
-                ),
-                title: Text(
-                  'profile_dark_mode'.tr,
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-                trailing: Switch(
-                  value: isDarkMode,
-                  onChanged: (_) => onThemeToggle(),
-                  activeColor: Colors.purple,
-                ),
+              GetBuilder<ThemeService>(
+                builder: (themeService) {
+                  final currentIsDarkMode = themeService.isDarkMode;
+                  return ListTile(
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 8,
+                    ),
+                    leading: Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: currentIsDarkMode
+                            ? Colors.purple.withOpacity(0.2)
+                            : Colors.purple.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(
+                        currentIsDarkMode ? Icons.dark_mode : Icons.light_mode,
+                        color: Colors.purple,
+                        size: 24,
+                      ),
+                    ),
+                    title: Text(
+                      'profile_dark_mode'.tr,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: isDark ? Colors.white : Colors.black87,
+                      ),
+                    ),
+                    trailing: Switch(
+                      value: currentIsDarkMode,
+                      onChanged: (_) => onThemeToggle(),
+                      activeColor: Colors.purple,
+                      activeTrackColor: Colors.purple.withOpacity(0.5),
+                      inactiveThumbColor: isDark
+                          ? Colors.grey[400]
+                          : Colors.grey[300],
+                      inactiveTrackColor: isDark
+                          ? Colors.grey[700]
+                          : Colors.grey[300],
+                    ),
+                  );
+                },
               ),
               Divider(height: 1, indent: 68, endIndent: 20),
               ListTile(
@@ -191,7 +213,10 @@ class SettingsSection extends StatelessWidget {
                 ),
                 title: Text(
                   'profile_notifications'.tr,
-                  style: TextStyle(fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: isDark ? Colors.white : Colors.black87,
+                  ),
                 ),
                 trailing: Switch(
                   value: true,
@@ -212,6 +237,13 @@ class SettingsSection extends StatelessWidget {
                     );
                   },
                   activeColor: Colors.orange,
+                  activeTrackColor: Colors.orange.withOpacity(0.5),
+                  inactiveThumbColor: isDark
+                      ? Colors.grey[400]
+                      : Colors.grey[300],
+                  inactiveTrackColor: isDark
+                      ? Colors.grey[700]
+                      : Colors.grey[300],
                 ),
               ),
               Divider(height: 1, indent: 68, endIndent: 20),
@@ -242,7 +274,10 @@ class SettingsSection extends StatelessWidget {
                   ),
                   title: Text(
                     'profile_location_sharing'.tr,
-                    style: TextStyle(fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: isDark ? Colors.white : Colors.black87,
+                    ),
                   ),
                   subtitle: Padding(
                     padding: EdgeInsets.only(top: 4),
@@ -265,6 +300,13 @@ class SettingsSection extends StatelessWidget {
                       profileController.toggleLocationSharing(value);
                     },
                     activeColor: Colors.green,
+                    activeTrackColor: Colors.green.withOpacity(0.5),
+                    inactiveThumbColor: isDark
+                        ? Colors.grey[400]
+                        : Colors.grey[300],
+                    inactiveTrackColor: isDark
+                        ? Colors.grey[700]
+                        : Colors.grey[300],
                   ),
                 ),
               ),

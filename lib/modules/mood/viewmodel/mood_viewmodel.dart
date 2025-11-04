@@ -79,7 +79,12 @@ class MoodViewModel extends GetxController {
         }
         return;
       }
-      _moodRepository = Get.put(MoodRepository());
+      // Use Get.find since repository is registered in MainContainerBinding
+      if (Get.isRegistered<MoodRepository>()) {
+        _moodRepository = Get.find<MoodRepository>();
+      } else {
+        _moodRepository = Get.put(MoodRepository());
+      }
       loadTodaysMoods();
     } catch (e) {
       print('Error initializing mood repository: $e');

@@ -251,9 +251,22 @@ class ProfileViewModel extends GetxController {
 
   Future<void> signOut() async {
     if (isDemoMode.value) {
-      Get.snackbar('demo_mode'.tr, 'demo_signout_unavailable'.tr);
+      // Clear demo data and navigate to splash
+      _storage.remove('hasSeenOnboarding');
+      Get.offAllNamed('/');
+      Get.snackbar(
+        'Signed Out',
+        'You have been signed out successfully',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green.withOpacity(0.1),
+        colorText: Colors.green,
+        duration: Duration(seconds: 2),
+        margin: EdgeInsets.all(16),
+        borderRadius: 12,
+      );
       return;
     }
     await _firebaseService.signOut();
+    Get.offAllNamed('/');
   }
 }

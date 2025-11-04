@@ -3,6 +3,11 @@ import '../../modules/splash/view/splash_view.dart';
 import '../../modules/splash/viewmodel/splash_viewmodel.dart';
 import '../../modules/onboarding/view/onboarding_view.dart';
 import '../../modules/onboarding/viewmodel/onboarding_viewmodel.dart';
+import '../../modules/auth/view/welcome_view.dart';
+import '../../modules/auth/view/login_view.dart';
+import '../../modules/auth/view/signup_view.dart';
+import '../../modules/auth/view/forgot_password_view.dart';
+import '../../modules/auth/binding/auth_binding.dart';
 import '../../modules/main_container/view/main_container_view.dart';
 import '../../modules/main_container/binding/main_container_binding.dart';
 import '../../modules/home/view/home_view.dart';
@@ -38,6 +43,29 @@ class AppPages {
         Get.lazyPut(() => OnboardingViewModel());
       }),
       transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: AppRoutes.welcome,
+      page: () => WelcomeView(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: AppRoutes.login,
+      page: () => LoginView(),
+      binding: AuthBinding(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: AppRoutes.signup,
+      page: () => SignupView(),
+      binding: AuthBinding(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: AppRoutes.forgotPassword,
+      page: () => ForgotPasswordView(),
+      binding: AuthBinding(),
+      transition: Transition.rightToLeft,
     ),
     GetPage(
       name: AppRoutes.mainContainer,

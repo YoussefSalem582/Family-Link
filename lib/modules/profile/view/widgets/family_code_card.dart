@@ -153,7 +153,217 @@ class FamilyCodeCard extends StatelessWidget {
                 ),
               ],
             ),
+            SizedBox(height: 16),
+            // Divider
+            Divider(
+              color: isDark ? Colors.grey[800] : Colors.grey[300],
+              thickness: 1,
+            ),
+            SizedBox(height: 16),
+            // Join family button
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () => _showJoinFamilyDialog(context, isDark),
+                icon: Icon(Icons.group_add_rounded, size: 20),
+                label: Text(
+                  'Join Another Family',
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                ),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.blue[700],
+                  side: BorderSide(
+                    color: Colors.blue.withOpacity(0.5),
+                    width: 1.5,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                ),
+              ),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+
+  void _showJoinFamilyDialog(BuildContext context, bool isDark) {
+    final TextEditingController codeController = TextEditingController();
+
+    Get.dialog(
+      Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        backgroundColor: isDark ? Color(0xFF1E1E1E) : Colors.white,
+        child: Padding(
+          padding: EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Icon
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.blue, Colors.blue.shade300],
+                  ),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.blue.withOpacity(0.3),
+                      blurRadius: 12,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Icon(
+                  Icons.family_restroom,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+              SizedBox(height: 20),
+              // Title
+              Text(
+                'Join a Family',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? Colors.white : Colors.black87,
+                ),
+              ),
+              SizedBox(height: 8),
+              // Description
+              Text(
+                'Enter the family code to join an existing family group',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: isDark ? Colors.grey[400] : Colors.grey[600],
+                  height: 1.4,
+                ),
+              ),
+              SizedBox(height: 24),
+              // Input field
+              TextField(
+                controller: codeController,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.5,
+                  color: isDark ? Colors.white : Colors.black87,
+                ),
+                decoration: InputDecoration(
+                  hintText: 'FAM-XXXX-XXXXXX',
+                  hintStyle: TextStyle(
+                    color: isDark ? Colors.grey[600] : Colors.grey[400],
+                    letterSpacing: 1.5,
+                  ),
+                  filled: true,
+                  fillColor: isDark ? Color(0xFF2A2A2A) : Colors.grey[100],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide(color: Colors.blue, width: 2),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 16,
+                  ),
+                ),
+                textCapitalization: TextCapitalization.characters,
+              ),
+              SizedBox(height: 24),
+              // Buttons
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: isDark
+                            ? Colors.grey[400]
+                            : Colors.grey[700],
+                        side: BorderSide(
+                          color: isDark ? Colors.grey[700]! : Colors.grey[300]!,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        final code = codeController.text.trim();
+                        if (code.isEmpty) {
+                          Get.snackbar(
+                            'Error',
+                            'Please enter a family code',
+                            snackPosition: SnackPosition.BOTTOM,
+                            backgroundColor: Colors.red.withOpacity(0.1),
+                            colorText: Colors.red,
+                            margin: EdgeInsets.all(16),
+                            borderRadius: 12,
+                          );
+                          return;
+                        }
+
+                        Get.back();
+
+                        // Show success message (UI only for now)
+                        Get.snackbar(
+                          'Success',
+                          'Joining family with code: $code (UI Only)',
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: Colors.green.withOpacity(0.1),
+                          colorText: Colors.green,
+                          duration: Duration(seconds: 3),
+                          icon: Icon(Icons.check_circle, color: Colors.green),
+                          margin: EdgeInsets.all(16),
+                          borderRadius: 12,
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child: Text(
+                        'Join Family',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

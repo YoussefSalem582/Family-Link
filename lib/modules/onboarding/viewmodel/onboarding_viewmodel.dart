@@ -69,7 +69,7 @@ class OnboardingViewModel extends GetxController {
 
   void completeOnboarding() {
     _storage.write('hasSeenOnboarding', true);
-    Get.offAllNamed(AppRoutes.mainContainer);
+    Get.offAllNamed(AppRoutes.welcome);
   }
 
   @override
