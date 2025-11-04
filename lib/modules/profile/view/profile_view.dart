@@ -116,34 +116,73 @@ class ProfileView extends GetView<ProfileViewModel> {
 
                     // About Section
                     AboutSection(onAboutTap: () => _showAboutDialog(context)),
-                    SizedBox(height: 24),
+                    SizedBox(height: 32),
 
-                    ElevatedButton(
-                      onPressed: () {
-                        Get.defaultDialog(
-                          title: 'profile_sign_out'.tr,
-                          middleText: 'profile_sign_out_confirm'.tr,
-                          textConfirm: 'profile_sign_out'.tr,
-                          textCancel: 'cancel'.tr,
-                          confirmTextColor: Colors.white,
-                          buttonColor: Colors.red,
-                          onConfirm: () {
-                            Get.back();
-                            controller.signOut();
+                    // Sign Out Button
+                    Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.red[400]!, Colors.red[600]!],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.red.withOpacity(0.3),
+                            blurRadius: 12,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          onTap: () {
+                            Get.defaultDialog(
+                              title: 'profile_sign_out'.tr,
+                              middleText: 'profile_sign_out_confirm'.tr,
+                              textConfirm: 'profile_sign_out'.tr,
+                              textCancel: 'cancel'.tr,
+                              confirmTextColor: Colors.white,
+                              buttonColor: Colors.red[700],
+                              cancelTextColor: Colors.grey[700],
+                              radius: 16,
+                              onConfirm: () {
+                                Get.back();
+                                controller.signOut();
+                              },
+                            );
                           },
-                        );
-                      },
-                      child: Text('profile_sign_out'.tr),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
-                        padding: EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(16),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 16),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.logout,
+                                  color: Colors.white,
+                                  size: 22,
+                                ),
+                                SizedBox(width: 12),
+                                Text(
+                                  'profile_sign_out'.tr,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 0.5,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                    SizedBox(height: 24),
+                    SizedBox(height: 32),
                   ],
                 ),
               ),
