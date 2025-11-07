@@ -7,6 +7,7 @@ import '../../../widgets/demo_banner_widget.dart';
 import 'widgets/family_status_card.dart';
 import 'widgets/family_member_card.dart';
 import 'widgets/member_details_sheet.dart';
+import 'widgets/events_section.dart';
 
 class HomeView extends GetView<HomeViewModel> {
   @override
@@ -74,6 +75,10 @@ class HomeView extends GetView<HomeViewModel> {
               //     ),
               //   ],
               // ),
+              SizedBox(height: 24),
+
+              // Upcoming Events Section
+              EventsSection(),
               SizedBox(height: 24),
 
               // Family Members List

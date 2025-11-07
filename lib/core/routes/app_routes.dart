@@ -18,6 +18,7 @@ abstract class AppRoutes {
   static const map = '/map';
   static const wall = '/wall';
   static const profile = '/profile';
+  static const events = '/events';
 
   // Settings
   static const settings = '/settings';

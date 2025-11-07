@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:get/get.dart';
+import '../core/services/event_service.dart';
+import '../data/models/event_model.dart';
 
-class ModernDatePicker {
+class Calendar {
   static Future<DateTime?> show(
     BuildContext context, {
     required DateTime initialDate,
@@ -88,6 +91,15 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
 
   Map<String, int>? _getStatsForDate(DateTime date) {
     return _mealStats[_formatDateKey(date)];
+  }
+
+  List<EventModel> _getEventsForDate(DateTime date) {
+    try {
+      final eventService = Get.find<EventService>();
+      return eventService.getEventsForDate(date);
+    } catch (e) {
+      return [];
+    }
   }
 
   @override
@@ -294,6 +306,62 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
                 ),
               ),
 
+            // Selected date events
+            if (_getEventsForDate(_selectedDate).isNotEmpty)
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.purple.withOpacity(0.05),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: Colors.purple.withOpacity(0.2),
+                    width: 1,
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.event, size: 18, color: Colors.purple[700]),
+                        SizedBox(width: 8),
+                        Text(
+                          'Events on this date:',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.purple[900],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8),
+                    ..._getEventsForDate(_selectedDate).map((event) {
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 4),
+                        child: Row(
+                          children: [
+                            Text(event.icon, style: TextStyle(fontSize: 14)),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                event.title,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.purple[900],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ],
+                ),
+              ),
+
             // Legend
             Container(
               margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -308,6 +376,7 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
                   _buildLegendItem(Colors.green, 'All Eaten'),
                   _buildLegendItem(Colors.orange, 'Partial'),
                   _buildLegendItem(Colors.red, 'None'),
+                  _buildLegendItem(Colors.purple, 'Event'),
                 ],
               ),
             ),
@@ -436,6 +505,8 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
               final hasData = stats != null && stats['total']! > 0;
               final eatenCount = stats?['eaten'] ?? 0;
               final totalCount = stats?['total'] ?? 0;
+              final events = _getEventsForDate(date);
+              final hasEvents = events.isNotEmpty;
 
               return InkWell(
                 onTap: () {
@@ -478,31 +549,48 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
                               : null,
                         ),
                       ),
-                      // Meal completion indicator dots
-                      if (hasData)
+                      // Indicators row (meals and events)
+                      if (hasData || hasEvents)
                         Positioned(
                           bottom: 2,
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Container(
-                                width: 4,
-                                height: 4,
-                                decoration: BoxDecoration(
-                                  color: eatenCount == totalCount
-                                      ? (isSelected
-                                            ? Colors.white
-                                            : Colors.green)
-                                      : eatenCount > 0
-                                      ? (isSelected
-                                            ? Colors.white.withOpacity(0.7)
-                                            : Colors.orange)
-                                      : (isSelected
-                                            ? Colors.white.withOpacity(0.5)
-                                            : Colors.red),
-                                  shape: BoxShape.circle,
+                              // Meal indicator dot
+                              if (hasData)
+                                Container(
+                                  width: 4,
+                                  height: 4,
+                                  margin: EdgeInsets.only(
+                                    right: hasEvents ? 2 : 0,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: eatenCount == totalCount
+                                        ? (isSelected
+                                              ? Colors.white
+                                              : Colors.green)
+                                        : eatenCount > 0
+                                        ? (isSelected
+                                              ? Colors.white.withOpacity(0.7)
+                                              : Colors.orange)
+                                        : (isSelected
+                                              ? Colors.white.withOpacity(0.5)
+                                              : Colors.red),
+                                    shape: BoxShape.circle,
+                                  ),
                                 ),
-                              ),
+                              // Event indicator dot
+                              if (hasEvents)
+                                Container(
+                                  width: 4,
+                                  height: 4,
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Colors.purple,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
                             ],
                           ),
                         ),

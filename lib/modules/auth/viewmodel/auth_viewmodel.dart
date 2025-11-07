@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 class AuthViewModel extends GetxController {
   // Login form controllers
@@ -15,6 +17,11 @@ class AuthViewModel extends GetxController {
 
   // Forgot password controller
   final forgotPasswordEmailController = TextEditingController();
+
+  // Photo picker
+  final signupPhotoPath = ''.obs;
+  File? signupPhotoFile;
+  final ImagePicker _picker = ImagePicker();
 
   // Observable states
   final isLoading = false.obs;
@@ -180,5 +187,54 @@ class AuthViewModel extends GetxController {
     );
 
     Get.offAllNamed('/main');
+  }
+
+  // Photo picker methods
+  Future<void> pickPhotoFromCamera() async {
+    try {
+      final XFile? photo = await _picker.pickImage(
+        source: ImageSource.camera,
+        maxWidth: 1024,
+        maxHeight: 1024,
+        imageQuality: 85,
+      );
+
+      if (photo != null) {
+        signupPhotoFile = File(photo.path);
+        signupPhotoPath.value = photo.path;
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to capture photo: ${e.toString()}',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red.withOpacity(0.1),
+        colorText: Colors.red,
+      );
+    }
+  }
+
+  Future<void> pickPhotoFromGallery() async {
+    try {
+      final XFile? photo = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1024,
+        maxHeight: 1024,
+        imageQuality: 85,
+      );
+
+      if (photo != null) {
+        signupPhotoFile = File(photo.path);
+        signupPhotoPath.value = photo.path;
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to select photo: ${e.toString()}',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red.withOpacity(0.1),
+        colorText: Colors.red,
+      );
+    }
   }
 }

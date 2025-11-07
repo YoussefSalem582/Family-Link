@@ -5,7 +5,7 @@ import '../viewmodel/meals_viewmodel.dart';
 import '../../home/view/widgets/demo_banner_widget.dart';
 import 'widgets/family_member_meal_card.dart';
 import 'widgets/calendar_header.dart';
-import 'widgets/modern_date_picker.dart';
+import '../../../widgets/calendar.dart';
 
 class MealsView extends GetView<MealsViewModel> {
   @override
@@ -161,7 +161,7 @@ class MealsView extends GetView<MealsViewModel> {
   }
 
   void _showDatePicker(BuildContext context) async {
-    final DateTime? picked = await ModernDatePicker.show(
+    final DateTime? picked = await Calendar.show(
       context,
       initialDate: controller.selectedDate.value,
       firstDate: DateTime(2020),

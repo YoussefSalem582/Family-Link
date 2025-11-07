@@ -22,6 +22,8 @@ import '../../modules/wall/view/wall_view.dart';
 import '../../modules/wall/viewmodel/wall_viewmodel.dart';
 import '../../modules/profile/view/profile_view.dart';
 import '../../modules/profile/viewmodel/profile_viewmodel.dart';
+import '../../modules/events/view/events_view.dart';
+import '../../modules/events/viewmodel/events_viewmodel.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -118,6 +120,14 @@ class AppPages {
       page: () => ProfileView(),
       binding: BindingsBuilder(() {
         Get.lazyPut(() => ProfileViewModel());
+      }),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: AppRoutes.events,
+      page: () => EventsView(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => EventsViewModel());
       }),
       transition: Transition.rightToLeft,
     ),

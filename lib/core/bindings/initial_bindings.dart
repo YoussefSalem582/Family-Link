@@ -3,6 +3,7 @@ import '../theme/theme_service.dart';
 import '../services/firebase_service.dart';
 import '../services/storage_service.dart';
 import '../services/notification_service.dart';
+import '../services/event_service.dart';
 
 class InitialBindings extends Bindings {
   @override
@@ -26,5 +27,8 @@ class InitialBindings extends Bindings {
     } catch (e) {
       print('⚠️ Notification service unavailable without Firebase');
     }
+
+    // Event Service
+    Get.put(EventService(), permanent: true);
   }
 }

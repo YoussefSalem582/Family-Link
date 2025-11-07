@@ -80,6 +80,88 @@ class SignupView extends GetView<AuthViewModel> {
                   ),
                 ),
                 SizedBox(height: 40),
+                // Profile Photo
+                Center(
+                  child: Stack(
+                    children: [
+                      Obx(
+                        () => CircleAvatar(
+                          radius: 50,
+                          backgroundColor: Theme.of(
+                            context,
+                          ).primaryColor.withOpacity(0.1),
+                          backgroundImage:
+                              controller.signupPhotoPath.value.isNotEmpty
+                              ? FileImage(controller.signupPhotoFile!)
+                              : null,
+                          child: controller.signupPhotoPath.value.isEmpty
+                              ? Icon(
+                                  Icons.person,
+                                  size: 50,
+                                  color: Theme.of(
+                                    context,
+                                  ).primaryColor.withOpacity(0.5),
+                                )
+                              : null,
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () =>
+                              _showPhotoOptions(context, controller, isDark),
+                          child: Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Theme.of(context).primaryColor,
+                                  Theme.of(
+                                    context,
+                                  ).primaryColor.withOpacity(0.7),
+                                ],
+                              ),
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: isDark
+                                    ? Color(0xFF1E1E1E)
+                                    : Colors.white,
+                                width: 3,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Theme.of(
+                                    context,
+                                  ).primaryColor.withOpacity(0.3),
+                                  blurRadius: 8,
+                                  offset: Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: Icon(
+                              Icons.camera_alt,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 12),
+                Center(
+                  child: Text(
+                    'Add Your Photo',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: isDark ? Colors.grey[400] : Colors.grey[600],
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 32),
                 // Name field
                 CustomTextField(
                   controller: controller.signupNameController,
@@ -394,6 +476,93 @@ class SignupView extends GetView<AuthViewModel> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showPhotoOptions(
+    BuildContext context,
+    AuthViewModel controller,
+    bool isDark,
+  ) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: isDark ? Colors.grey[900] : Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Add Your Photo',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: isDark ? Colors.white : Colors.black87,
+              ),
+            ),
+            SizedBox(height: 20),
+            ListTile(
+              leading: Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF7C3AED), Color(0xFF9333EA)],
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(Icons.camera_alt, color: Colors.white, size: 24),
+              ),
+              title: Text(
+                'Take Photo',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: isDark ? Colors.white : Colors.black87,
+                ),
+              ),
+              onTap: () {
+                Get.back();
+                controller.pickPhotoFromCamera();
+              },
+            ),
+            ListTile(
+              leading: Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF7C3AED), Color(0xFF9333EA)],
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(Icons.photo_library, color: Colors.white, size: 24),
+              ),
+              title: Text(
+                'Choose from Gallery',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: isDark ? Colors.white : Colors.black87,
+                ),
+              ),
+              onTap: () {
+                Get.back();
+                controller.pickPhotoFromGallery();
+              },
+            ),
+            SizedBox(height: 10),
+            TextButton(
+              onPressed: () => Get.back(),
+              child: Text(
+                'Cancel',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
