@@ -19,6 +19,8 @@ abstract class AppRoutes {
   static const wall = '/wall';
   static const profile = '/profile';
   static const events = '/events';
+  static const chat = '/chat';
+  static const chatList = '/chat-list';
 
   // Settings
   static const settings = '/settings';

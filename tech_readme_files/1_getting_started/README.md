@@ -24,24 +24,51 @@ Fast-track guide to get the project running ASAP.
 
 ---
 
+### [PROJECT_ARCHITECTURE.md](./PROJECT_ARCHITECTURE.md)
+**⏱️ Reading Time: 20 minutes**  
+**⭐ NEW - Comprehensive Architecture Guide**
+
+Complete documentation of the entire FamilyLink architecture.
+
+**What you'll learn:**
+- 🏗️ MVVM architecture in detail
+- 📊 All data models explained
+- 🔧 Services & repositories
+- 🎮 State management with GetX
+- 🧭 Navigation system
+- 🌍 Localization architecture
+- 💾 Data persistence strategy
+- 🎮 Demo mode implementation
+- 📦 Dependency injection
+- 📈 Project statistics
+
+**Perfect for:**
+- Understanding complete system design
+- Deep architectural knowledge
+- Contributing to core features
+- Code review preparation
+- Technical documentation
+
+---
+
 ### [PROJECT_SETUP.md](./PROJECT_SETUP.md)
 **⏱️ Reading Time: 15 minutes**
 
-Comprehensive guide covering the complete project architecture and setup.
+Detailed project setup and configuration guide.
 
 **What you'll learn:**
-- 📁 Complete MVVM folder structure
-- 🏗️ Architecture patterns used
+- 📁 Folder structure overview
 - 📦 All dependencies explained
 - 🔧 Detailed Firebase configuration
 - 🌐 Localization setup
 - 🎨 Theme configuration
+- 🛠️ Development environment setup
 
 **Perfect for:**
-- Understanding project architecture
-- Deep-dive into structure
-- Contributing to the codebase
-- Architecture discussions
+- Setting up development environment
+- Configuration reference
+- Troubleshooting setup issues
+- Team onboarding
 
 ---
 
@@ -53,11 +80,18 @@ Comprehensive guide covering the complete project architecture and setup.
 - 👀 You're evaluating the project
 - 🔥 You need Firebase basics only
 
+### Use PROJECT_ARCHITECTURE.md if:
+- 🏗️ You want complete architectural understanding
+- 📊 You need to know all system components
+- 🔍 You're doing code review or refactoring
+- 📚 You want comprehensive technical docs
+- 🎯 You're designing new features
+
 ### Use PROJECT_SETUP.md if:
-- 🏗️ You're setting up for development
-- 📚 You want to understand architecture
-- 🔨 You plan to contribute code
-- 📖 You need complete documentation
+- � You're setting up development environment
+- 📁 You need folder structure reference
+- ⚙️ You're configuring Firebase/dependencies
+- 🐛 You're troubleshooting setup issues
 
 ---
 

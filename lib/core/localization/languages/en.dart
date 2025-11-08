@@ -225,4 +225,19 @@ const Map<String, String> en = {
   'language_english': 'English',
   'language_arabic': 'Arabic',
   'language_select': 'Select Language',
+
+  // Chat Screen
+  'chats': 'Chats',
+  'create_group_chat': 'Create Group Chat',
+  'no_chats_yet': 'No chats yet',
+  'start_conversation': 'Start a conversation with your family',
+  'new_chat': 'New Chat',
+  'yesterday': 'Yesterday',
+  'monday': 'Mon',
+  'tuesday': 'Tue',
+  'wednesday': 'Wed',
+  'thursday': 'Thu',
+  'friday': 'Fri',
+  'saturday': 'Sat',
+  'sunday': 'Sun',
 };

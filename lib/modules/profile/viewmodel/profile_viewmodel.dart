@@ -4,7 +4,10 @@ import 'package:get_storage/get_storage.dart';
 import '../../../data/models/user_model.dart';
 import '../../../data/repositories/user_repository.dart';
 import '../../../core/services/firebase_service.dart';
+import '../../../core/services/event_service.dart';
 import '../../../core/theme/theme_service.dart';
+import '../../wall/viewmodel/wall_viewmodel.dart';
+import '../../meals/viewmodel/meals_viewmodel.dart';
 
 class ProfileViewModel extends GetxController {
   final FirebaseService _firebaseService = Get.find<FirebaseService>();
@@ -131,7 +134,7 @@ class ProfileViewModel extends GetxController {
 
   void _loadDemoData() {
     currentUser.value = UserModel(
-      id: 'demo_user',
+      id: 'demo_user_1',
       name: 'Demo User',
       email: 'demo@familylink.com',
       location: 'Demo City, Demo Country',
@@ -156,6 +159,33 @@ class ProfileViewModel extends GetxController {
   }
 
   Future<void> refreshProfile() async {
+    // Reload all feature module data
+    try {
+      // Reload events
+      if (Get.isRegistered<EventService>()) {
+        final eventService = Get.find<EventService>();
+        eventService.onInit(); // Reload events from storage
+      }
+
+      // Reload wall posts
+      if (Get.isRegistered<WallViewModel>()) {
+        final wallViewModel = Get.find<WallViewModel>();
+        wallViewModel.loadPosts();
+      }
+
+      // Reload moods (they reload from storage automatically via Obx)
+      // No explicit reload needed as MoodViewModel loads all moods on init
+
+      // Reload meals
+      if (Get.isRegistered<MealsViewModel>()) {
+        final mealsViewModel = Get.find<MealsViewModel>();
+        mealsViewModel.loadTodaysMeals();
+      }
+    } catch (e) {
+      print('Error refreshing feature modules: $e');
+    }
+
+    // Reload stats
     _loadStats();
     await Future.delayed(Duration(milliseconds: 300));
   }

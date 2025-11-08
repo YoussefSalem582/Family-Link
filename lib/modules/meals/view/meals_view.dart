@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../widgets/custom_app_bar.dart';
+import '../../../widgets/demo_banner_widget.dart';
 import '../viewmodel/meals_viewmodel.dart';
-import '../../home/view/widgets/demo_banner_widget.dart';
 import 'widgets/family_member_meal_card.dart';
 import 'widgets/calendar_header.dart';
 import '../../../widgets/calendar.dart';

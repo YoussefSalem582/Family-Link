@@ -15,7 +15,8 @@ tech_readme_files/
 ├── 🚀 1_getting_started/ .................. Project setup & onboarding
 │   ├── README.md .......................... Section guide
 │   ├── QUICK_START.md ..................... ⚡ 5-min setup
-│   └── PROJECT_SETUP.md ................... 📚 Complete architecture guide
+│   ├── PROJECT_ARCHITECTURE.md ............ 🏗️ Complete architecture guide
+│   └── PROJECT_SETUP.md ................... 📚 Detailed setup reference
 │
 ├── 🛠️ 2_development/ ...................... Active development guides
 │   ├── README.md .......................... Section guide
@@ -55,13 +56,13 @@ tech_readme_files/
 
 | Category | Files | Total Size | Purpose |
 |----------|-------|------------|---------|
-| 🚀 Getting Started | 3 | ~60KB | Onboarding |
+| 🚀 Getting Started | 4 | ~120KB | Onboarding |
 | 🛠️ Development | 8 | ~180KB | Active work |
-| ✨ Features | 10 | ~280KB | Completions |
+| ✨ Features | 11 | ~280KB | Completions |
 | 🗺️ Roadmap | 3 | ~95KB | Planning |
 | 📦 Archive | 2 | ~50KB | History |
-| 📖 Root | 2 | ~40KB | Navigation |
-| **TOTAL** | **28** | **~705KB** | **Complete** |
+| 📖 Root | 3 | ~50KB | Navigation |
+| **TOTAL** | **31** | **~775KB** | **Complete** |
 
 ---
 
@@ -77,7 +78,7 @@ NAVIGATOR.md (Quick reference)
   ↓
 1_getting_started/QUICK_START.md
   ↓
-1_getting_started/PROJECT_SETUP.md
+1_getting_started/PROJECT_ARCHITECTURE.md
   ↓
 3_features/DEMO_MODE_COMPLETE.md
   ↓
@@ -157,6 +158,8 @@ Done! ✅
 | Task | Location |
 |------|----------|
 | 🆕 Set up project | `1_getting_started/QUICK_START.md` |
+| 🏗️ Understand architecture | `1_getting_started/PROJECT_ARCHITECTURE.md` |
+| 📚 Detailed project setup | `1_getting_started/PROJECT_SETUP.md` |
 | 🌍 Add translation | `2_development/LOCALIZATION_IMPLEMENTATION.md` |
 | 🔑 Find translation key | `2_development/TRANSLATION_REFERENCE.md` |
 | 🐛 Fix a bug | `2_development/BUG_FIXES_AND_FREE_MAP.md` |

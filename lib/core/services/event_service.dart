@@ -22,6 +22,12 @@ class EventService extends GetxService {
         events.value = savedEvents
             .map((json) => EventModel.fromJson(Map<String, dynamic>.from(json)))
             .toList();
+
+        // Check if demo_user_1 has any events, if not add demo events for them
+        final hasUserEvents = events.any((e) => e.userId == 'demo_user_1');
+        if (!hasUserEvents) {
+          _addDemoUserEvents();
+        }
       } else {
         // Load demo events
         _loadDemoEvents();
@@ -32,10 +38,82 @@ class EventService extends GetxService {
     }
   }
 
+  // Add demo events for the current user
+  void _addDemoUserEvents() {
+    final now = DateTime.now();
+    final demoUserEvents = [
+      EventModel(
+        id: 'demo_event_1',
+        title: 'My Doctor Appointment',
+        description: 'Annual health checkup',
+        date: DateTime(now.year, now.month, now.day + 3),
+        type: EventType.appointment,
+        userId: 'demo_user_1',
+        userName: 'Demo User',
+        isRecurring: false,
+      ),
+      EventModel(
+        id: 'demo_event_2',
+        title: 'My Birthday',
+        description: 'Celebrate my birthday with family',
+        date: DateTime(now.year, now.month, now.day + 10),
+        type: EventType.birthday,
+        userId: 'demo_user_1',
+        userName: 'Demo User',
+        isRecurring: true,
+      ),
+      EventModel(
+        id: 'demo_event_3',
+        title: 'Work Meeting',
+        description: 'Important team meeting',
+        date: DateTime(now.year, now.month, now.day + 1),
+        type: EventType.other,
+        userId: 'demo_user_1',
+        userName: 'Demo User',
+        isRecurring: false,
+      ),
+    ];
+
+    events.addAll(demoUserEvents);
+    _saveEvents();
+    print('✅ Added ${demoUserEvents.length} demo events for demo_user_1');
+  }
+
   // Load demo events for testing
   void _loadDemoEvents() {
     final now = DateTime.now();
     events.value = [
+      // Current user's events
+      EventModel(
+        id: 'demo_event_1',
+        title: 'My Doctor Appointment',
+        description: 'Annual health checkup',
+        date: DateTime(now.year, now.month, now.day + 3),
+        type: EventType.appointment,
+        userId: 'demo_user_1',
+        userName: 'Demo User',
+        isRecurring: false,
+      ),
+      EventModel(
+        id: 'demo_event_2',
+        title: 'My Birthday',
+        description: 'Celebrate my birthday with family',
+        date: DateTime(now.year, now.month, now.day + 10),
+        type: EventType.birthday,
+        userId: 'demo_user_1',
+        userName: 'Demo User',
+        isRecurring: true,
+      ),
+      EventModel(
+        id: 'demo_event_3',
+        title: 'Work Meeting',
+        description: 'Important team meeting',
+        date: DateTime(now.year, now.month, now.day + 1),
+        type: EventType.other,
+        userId: 'demo_user_1',
+        userName: 'Demo User',
+        isRecurring: false,
+      ),
       // Birthday events
       EventModel(
         id: '1',

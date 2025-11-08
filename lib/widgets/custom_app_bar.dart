@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'avatar_widget.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -11,6 +12,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackButton;
   final Color? backgroundColor;
   final double elevation;
+  final String? avatarName;
+  final String? avatarPhotoUrl;
+  final VoidCallback? onTitleTap;
 
   const CustomAppBar({
     Key? key,
@@ -23,6 +27,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.showBackButton = true,
     this.backgroundColor,
     this.elevation = 0,
+    this.avatarName,
+    this.avatarPhotoUrl,
+    this.onTitleTap,
   }) : super(key: key);
 
   @override
@@ -36,63 +43,92 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: bgColor,
       automaticallyImplyLeading: showBackButton,
       iconTheme: IconThemeData(color: isDark ? Colors.white : Colors.black87),
-      title: Row(
-        children: [
-          Container(
-            padding: EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Theme.of(context).primaryColor,
-                  Theme.of(context).primaryColor.withOpacity(0.7),
+      titleSpacing: avatarName != null ? 0 : null,
+      title: GestureDetector(
+        onTap: onTitleTap,
+        child: Row(
+          children: [
+            // Show avatar or icon
+            if (avatarName != null)
+              AvatarWidget(
+                name: avatarName!,
+                photoUrl: avatarPhotoUrl,
+                size: 40,
+              )
+            else
+              Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Theme.of(context).primaryColor,
+                      Theme.of(context).primaryColor.withOpacity(0.7),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Theme.of(context).primaryColor.withOpacity(0.3),
+                      blurRadius: 8,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Icon(icon, color: Colors.white, size: 20),
+              ),
+            SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    title.tr,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: avatarName != null ? 16 : 20,
+                      letterSpacing: 0.3,
+                      color: isDark ? Colors.white : Colors.black87,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  if (avatarName != null && onTitleTap != null)
+                    Text(
+                      'Tap to view profile',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: isDark ? Colors.grey[500] : Colors.grey[600],
+                      ),
+                    ),
                 ],
               ),
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Theme.of(context).primaryColor.withOpacity(0.3),
-                  blurRadius: 8,
-                  offset: Offset(0, 2),
-                ),
-              ],
             ),
-            child: Icon(icon, color: Colors.white, size: 20),
-          ),
-          SizedBox(width: 12),
-          Text(
-            title.tr,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-              letterSpacing: 0.3,
-              color: isDark ? Colors.white : Colors.black87,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
-      actions:
-          actions ??
-          (onActionPressed != null
-              ? [
-                  Container(
-                    margin: EdgeInsets.only(right: 8),
-                    decoration: BoxDecoration(
-                      color: Theme.of(
-                        context,
-                      ).primaryColor.withOpacity(isDark ? 0.2 : 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    child: IconButton(
-                      icon: Icon(
-                        actionIcon ?? Icons.add_circle_outline,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      onPressed: onActionPressed,
-                      tooltip: actionTooltip?.tr ?? '',
-                    ),
-                  ),
-                ]
-              : null),
+      actions: [
+        // Show action icon if provided
+        if (onActionPressed != null)
+          Container(
+            margin: EdgeInsets.only(right: 8),
+            decoration: BoxDecoration(
+              color: Theme.of(
+                context,
+              ).primaryColor.withOpacity(isDark ? 0.2 : 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
+              icon: Icon(
+                actionIcon ?? Icons.add_circle_outline,
+                color: Theme.of(context).primaryColor,
+              ),
+              onPressed: onActionPressed,
+              tooltip: actionTooltip?.tr ?? '',
+            ),
+          ),
+        // Show additional actions if provided
+        if (actions != null) ...actions!,
+      ],
     );
   }
 

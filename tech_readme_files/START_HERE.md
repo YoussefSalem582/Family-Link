@@ -37,7 +37,8 @@
 | Task | Go To |
 |------|-------|
 | 🆕 **Set up the project** | [1_getting_started/QUICK_START.md](./1_getting_started/QUICK_START.md) |
-| 📚 **Understand architecture** | [1_getting_started/PROJECT_SETUP.md](./1_getting_started/PROJECT_SETUP.md) |
+| 📚 **Understand architecture** | [1_getting_started/PROJECT_ARCHITECTURE.md](./1_getting_started/PROJECT_ARCHITECTURE.md) |
+| 🏗️ **Detailed project setup** | [1_getting_started/PROJECT_SETUP.md](./1_getting_started/PROJECT_SETUP.md) |
 | 🌍 **Add a translation** | [2_development/LOCALIZATION_IMPLEMENTATION.md](./2_development/LOCALIZATION_IMPLEMENTATION.md) |
 | 🔑 **Find translation key** | [2_development/TRANSLATION_REFERENCE.md](./2_development/TRANSLATION_REFERENCE.md) |
 | 🐛 **Fix a bug** | [2_development/BUG_FIXES_AND_FREE_MAP.md](./2_development/BUG_FIXES_AND_FREE_MAP.md) |
@@ -55,6 +56,10 @@
 tech_readme_files/
 │
 ├── 🚀 1_getting_started/    ← New to the project? Start here
+│   ├── QUICK_START.md       ← Fast 5-min setup
+│   ├── PROJECT_ARCHITECTURE.md ← Complete architecture guide  
+│   └── PROJECT_SETUP.md     ← Detailed setup reference
+│
 ├── 🛠️ 2_development/        ← Actively developing? Work here  
 ├── ✨ 3_features/            ← Need feature info? Look here
 ├── 🗺️ 4_roadmap/             ← Planning ahead? Check here
@@ -71,7 +76,7 @@ tech_readme_files/
    ↓
 2. 1_getting_started/QUICK_START.md (10 min)
    ↓
-3. 1_getting_started/PROJECT_SETUP.md (15 min)
+3. 1_getting_started/PROJECT_ARCHITECTURE.md (15 min)
    ↓
 Ready to code! 🎉
 ```
@@ -106,11 +111,11 @@ Ready to code! 🎉
 
 ## 📊 Documentation Stats
 
-- **Total Files:** 25 documents
-- **Total Size:** ~201 KB
+- **Total Files:** 28 documents
+- **Total Size:** ~240 KB
 - **Categories:** 5 organized folders
 - **Status:** ✅ Complete & Organized
-- **Last Updated:** November 4, 2025
+- **Last Updated:** November 8, 2025
 
 ---
 

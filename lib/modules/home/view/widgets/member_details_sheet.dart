@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../widgets/avatar_widget.dart';
+import '../../../../widgets/custom_button.dart';
 import '../../../../data/repositories/mood_repository.dart';
 import '../../../../data/repositories/meal_repository.dart';
 import '../../../../data/models/mood_model.dart';
@@ -104,6 +105,51 @@ class MemberDetailsSheet extends StatelessWidget {
 
                   SizedBox(height: 28),
 
+                  // View Profile Button
+                  CustomButton(
+                    text: 'View ${member.name}\'s Profile',
+                    onPressed: () {
+                      Get.back(); // Close the bottom sheet
+                      Get.toNamed(
+                        '/profile',
+                        arguments: {
+                          'userId': member.id,
+                          'userName': member.name,
+                        },
+                      );
+                    },
+                    icon: Icons.person_outline_rounded,
+                    backgroundColor: Theme.of(context).primaryColor,
+                    textColor: Colors.white,
+                    width: double.infinity,
+                  ),
+
+                  SizedBox(height: 12),
+
+                  // Chat Button
+                  CustomButton(
+                    text: 'Message ${member.name}',
+                    onPressed: () {
+                      Get.back(); // Close the bottom sheet
+                      Get.toNamed(
+                        '/chat',
+                        arguments: {
+                          'receiverId': member.id,
+                          'receiverName': member.name,
+                          'receiverPhotoUrl': member.photoUrl,
+                        },
+                      );
+                    },
+                    icon: Icons.chat_bubble_outline_rounded,
+                    backgroundColor: isDark
+                        ? Color(0xFF2A2A2A)
+                        : Colors.grey[100]!,
+                    textColor: Theme.of(context).primaryColor,
+                    width: double.infinity,
+                  ),
+
+                  SizedBox(height: 28),
+
                   // Divider
                   Divider(color: dividerColor, height: 1),
 
@@ -190,8 +236,10 @@ class MemberDetailsSheet extends StatelessWidget {
                   // Meals Section
                   _buildMealsSection(context, member, isDark),
 
+                  SizedBox(height: 24),
+
                   if (isDemoMode) ...[
-                    SizedBox(height: 24),
+                    SizedBox(height: 16),
                     Container(
                       padding: EdgeInsets.symmetric(
                         horizontal: 16,

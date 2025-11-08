@@ -20,40 +20,65 @@ FamilyLink helps families stay connected by providing:
 ## ✨ Features
 
 ### 🏠 Home Dashboard
-- Family member status overview
-- Real-time location display
-- Quick stats (members at home/away)
-- Last seen timestamps
+- Family member status overview with real-time indicators
+- Activity statistics (members at home/away)
+- Location display with last seen timestamps
+- Member detail sheets with complete info
+- Pull-to-refresh functionality
 
 ### 🍽️ Meals Module
-- Track breakfast, lunch, and dinner
+- Track all meals (breakfast, lunch, dinner, snacks)
 - Mark meals as eaten or skipped
-- View family meal history
-- Daily meal statistics
+- Calendar navigation to view any date
+- Meal history with full persistence
+- Family meal overview and statistics
+- Prevents duplicate meal entries
 
 ### 😊 Mood Tracker
-- Share your mood with emojis
-- Add notes to express feelings
+- Share mood with 8 emoji options
+- Add optional notes to moods
 - View family mood history
-- Daily mood reminders
+- Daily mood tracking
+- Mood statistics and insights
+- Complete data persistence
 
 ### 🗺️ Interactive Map
-- Live family member locations
-- Google Maps integration
-- Location history
-- Privacy controls
+- Family member location visualization
+- OpenStreetMap integration (no API key needed)
+- Custom markers with user initials
+- Location privacy controls
+- Free and open-source solution
+
+### 📅 Events Calendar
+- Full calendar view with month navigation
+- Multiple event types (birthdays, appointments, holidays, etc.)
+- Add, edit, delete events
+- Recurring events support
+- Upcoming events list
+- Color-coded event categories
+- Event countdown display
 
 ### 💬 Family Wall
-- Share posts and photos
+- Create text posts with timestamps
 - Like and comment on posts
-- Real-time updates
-- Family social feed
+- Delete own posts with confirmation
+- Real-time like count updates
+- Comment system with threading
+- Full CRUD operations with persistence
 
 ### 👤 Profile & Settings
-- Personal profile management
-- Dark/Light theme toggle
-- Notification preferences
-- Family management
+- Real-time activity statistics
+  - Posts count (from wall)
+  - Moods count (from mood tracker)
+  - Meals count (from meal tracker)
+  - Days active (calculated from all activities)
+- View recent posts, moods, and meals
+- Dark/Light theme toggle with persistence
+- Language switcher (English/Arabic)
+- Location sharing controls
+- Live location toggle
+- Comprehensive settings panel
+- Sign out functionality
 
 ## 🏗️ Architecture
 

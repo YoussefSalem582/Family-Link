@@ -21,9 +21,14 @@ import '../../modules/map/viewmodel/map_viewmodel.dart';
 import '../../modules/wall/view/wall_view.dart';
 import '../../modules/wall/viewmodel/wall_viewmodel.dart';
 import '../../modules/profile/view/profile_view.dart';
+import '../../modules/profile/view/settings_view.dart';
 import '../../modules/profile/viewmodel/profile_viewmodel.dart';
 import '../../modules/events/view/events_view.dart';
 import '../../modules/events/viewmodel/events_viewmodel.dart';
+import '../../modules/chat/view/chat_view.dart';
+import '../../modules/chat/view/chat_list_view.dart';
+import '../../modules/chat/viewmodel/chat_viewmodel.dart';
+import '../../modules/chat/viewmodel/chat_list_viewmodel.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -128,6 +133,30 @@ class AppPages {
       page: () => EventsView(),
       binding: BindingsBuilder(() {
         Get.lazyPut(() => EventsViewModel());
+      }),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: AppRoutes.chat,
+      page: () => ChatView(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => ChatViewModel());
+      }),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: AppRoutes.chatList,
+      page: () => ChatListView(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => ChatListViewModel());
+      }),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: AppRoutes.settings,
+      page: () => SettingsView(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => ProfileViewModel());
       }),
       transition: Transition.rightToLeft,
     ),

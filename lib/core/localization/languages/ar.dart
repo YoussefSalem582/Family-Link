@@ -225,4 +225,19 @@ const Map<String, String> ar = {
   'language_english': 'الإنجليزية',
   'language_arabic': 'العربية',
   'language_select': 'اختر اللغة',
+
+  // Chat Screen
+  'chats': 'المحادثات',
+  'create_group_chat': 'إنشاء محادثة جماعية',
+  'no_chats_yet': 'لا توجد محادثات بعد',
+  'start_conversation': 'ابدأ محادثة مع عائلتك',
+  'new_chat': 'محادثة جديدة',
+  'yesterday': 'أمس',
+  'monday': 'الاثنين',
+  'tuesday': 'الثلاثاء',
+  'wednesday': 'الأربعاء',
+  'thursday': 'الخميس',
+  'friday': 'الجمعة',
+  'saturday': 'السبت',
+  'sunday': 'الأحد',
 };

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../../core/services/event_service.dart';
 import '../../../../data/models/event_model.dart';
 import '../../../../core/routes/app_routes.dart';
+import '../../../../widgets/section_header.dart';
 import '../../../events/view/widgets/event_details_sheet.dart';
 
 class EventsSection extends StatelessWidget {
@@ -18,39 +19,12 @@ class EventsSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Section Header
-        Row(
-          children: [
-            Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Theme.of(context).primaryColor,
-                    Theme.of(context).primaryColor.withOpacity(0.7),
-                  ],
-                ),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(Icons.event_rounded, color: Colors.white, size: 20),
-            ),
-            SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                'Upcoming Events',
-                style: Theme.of(
-                  context,
-                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
-              ),
-            ),
-            TextButton.icon(
-              onPressed: () => Get.toNamed(AppRoutes.events),
-              icon: Icon(Icons.calendar_month, size: 18),
-              label: Text('View All'),
-              style: TextButton.styleFrom(
-                foregroundColor: Theme.of(context).primaryColor,
-              ),
-            ),
-          ],
+        SectionHeader(
+          title: 'Upcoming Events',
+          icon: Icons.event_rounded,
+          actionText: 'View All',
+          actionIcon: Icons.calendar_month,
+          onActionPressed: () => Get.toNamed(AppRoutes.events),
         ),
         SizedBox(height: 12),
 
