@@ -283,4 +283,64 @@ const Map<String, String> ar = {
   'friday': 'الجمعة',
   'saturday': 'السبت',
   'sunday': 'الأحد',
+
+  // Events Module - Smart Features
+  'events_calendar': 'تقويم الأحداث',
+  'family_availability': 'توفر العائلة',
+  'view_availability': 'عرض التوفر',
+  'view_calendar': 'عرض التقويم',
+  'add_event': 'إضافة حدث',
+
+  // Availability Sections
+  'suggested_family_time': '💡 وقت عائلي مقترح',
+  'find_time_together': '⏰ إيجاد وقت معاً',
+  'family_welcome_activities': '👋 أنشطة ترحيب عائلي',
+  'todays_schedule': '📊 جدول اليوم',
+
+  // Events Common
+  'available': 'متاح',
+  'activity': 'نشاط',
+  'join': 'انضم!',
+  'schedule_event': 'جدولة حدث',
+
+  // Schedule Editing
+  'edit_schedule': 'تعديل الجدول',
+  'mark_as_free': 'وضع علامة كوقت فراغ',
+  'available_for_activities': 'متاح للأنشطة العائلية',
+  'busy_with_activity': 'مشغول بنشاط مجدول',
+  'activity_name': 'اسم النشاط',
+  'activity_hint': 'مثال: العمل، المدرسة، الصالة الرياضية',
+  'location_optional': 'الموقع (اختياري)',
+  'location_hint': 'مثال: المكتب، النادي الرياضي',
+  'family_welcome': 'الترحيب العائلي',
+  'others_can_join': 'يمكن للآخرين الانضمام لهذا النشاط',
+  'tap_to_edit_schedule':
+      'اضغط على الكتل التي تحمل أيقونة التعديل لتغيير جدولك',
+  'schedule_updated': 'تم تحديث الجدول',
+  'now_free': 'الآن متاح',
+  'scheduled_for': 'تم الجدولة لـ',
+
+  // Home Module - Smart Status
+  'family_status': 'حالة العائلة',
+  'auto': 'تلقائي',
+  'update_status_for': 'تحديث الحالة لـ',
+
+  // Time Formatting
+  'm_ago': ' د مضت',
+  'h_ago': ' س مضت',
+  'd_ago': ' ي مضت',
+
+  // Geofence Notifications
+  'location_updates': 'تحديثات الموقع',
+  'managed_locations': 'المواقع المدارة',
+  'settings': 'الإعدادات',
+  'no_recent_location_updates': 'لا توجد تحديثات موقع حديثة',
+
+  // Calendar
+  'select_date': 'اختر التاريخ',
+  'events_on_date': 'الأحداث في هذا التاريخ:',
+  'availability_on_date': 'التوفر في هذا التاريخ:',
+  'all_eaten': 'تم تناول الكل',
+  'free_time': 'وقت فراغ',
+  'busy_time': 'وقت مشغول',
 };

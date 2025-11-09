@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:get/get.dart';
 import '../core/services/event_service.dart';
 import '../data/models/event_model.dart';
+import '../modules/events/data/models/availability_model.dart';
 
 class Calendar {
   static Future<DateTime?> show(
@@ -11,6 +12,8 @@ class Calendar {
     required DateTime initialDate,
     DateTime? firstDate,
     DateTime? lastDate,
+    List<AvailabilitySlot>? availabilitySlots,
+    bool showAvailability = false,
   }) async {
     return await showDialog<DateTime>(
       context: context,
@@ -18,6 +21,8 @@ class Calendar {
         initialDate: initialDate,
         firstDate: firstDate ?? DateTime(2020),
         lastDate: lastDate ?? DateTime(2030),
+        availabilitySlots: availabilitySlots ?? [],
+        showAvailability: showAvailability,
       ),
     );
   }
@@ -27,11 +32,15 @@ class _ModernDatePickerDialog extends StatefulWidget {
   final DateTime initialDate;
   final DateTime firstDate;
   final DateTime lastDate;
+  final List<AvailabilitySlot> availabilitySlots;
+  final bool showAvailability;
 
   const _ModernDatePickerDialog({
     required this.initialDate,
     required this.firstDate,
     required this.lastDate,
+    required this.availabilitySlots,
+    required this.showAvailability,
   });
 
   @override
@@ -102,6 +111,35 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
     }
   }
 
+  List<AvailabilitySlot> _getAvailabilityForDate(DateTime date) {
+    return widget.availabilitySlots.where((slot) {
+      final slotDate = DateTime(
+        slot.start.year,
+        slot.start.month,
+        slot.start.day,
+      );
+      final targetDate = DateTime(date.year, date.month, date.day);
+      return slotDate == targetDate;
+    }).toList();
+  }
+
+  Map<String, dynamic> _getAvailabilityStats(DateTime date) {
+    final slots = _getAvailabilityForDate(date);
+    if (slots.isEmpty) return {};
+
+    final freeSlots = slots.where((s) => s.isFree).length;
+    final busySlots = slots.where((s) => !s.isFree).length;
+    final uniqueUsers = slots.map((s) => s.userId).toSet().length;
+
+    return {
+      'free': freeSlots,
+      'busy': busySlots,
+      'total': slots.length,
+      'users': uniqueUsers,
+      'hasFamilyWelcome': slots.any((s) => s.familyWelcome),
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
@@ -111,11 +149,13 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
       now.subtract(Duration(days: 1)),
     );
     final isTomorrow = _isSameDay(_selectedDate, now.add(Duration(days: 1)));
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
       child: Container(
-        constraints: BoxConstraints(maxWidth: 400),
+        constraints: BoxConstraints(maxWidth: 400, maxHeight: 700),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -125,10 +165,15 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [
-                    Theme.of(context).primaryColor,
-                    Theme.of(context).primaryColor.withOpacity(0.8),
-                  ],
+                  colors: isDarkMode
+                      ? [
+                          Theme.of(context).primaryColor.withOpacity(0.8),
+                          Theme.of(context).primaryColor.withOpacity(0.6),
+                        ]
+                      : [
+                          Theme.of(context).primaryColor,
+                          Theme.of(context).primaryColor.withOpacity(0.8),
+                        ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -144,7 +189,7 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
                     children: [
                       Expanded(
                         child: Text(
-                          'Select Date',
+                          'select_date'.tr,
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.white.withOpacity(0.9),
@@ -160,19 +205,19 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
+                            color: Colors.white.withOpacity(0.25),
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              color: Colors.white.withOpacity(0.3),
+                              color: Colors.white.withOpacity(0.4),
                               width: 1,
                             ),
                           ),
                           child: Text(
                             isToday
-                                ? 'TODAY'
+                                ? 'today'.tr.toUpperCase()
                                 : isYesterday
-                                ? 'YESTERDAY'
-                                : 'TOMORROW',
+                                ? 'yesterday'.tr.toUpperCase()
+                                : 'tomorrow'.tr.toUpperCase(),
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
@@ -196,188 +241,381 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
               ),
             ),
 
-            // Quick select buttons
-            Container(
-              padding: EdgeInsets.all(16),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _buildQuickButton(
-                      context,
-                      'Yesterday',
-                      Icons.arrow_back,
-                      now.subtract(Duration(days: 1)),
-                      Colors.orange,
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: _buildQuickButton(
-                      context,
-                      'Today',
-                      Icons.today,
-                      now,
-                      Colors.green,
-                      isPrimary: true,
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: _buildQuickButton(
-                      context,
-                      'Tomorrow',
-                      Icons.arrow_forward,
-                      now.add(Duration(days: 1)),
-                      Colors.blue,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            // Month navigation
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.chevron_left),
-                    onPressed: () {
-                      setState(() {
-                        _displayedMonth = DateTime(
-                          _displayedMonth.year,
-                          _displayedMonth.month - 1,
-                        );
-                      });
-                    },
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  Expanded(
-                    child: Text(
-                      DateFormat('MMMM yyyy').format(_displayedMonth),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+            // Scrollable content
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Quick select buttons
+                    Container(
+                      padding: EdgeInsets.all(16),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: _buildQuickButton(
+                              context,
+                              'yesterday'.tr,
+                              Icons.arrow_back,
+                              now.subtract(Duration(days: 1)),
+                              Colors.orange,
+                              isDarkMode,
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: _buildQuickButton(
+                              context,
+                              'today'.tr,
+                              Icons.today,
+                              now,
+                              Colors.green,
+                              isDarkMode,
+                              isPrimary: true,
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: _buildQuickButton(
+                              context,
+                              'tomorrow'.tr,
+                              Icons.arrow_forward,
+                              now.add(Duration(days: 1)),
+                              Colors.blue,
+                              isDarkMode,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.chevron_right),
-                    onPressed: () {
-                      setState(() {
-                        _displayedMonth = DateTime(
-                          _displayedMonth.year,
-                          _displayedMonth.month + 1,
-                        );
-                      });
-                    },
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ],
-              ),
-            ),
 
-            // Calendar grid
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: _buildCalendarGrid(context),
-            ),
+                    // Month navigation
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.chevron_left),
+                            onPressed: () {
+                              setState(() {
+                                _displayedMonth = DateTime(
+                                  _displayedMonth.year,
+                                  _displayedMonth.month - 1,
+                                );
+                              });
+                            },
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          Expanded(
+                            child: Text(
+                              DateFormat('MMMM yyyy').format(_displayedMonth),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.chevron_right),
+                            onPressed: () {
+                              setState(() {
+                                _displayedMonth = DateTime(
+                                  _displayedMonth.year,
+                                  _displayedMonth.month + 1,
+                                );
+                              });
+                            },
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ],
+                      ),
+                    ),
 
-            // Selected date meal statistics
-            if (_getStatsForDate(_selectedDate) != null)
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.blue.withOpacity(0.05),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: Colors.blue.withOpacity(0.2),
-                    width: 1,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Icons.info_outline, size: 18, color: Colors.blue[700]),
-                    SizedBox(width: 8),
-                    Expanded(child: _buildDateStats(_selectedDate)),
-                  ],
-                ),
-              ),
+                    // Calendar grid
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: _buildCalendarGrid(context),
+                    ),
 
-            // Selected date events
-            if (_getEventsForDate(_selectedDate).isNotEmpty)
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.purple.withOpacity(0.05),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(
-                    color: Colors.purple.withOpacity(0.2),
-                    width: 1,
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(Icons.event, size: 18, color: Colors.purple[700]),
-                        SizedBox(width: 8),
-                        Text(
-                          'Events on this date:',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.purple[900],
+                    // Selected date meal statistics
+                    if (!widget.showAvailability &&
+                        _getStatsForDate(_selectedDate) != null)
+                      Container(
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: isDarkMode
+                              ? Colors.blue.withOpacity(0.15)
+                              : Colors.blue.withOpacity(0.05),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: isDarkMode
+                                ? Colors.blue.withOpacity(0.4)
+                                : Colors.blue.withOpacity(0.2),
+                            width: 1,
                           ),
                         ),
-                      ],
-                    ),
-                    SizedBox(height: 8),
-                    ..._getEventsForDate(_selectedDate).map((event) {
-                      return Padding(
-                        padding: EdgeInsets.only(bottom: 4),
                         child: Row(
                           children: [
-                            Text(event.icon, style: TextStyle(fontSize: 14)),
+                            Icon(
+                              Icons.info_outline,
+                              size: 18,
+                              color: isDarkMode
+                                  ? Colors.blue[300]
+                                  : Colors.blue[700],
+                            ),
                             SizedBox(width: 8),
                             Expanded(
-                              child: Text(
-                                event.title,
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.purple[900],
-                                ),
-                              ),
+                              child: _buildDateStats(_selectedDate, isDarkMode),
                             ),
                           ],
                         ),
-                      );
-                    }).toList(),
+                      ),
+
+                    // Selected date events
+                    if (_getEventsForDate(_selectedDate).isNotEmpty)
+                      Container(
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: isDarkMode
+                              ? Colors.purple.withOpacity(0.15)
+                              : Colors.purple.withOpacity(0.05),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: isDarkMode
+                                ? Colors.purple.withOpacity(0.4)
+                                : Colors.purple.withOpacity(0.2),
+                            width: 1,
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.event,
+                                  size: 18,
+                                  color: isDarkMode
+                                      ? Colors.purple[300]
+                                      : Colors.purple[700],
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  'events_on_date'.tr,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: isDarkMode
+                                        ? Colors.purple[200]
+                                        : Colors.purple[900],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            ..._getEventsForDate(_selectedDate).map((event) {
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 4),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      event.icon,
+                                      style: TextStyle(fontSize: 14),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        event.title,
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          color: isDarkMode
+                                              ? Colors.purple[200]
+                                              : Colors.purple[900],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          ],
+                        ),
+                      ),
+
+                    // Selected date availability
+                    if (widget.showAvailability &&
+                        _getAvailabilityForDate(_selectedDate).isNotEmpty)
+                      Container(
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: isDarkMode
+                              ? Colors.blue.withOpacity(0.15)
+                              : Colors.blue.withOpacity(0.05),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: isDarkMode
+                                ? Colors.blue.withOpacity(0.4)
+                                : Colors.blue.withOpacity(0.2),
+                            width: 1,
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.schedule,
+                                  size: 18,
+                                  color: isDarkMode
+                                      ? Colors.blue[300]
+                                      : Colors.blue[700],
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  'availability_on_date'.tr,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: isDarkMode
+                                        ? Colors.blue[200]
+                                        : Colors.blue[900],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            ..._getAvailabilityForDate(_selectedDate).map((
+                              slot,
+                            ) {
+                              final timeStr =
+                                  '${DateFormat('h:mm a').format(slot.start)} - ${DateFormat('h:mm a').format(slot.end)}';
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 6),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 6,
+                                      height: 6,
+                                      decoration: BoxDecoration(
+                                        color: slot.isFree
+                                            ? (isDarkMode
+                                                  ? Colors.blue[300]
+                                                  : Colors.blue)
+                                            : (isDarkMode
+                                                  ? Colors.amber[500]
+                                                  : Colors.amber[700]),
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Expanded(
+                                      child: RichText(
+                                        text: TextSpan(
+                                          style: TextStyle(
+                                            fontSize: 11,
+                                            color: isDarkMode
+                                                ? Colors.blue[200]
+                                                : Colors.blue[900],
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text: '${slot.userName}: ',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                            TextSpan(
+                                              text: slot.isFree
+                                                  ? '${'free'.tr} ($timeStr)'
+                                                  : '${slot.activityName ?? 'busy'.tr} ($timeStr)',
+                                            ),
+                                            if (slot.familyWelcome)
+                                              TextSpan(
+                                                text: ' 👋',
+                                                style: TextStyle(fontSize: 10),
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
+                          ],
+                        ),
+                      ),
+
+                    // Legend
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: isDarkMode
+                            ? Colors.grey[800]?.withOpacity(0.3)
+                            : Colors.grey.withOpacity(0.05),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Wrap(
+                        spacing: 12,
+                        runSpacing: 8,
+                        alignment: WrapAlignment.center,
+                        children: [
+                          if (!widget.showAvailability) ...[
+                            _buildLegendItem(
+                              Colors.green,
+                              'all_eaten'.tr,
+                              isDarkMode,
+                            ),
+                            _buildLegendItem(
+                              Colors.orange,
+                              'partial'.tr,
+                              isDarkMode,
+                            ),
+                            _buildLegendItem(Colors.red, 'none'.tr, isDarkMode),
+                          ],
+                          _buildLegendItem(
+                            Colors.purple,
+                            'event'.tr,
+                            isDarkMode,
+                          ),
+                          if (widget.showAvailability) ...[
+                            _buildLegendItem(
+                              isDarkMode ? Colors.blue[300]! : Colors.blue,
+                              'free'.tr,
+                              isDarkMode,
+                            ),
+                            _buildLegendItem(
+                              isDarkMode
+                                  ? Colors.amber[500]!
+                                  : Colors.amber[700]!,
+                              'busy'.tr,
+                              isDarkMode,
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-              ),
-
-            // Legend
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              padding: EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.grey.withOpacity(0.05),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  _buildLegendItem(Colors.green, 'All Eaten'),
-                  _buildLegendItem(Colors.orange, 'Partial'),
-                  _buildLegendItem(Colors.red, 'None'),
-                  _buildLegendItem(Colors.purple, 'Event'),
-                ],
               ),
             ),
 
@@ -392,9 +630,9 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     child: Text(
-                      'Cancel',
+                      'cancel'.tr,
                       style: TextStyle(
-                        color: Colors.grey[600],
+                        color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
                         fontWeight: FontWeight.w600,
                         fontSize: 15,
                       ),
@@ -424,7 +662,7 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
                       elevation: 0,
                     ),
                     child: Text(
-                      'OK',
+                      'ok'.tr,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 15,
@@ -501,12 +739,24 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
               final isSelected = _isSameDay(date, _selectedDate);
               final isToday = _isSameDay(date, DateTime.now());
               final isSunday = dayIndex == 0;
-              final stats = _getStatsForDate(date);
-              final hasData = stats != null && stats['total']! > 0;
+              final stats = widget.showAvailability
+                  ? null
+                  : _getStatsForDate(date);
+              final hasData =
+                  !widget.showAvailability &&
+                  stats != null &&
+                  stats['total']! > 0;
               final eatenCount = stats?['eaten'] ?? 0;
               final totalCount = stats?['total'] ?? 0;
               final events = _getEventsForDate(date);
               final hasEvents = events.isNotEmpty;
+              final availStats = widget.showAvailability
+                  ? _getAvailabilityStats(date)
+                  : <String, dynamic>{};
+              final hasAvailability =
+                  widget.showAvailability && availStats.isNotEmpty;
+              final hasFreeTime = hasAvailability && availStats['free'] > 0;
+              final hasBusyTime = hasAvailability && availStats['busy'] > 0;
 
               return InkWell(
                 onTap: () {
@@ -549,8 +799,8 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
                               : null,
                         ),
                       ),
-                      // Indicators row (meals and events)
-                      if (hasData || hasEvents)
+                      // Indicators row (meals, events, and availability)
+                      if (hasData || hasEvents || hasAvailability)
                         Positioned(
                           bottom: 2,
                           child: Row(
@@ -562,7 +812,9 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
                                   width: 4,
                                   height: 4,
                                   margin: EdgeInsets.only(
-                                    right: hasEvents ? 2 : 0,
+                                    right: (hasEvents || hasAvailability)
+                                        ? 2
+                                        : 0,
                                   ),
                                   decoration: BoxDecoration(
                                     color: eatenCount == totalCount
@@ -584,10 +836,40 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
                                 Container(
                                   width: 4,
                                   height: 4,
+                                  margin: EdgeInsets.only(
+                                    right: hasAvailability ? 2 : 0,
+                                  ),
                                   decoration: BoxDecoration(
                                     color: isSelected
                                         ? Colors.white
                                         : Colors.purple,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                              // Free time indicator (blue dot)
+                              if (hasFreeTime)
+                                Container(
+                                  width: 4,
+                                  height: 4,
+                                  margin: EdgeInsets.only(
+                                    right: hasBusyTime ? 2 : 0,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Colors.blue,
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                              // Busy time indicator (amber dot)
+                              if (hasBusyTime)
+                                Container(
+                                  width: 4,
+                                  height: 4,
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? Colors.white.withOpacity(0.8)
+                                        : Colors.amber[700],
                                     shape: BoxShape.circle,
                                   ),
                                 ),
@@ -610,7 +892,8 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
     String label,
     IconData icon,
     DateTime date,
-    Color color, {
+    Color color,
+    bool isDarkMode, {
     bool isPrimary = false,
   }) {
     final isSelected = _isSameDay(_selectedDate, date);
@@ -629,15 +912,19 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
           color: isSelected
               ? color
               : isPrimary
-              ? color.withOpacity(0.1)
-              : Colors.grey.withOpacity(0.08),
+              ? (isDarkMode ? color.withOpacity(0.25) : color.withOpacity(0.1))
+              : (isDarkMode
+                    ? Colors.grey[800]?.withOpacity(0.3)
+                    : Colors.grey.withOpacity(0.08)),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected
                 ? color
                 : isPrimary
-                ? color.withOpacity(0.4)
-                : Colors.grey.withOpacity(0.2),
+                ? (isDarkMode ? color.withOpacity(0.6) : color.withOpacity(0.4))
+                : (isDarkMode
+                      ? Colors.grey[700]!
+                      : Colors.grey.withOpacity(0.2)),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -650,8 +937,8 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
               color: isSelected
                   ? Colors.white
                   : isPrimary
-                  ? color
-                  : Colors.grey[700],
+                  ? (isDarkMode ? color.withOpacity(0.9) : color)
+                  : (isDarkMode ? Colors.grey[400] : Colors.grey[700]),
             ),
             SizedBox(height: 4),
             Text(
@@ -662,8 +949,8 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
                 color: isSelected
                     ? Colors.white
                     : isPrimary
-                    ? color
-                    : Colors.grey[700],
+                    ? (isDarkMode ? color.withOpacity(0.9) : color)
+                    : (isDarkMode ? Colors.grey[400] : Colors.grey[700]),
               ),
             ),
           ],
@@ -676,7 +963,7 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
     return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 
-  Widget _buildDateStats(DateTime date) {
+  Widget _buildDateStats(DateTime date, bool isDarkMode) {
     final stats = _getStatsForDate(date);
     if (stats == null) return SizedBox.shrink();
 
@@ -685,16 +972,16 @@ class _ModernDatePickerDialogState extends State<_ModernDatePickerDialog> {
     final percentage = total > 0 ? (eaten / total * 100).round() : 0;
 
     return Text(
-      '$eaten of $total meals eaten ($percentage%)',
+      '$eaten / $total ${'meals_eaten_count'.tr} ($percentage%)',
       style: TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w600,
-        color: Colors.blue[900],
+        color: isDarkMode ? Colors.blue[200] : Colors.blue[900],
       ),
     );
   }
 
-  Widget _buildLegendItem(Color color, String label) {
+  Widget _buildLegendItem(Color color, String label, bool isDarkMode) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [

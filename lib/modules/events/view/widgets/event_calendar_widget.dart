@@ -3,8 +3,19 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../viewmodel/events_viewmodel.dart';
 
+enum CalendarDisplayMode {
+  events, // Show only events
+  availability, // Show only availability
+  combined, // Show both events and availability
+}
+
 class EventCalendarWidget extends GetView<EventsViewModel> {
-  const EventCalendarWidget({Key? key}) : super(key: key);
+  final CalendarDisplayMode mode;
+
+  const EventCalendarWidget({
+    Key? key,
+    this.mode = CalendarDisplayMode.combined,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +24,8 @@ class EventCalendarWidget extends GetView<EventsViewModel> {
     return Obx(() {
       final focusedMonth = controller.focusedDay.value;
       final selectedDay = controller.selectedDay.value;
+      // Watch availability slots to update dots when data changes
+      controller.availabilitySlots.length;
 
       return Container(
         margin: EdgeInsets.all(16),
@@ -40,6 +53,11 @@ class EventCalendarWidget extends GetView<EventsViewModel> {
 
             // Calendar Grid
             ..._buildCalendarGrid(context, focusedMonth, selectedDay, isDark),
+
+            SizedBox(height: 16),
+
+            // Legend
+            _buildLegend(context, isDark),
           ],
         ),
       );
@@ -102,6 +120,89 @@ class EventCalendarWidget extends GetView<EventsViewModel> {
     );
   }
 
+  Widget _buildLegend(BuildContext context, bool isDark) {
+    // Build legend based on display mode
+    final List<Widget> legendItems = [];
+
+    // Add event indicator if showing events
+    if (mode == CalendarDisplayMode.events ||
+        mode == CalendarDisplayMode.combined) {
+      legendItems.add(
+        _buildLegendItem(
+          context,
+          color: Theme.of(context).primaryColor,
+          label: 'events'.tr,
+          isDark: isDark,
+        ),
+      );
+    }
+
+    // Add availability indicators if showing availability
+    if (mode == CalendarDisplayMode.availability ||
+        mode == CalendarDisplayMode.combined) {
+      legendItems.add(
+        _buildLegendItem(
+          context,
+          color: Colors.blue[600]!,
+          label: 'free_time'.tr,
+          isDark: isDark,
+        ),
+      );
+      legendItems.add(
+        _buildLegendItem(
+          context,
+          color: Colors.amber[700]!,
+          label: 'busy_time'.tr,
+          isDark: isDark,
+        ),
+      );
+    }
+
+    return Wrap(
+      spacing: 16,
+      runSpacing: 8,
+      alignment: WrapAlignment.center,
+      children: legendItems,
+    );
+  }
+
+  Widget _buildLegendItem(
+    BuildContext context, {
+    required Color color,
+    required String label,
+    required bool isDark,
+  }) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 10,
+          height: 10,
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.15),
+                blurRadius: 2,
+                offset: Offset(0, 1),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(width: 6),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+            color: isDark ? Colors.grey[300] : Colors.grey[800],
+          ),
+        ),
+      ],
+    );
+  }
+
   List<Widget> _buildCalendarGrid(
     BuildContext context,
     DateTime focusedMonth,
@@ -142,6 +243,24 @@ class EventCalendarWidget extends GetView<EventsViewModel> {
             final events = controller.getEventsForDay(date);
             final hasEvents = events.isNotEmpty;
 
+            // Check availability for this date
+            final hasAvailability = _hasAvailabilityForDate(date);
+            final hasFreeTime = _hasFreeTimeForDate(date);
+
+            // Determine what to show based on mode
+            final showEvents =
+                (mode == CalendarDisplayMode.events ||
+                    mode == CalendarDisplayMode.combined) &&
+                hasEvents;
+            final showFreeTime =
+                (mode == CalendarDisplayMode.availability ||
+                    mode == CalendarDisplayMode.combined) &&
+                hasFreeTime;
+            final showBusyTime =
+                (mode == CalendarDisplayMode.availability ||
+                    mode == CalendarDisplayMode.combined) &&
+                hasAvailability;
+
             return InkWell(
               onTap: () => controller.onDaySelected(date),
               borderRadius: BorderRadius.circular(20),
@@ -180,18 +299,88 @@ class EventCalendarWidget extends GetView<EventsViewModel> {
                             : Colors.black87,
                       ),
                     ),
-                    if (hasEvents)
+                    // Event indicator (purple dot) - centered at bottom
+                    if (showEvents)
                       Positioned(
-                        bottom: 4,
+                        bottom: 3,
                         child: Container(
-                          width: 4,
-                          height: 4,
+                          width: 5,
+                          height: 5,
                           decoration: BoxDecoration(
                             color: isSelected
                                 ? Colors.white
                                 : Theme.of(context).primaryColor,
                             shape: BoxShape.circle,
+                            boxShadow: isSelected
+                                ? null
+                                : [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      blurRadius: 1,
+                                      offset: Offset(0, 0.5),
+                                    ),
+                                  ],
                           ),
+                        ),
+                      ),
+                    // Availability indicators (row of dots) - positioned higher
+                    if (showFreeTime || showBusyTime)
+                      Positioned(
+                        bottom: showEvents
+                            ? 10
+                            : 3, // Move up if event dot exists
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // Free time indicator (blue dot)
+                            if (showFreeTime)
+                              Container(
+                                width: 4,
+                                height: 4,
+                                margin: EdgeInsets.symmetric(horizontal: 1),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? Colors.white.withOpacity(0.95)
+                                      : Colors.blue[600],
+                                  shape: BoxShape.circle,
+                                  boxShadow: isSelected
+                                      ? null
+                                      : [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(
+                                              0.2,
+                                            ),
+                                            blurRadius: 1,
+                                            offset: Offset(0, 0.5),
+                                          ),
+                                        ],
+                                ),
+                              ),
+                            // Busy time indicator (amber dot)
+                            if (showBusyTime)
+                              Container(
+                                width: 4,
+                                height: 4,
+                                margin: EdgeInsets.symmetric(horizontal: 1),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? Colors.white.withOpacity(0.95)
+                                      : Colors.amber[700],
+                                  shape: BoxShape.circle,
+                                  boxShadow: isSelected
+                                      ? null
+                                      : [
+                                          BoxShadow(
+                                            color: Colors.black.withOpacity(
+                                              0.2,
+                                            ),
+                                            blurRadius: 1,
+                                            offset: Offset(0, 0.5),
+                                          ),
+                                        ],
+                                ),
+                              ),
+                          ],
                         ),
                       ),
                   ],
@@ -206,5 +395,29 @@ class EventCalendarWidget extends GetView<EventsViewModel> {
 
   bool _isSameDay(DateTime a, DateTime b) {
     return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
+
+  /// Check if date has any availability slots (busy time)
+  bool _hasAvailabilityForDate(DateTime date) {
+    return controller.availabilitySlots.any((slot) {
+      final slotDate = DateTime(
+        slot.start.year,
+        slot.start.month,
+        slot.start.day,
+      );
+      return _isSameDay(slotDate, date) && !slot.isFree;
+    });
+  }
+
+  /// Check if date has any free time slots
+  bool _hasFreeTimeForDate(DateTime date) {
+    return controller.availabilitySlots.any((slot) {
+      final slotDate = DateTime(
+        slot.start.year,
+        slot.start.month,
+        slot.start.day,
+      );
+      return _isSameDay(slotDate, date) && slot.isFree;
+    });
   }
 }

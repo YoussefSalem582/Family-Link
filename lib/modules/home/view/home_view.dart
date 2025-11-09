@@ -9,6 +9,8 @@ import 'widgets/family_status_card.dart';
 import 'widgets/family_member_card.dart';
 import 'widgets/member_details_sheet.dart';
 import 'widgets/events_section.dart';
+import 'widgets/smart_status_section.dart';
+import 'widgets/geofence_notifications_section.dart';
 
 class HomeView extends GetView<HomeViewModel> {
   @override
@@ -80,6 +82,14 @@ class HomeView extends GetView<HomeViewModel> {
 
               // Upcoming Events Section
               EventsSection(),
+              SizedBox(height: 24),
+
+              // Smart Status Updates Section
+              SmartStatusSection(),
+              SizedBox(height: 24),
+
+              // Geofence Notifications Section
+              GeofenceNotificationsSection(),
               SizedBox(height: 24),
 
               // Family Members List

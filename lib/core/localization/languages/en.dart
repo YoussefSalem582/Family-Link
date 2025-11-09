@@ -284,4 +284,63 @@ const Map<String, String> en = {
   'friday': 'Fri',
   'saturday': 'Sat',
   'sunday': 'Sun',
+
+  // Events Module - Smart Features
+  'events_calendar': 'Events Calendar',
+  'family_availability': 'Family Availability',
+  'view_availability': 'View Availability',
+  'view_calendar': 'View Calendar',
+  'add_event': 'Add Event',
+
+  // Availability Sections
+  'suggested_family_time': '💡 Suggested Family Time',
+  'find_time_together': '⏰ Find Time Together',
+  'family_welcome_activities': '👋 Family Welcome Activities',
+  'todays_schedule': '📊 Today\'s Schedule',
+
+  // Events Common
+  'available': 'available',
+  'activity': 'Activity',
+  'join': 'Join!',
+  'schedule_event': 'Schedule Event',
+
+  // Schedule Editing
+  'edit_schedule': 'Edit Schedule',
+  'mark_as_free': 'Mark as Free Time',
+  'available_for_activities': 'Available for family activities',
+  'busy_with_activity': 'Busy with scheduled activity',
+  'activity_name': 'Activity Name',
+  'activity_hint': 'e.g., Work, School, Gym',
+  'location_optional': 'Location (Optional)',
+  'location_hint': 'e.g., Office, Sports Club',
+  'family_welcome': 'Family Welcome',
+  'others_can_join': 'Others can join this activity',
+  'tap_to_edit_schedule': 'Tap blocks with edit icon to change your schedule',
+  'schedule_updated': 'Schedule Updated',
+  'now_free': 'is now free',
+  'scheduled_for': 'scheduled for',
+
+  // Home Module - Smart Status
+  'family_status': 'Family Status',
+  'auto': 'Auto',
+  'update_status_for': 'Update Status for',
+
+  // Time Formatting
+  'm_ago': 'm ago',
+  'h_ago': 'h ago',
+  'd_ago': 'd ago',
+
+  // Geofence Notifications
+  'location_updates': 'Location Updates',
+  'managed_locations': 'Managed Locations',
+  'settings': 'Settings',
+  'no_recent_location_updates': 'No recent location updates',
+
+  // Calendar
+  'select_date': 'Select Date',
+  'events_on_date': 'Events on this date:',
+  'availability_on_date': 'Availability on this date:',
+  'all_eaten': 'All Eaten',
+  'free_time': 'Free Time',
+  'busy_time': 'Busy Time',
 };
