@@ -19,16 +19,32 @@ class MoodCard extends StatelessWidget {
     final color = getMoodColor(mood.mood);
     final emoji = getMoodEmoji(mood.mood);
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final gradEnd = isDark ? Color(0xFF2A2A2A) : Colors.white;
+    final cardBg = isDark ? const Color(0xFF1E1E1E) : Colors.white;
+    final borderColor = isDark
+        ? Colors.white.withOpacity(0.1)
+        : Colors.grey.withOpacity(0.1);
+    final gradEnd = isDark ? const Color(0xFF2A2A2A) : Colors.white;
     final noteColor = isDark ? Colors.grey[300] : Colors.grey[700];
     final timeColor = isDark ? Colors.grey[600] : Colors.grey[500];
 
-    return Card(
-      margin: EdgeInsets.only(bottom: 12),
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: cardBg,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: borderColor, width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: isDark
+                ? Colors.black.withOpacity(0.3)
+                : Colors.grey.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           gradient: LinearGradient(
@@ -45,10 +61,13 @@ class MoodCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: color.withOpacity(0.1),
                 shape: BoxShape.circle,
+                border: Border.all(color: color.withOpacity(0.3), width: 2),
               ),
-              child: Center(child: Text(emoji, style: TextStyle(fontSize: 28))),
+              child: Center(
+                child: Text(emoji, style: const TextStyle(fontSize: 28)),
+              ),
             ),
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,14 +76,14 @@ class MoodCard extends StatelessWidget {
                     children: [
                       Text(
                         mood.userName,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Container(
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 8,
                           vertical: 2,
                         ),
@@ -83,13 +102,13 @@ class MoodCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 4),
+                  const SizedBox(height: 4),
                   if (mood.note != null && mood.note!.isNotEmpty) ...[
                     Text(
                       mood.note!,
                       style: TextStyle(color: noteColor, fontSize: 14),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                   ],
                   Text(
                     formatTime(mood.date),

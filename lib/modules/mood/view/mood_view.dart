@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../widgets/custom_app_bar.dart';
 import '../viewmodel/mood_viewmodel.dart';
-import '../../../widgets/demo_banner_widget.dart';
+import '../../../widgets/section_header.dart';
 import 'widgets/mood_stats_card.dart';
 import 'widgets/mood_selector_sheet.dart';
 import 'widgets/mood_card.dart';
@@ -26,10 +26,6 @@ class MoodView extends GetView<MoodViewModel> {
 
         return Column(
           children: [
-            // Demo Mode Banner
-            if (controller.isDemoMode.value)
-              DemoBannerWidget(message: 'demo_mood'.tr),
-
             // Content
             Expanded(
               child: RefreshIndicator(
@@ -41,23 +37,20 @@ class MoodView extends GetView<MoodViewModel> {
                   children: [
                     // Mood Stats
                     MoodStatsCard(getMoodCount: _getMoodCount),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'mood_family_today'.tr,
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                        TextButton.icon(
-                          onPressed: () => _showMoodSelector(context),
-                          icon: Icon(Icons.add),
-                          label: Text('mood_share'.tr),
-                        ),
-                      ],
+                    // Section Header
+                    SectionHeader(
+                      title: 'mood_family_today',
+                      icon: Icons.emoji_emotions,
+                      actionText: 'mood_share',
+                      actionIcon: Icons.add,
+                      onActionPressed: () => _showMoodSelector(context),
+                      iconGradient: LinearGradient(
+                        colors: [Colors.purple, Colors.purple.withOpacity(0.7)],
+                      ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
                     // Family Moods
                     if (controller.todaysMoods.isNotEmpty) ...[

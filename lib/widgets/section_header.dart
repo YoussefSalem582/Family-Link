@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'custom_button.dart';
 
 class SectionHeader extends StatelessWidget {
@@ -23,11 +24,13 @@ class SectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Row(
       children: [
-        // text and Icon with Gradient Background
+        // Icon with Gradient Background
         Container(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             gradient:
                 iconGradient ??
@@ -38,27 +41,39 @@ class SectionHeader extends StatelessWidget {
                   ],
                 ),
             borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context).primaryColor.withOpacity(0.2),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
           child: Icon(icon, color: iconColor ?? Colors.white, size: 20),
         ),
-        SizedBox(width: 12),
-        // button
+        const SizedBox(width: 12),
+        // Title text with localization support
         Expanded(
           child: Text(
-            title,
-            style: Theme.of(
-              context,
-            ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+            title.tr,
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.3,
+            ),
           ),
         ),
         if (actionText != null && onActionPressed != null)
           CustomButton(
-            text: actionText!,
+            text: actionText!.tr,
             onPressed: onActionPressed!,
             icon: actionIcon,
-            backgroundColor: Colors.white,
+            backgroundColor: isDark
+                ? Theme.of(context).colorScheme.surface
+                : Colors.white,
             textColor: Theme.of(context).primaryColor,
-            borderColor: Theme.of(context).primaryColor.withOpacity(0.3),
+            borderColor: Theme.of(
+              context,
+            ).primaryColor.withOpacity(isDark ? 0.5 : 0.3),
           ),
       ],
     );

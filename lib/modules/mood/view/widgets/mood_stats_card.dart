@@ -8,11 +8,29 @@ class MoodStatsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final cardBg = isDark ? const Color(0xFF1E1E1E) : Colors.white;
+    final borderColor = isDark
+        ? Colors.white.withOpacity(0.1)
+        : Colors.grey.withOpacity(0.1);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: cardBg,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: borderColor, width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: isDark
+                ? Colors.black.withOpacity(0.3)
+                : Colors.grey.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
       child: Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           gradient: LinearGradient(
@@ -22,13 +40,41 @@ class MoodStatsCard extends StatelessWidget {
             ],
           ),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        child: Column(
           children: [
-            _buildMoodStat('😊', 'mood_happy'.tr, getMoodCount('happy')),
-            _buildMoodStat('😐', 'mood_neutral'.tr, getMoodCount('neutral')),
-            _buildMoodStat('😢', 'mood_sad'.tr, getMoodCount('sad')),
-            _buildMoodStat('🤩', 'mood_excited'.tr, getMoodCount('excited')),
+            // First row - 4 moods
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildMoodStat('😊', 'mood_happy'.tr, getMoodCount('happy')),
+                _buildMoodStat('😢', 'mood_sad'.tr, getMoodCount('sad')),
+                _buildMoodStat('😠', 'mood_angry'.tr, getMoodCount('angry')),
+                _buildMoodStat(
+                  '😰',
+                  'mood_anxious'.tr,
+                  getMoodCount('anxious'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            // Second row - 4 moods
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildMoodStat('😴', 'mood_tired'.tr, getMoodCount('tired')),
+                _buildMoodStat(
+                  '😎',
+                  'mood_excited'.tr,
+                  getMoodCount('excited'),
+                ),
+                _buildMoodStat('😌', 'mood_calm'.tr, getMoodCount('calm')),
+                _buildMoodStat(
+                  '😐',
+                  'mood_neutral'.tr,
+                  getMoodCount('neutral'),
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -43,11 +89,11 @@ class MoodStatsCard extends StatelessWidget {
 
         return Column(
           children: [
-            Text(emoji, style: TextStyle(fontSize: 28)),
-            SizedBox(height: 4),
+            Text(emoji, style: const TextStyle(fontSize: 28)),
+            const SizedBox(height: 4),
             Text(
               '$count',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             Text(label, style: TextStyle(fontSize: 11, color: labelColor)),
           ],

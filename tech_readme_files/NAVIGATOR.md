@@ -2,10 +2,14 @@
 
 Quick visual guide to find what you need in the tech documentation.
 
+**Last Updated**: November 9, 2025
+
 ```
 tech_readme_files/
 │
-├── 📖 README.md ..................... Start here! Complete documentation index
+├── 📖 START_HERE.md ................. 🌟 Start here! Navigation hub
+├── 📖 README.md ..................... Complete documentation index
+├── 📊 IMPLEMENTATION_STATUS.md ...... Current vs planned features (NEW!)
 │
 ├── 🚀 1_getting_started/
 │   ├── QUICK_START.md ............... ⏱️ 5 min - Get running fast
@@ -21,6 +25,8 @@ tech_readme_files/
 │   └── QUICK_FEATURE_GUIDE.md ........... Visual feature reference
 │
 ├── ✨ 3_features/
+│   ├── 🎤 VOICE_NOTES_IMPLEMENTATION.md . Voice Notes Hub guide (NEW!)
+│   ├── 📊 SMART_STATUS_GUIDE.md ......... Smart Status Updates (NEW!)
 │   ├── LOCALIZATION_COMPLETE.md ......... Localization overview
 │   ├── LOCALIZATION_FINAL_REPORT.md ..... Final audit report
 │   ├── LOCALIZATION_QUICK_START.md ...... Quick localization guide
@@ -106,14 +112,16 @@ GetStorage (Local Persistence)
 
 ## 🔥 Hot Files (Most Frequently Used)
 
-1. **QUICK_START.md** - New developer onboarding
-2. **QUICK_FEATURE_GUIDE.md** - Visual feature reference
-3. **DATA_PERSISTENCE_TEST.md** - Testing data storage
-4. **TRANSLATION_REFERENCE.md** - Looking up translation keys
-5. **IMPLEMENTATION_SUMMARY.md** - Latest feature implementations
-6. **TESTING_REPORT.md** - Comprehensive test results
-7. **FEATURE_ROADMAP.md** - Planning new features
-8. **BUG_FIXES_AND_FREE_MAP.md** - Troubleshooting
+1. **START_HERE.md** - Main navigation hub
+2. **IMPLEMENTATION_STATUS.md** - Current vs planned features
+3. **VOICE_NOTES_IMPLEMENTATION.md** - Voice Notes feature guide
+4. **SMART_STATUS_GUIDE.md** - Smart Status implementation
+5. **QUICK_START.md** - New developer onboarding
+6. **QUICK_FEATURE_GUIDE.md** - Visual feature reference
+7. **DATA_PERSISTENCE_TEST.md** - Testing data storage
+8. **TRANSLATION_REFERENCE.md** - Looking up translation keys
+9. **FEATURE_ROADMAP.md** - Planning new features
+10. **BUG_FIXES_AND_FREE_MAP.md** - Troubleshooting
 
 ---
 

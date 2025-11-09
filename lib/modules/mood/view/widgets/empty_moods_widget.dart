@@ -16,17 +16,17 @@ class EmptyMoodsWidget extends StatelessWidget {
     return Center(
       child: Column(
         children: [
-          SizedBox(height: 32),
+          const SizedBox(height: 32),
           Icon(Icons.mood, size: 64, color: iconColor),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
             'mood_no_moods'.tr,
             style: TextStyle(color: textColor, fontSize: 16),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           TextButton.icon(
             onPressed: onShareMood,
-            icon: Icon(Icons.add_reaction),
+            icon: const Icon(Icons.add_reaction),
             label: Text('mood_share_mood'.tr),
           ),
         ],

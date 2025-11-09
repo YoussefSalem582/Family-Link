@@ -23,138 +23,122 @@ class MealsView extends GetView<MealsViewModel> {
           return Center(child: CircularProgressIndicator());
         }
 
-        return Column(
-          children: [
-            // Demo Mode Banner
-            if (controller.isDemoMode.value)
-              DemoBannerWidget(message: 'demo_meals'.tr),
+        return RefreshIndicator(
+          onRefresh: () async {
+            controller.changeDate(controller.selectedDate.value);
+          },
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              // Demo Mode Banner
+              if (controller.isDemoMode.value)
+                DemoBannerWidget(message: 'demo_meals'.tr),
 
-            // Calendar Header
-            CalendarHeader(
-              selectedDate: controller.selectedDate.value,
-              isToday: controller.isToday(controller.selectedDate.value),
-              onPreviousDay: () {
-                final previousDay = controller.selectedDate.value.subtract(
-                  Duration(days: 1),
-                );
-                controller.changeDate(previousDay);
-              },
-              onNextDay: () {
-                final nextDay = controller.selectedDate.value.add(
-                  Duration(days: 1),
-                );
-                controller.changeDate(nextDay);
-              },
-              onCalendarTap: () => _showDatePicker(context),
-              onTodayTap: () {
-                controller.changeDate(DateTime.now());
-              },
-            ),
-
-            // Content
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  controller.changeDate(controller.selectedDate.value);
+              // Calendar Header
+              CalendarHeader(
+                selectedDate: controller.selectedDate.value,
+                isToday: controller.isToday(controller.selectedDate.value),
+                onPreviousDay: () {
+                  final previousDay = controller.selectedDate.value.subtract(
+                    Duration(days: 1),
+                  );
+                  controller.changeDate(previousDay);
                 },
-                child: ListView.builder(
-                  padding: EdgeInsets.all(16),
-                  itemCount:
-                      controller.familyMembers.length +
-                      1, // +1 for current user
-                  itemBuilder: (context, index) {
-                    // First item is current user
-                    if (index == 0) {
-                      final userId = controller.currentUser['id']!;
-                      final userName = controller.currentUser['name']!;
-                      final location = controller.currentUser['location']!;
-                      final meals = controller.getMealsForUser(userId);
+                onNextDay: () {
+                  final nextDay = controller.selectedDate.value.add(
+                    Duration(days: 1),
+                  );
+                  controller.changeDate(nextDay);
+                },
+                onCalendarTap: () => _showDatePicker(context),
+                onTodayTap: () {
+                  controller.changeDate(DateTime.now());
+                },
+              ),
 
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 4, bottom: 8),
-                            child: Text(
-                              'Your Meals',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).primaryColor,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
+              // Content
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Current User Section
+                    if (controller.currentUser != null) ...[
+                      Padding(
+                        padding: EdgeInsets.only(left: 4, bottom: 8),
+                        child: Text(
+                          'meals_your_meals'.tr,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).primaryColor,
+                            letterSpacing: 0.5,
                           ),
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: Theme.of(
-                                  context,
-                                ).primaryColor.withOpacity(0.3),
-                                width: 2,
-                              ),
-                            ),
-                            child: FamilyMemberMealCard(
-                              userId: userId,
-                              userName: userName,
-                              location: location,
-                              meals: meals,
-                              isCurrentUser: true,
-                              onMealTap: (mealType, isEaten) {
-                                controller.updateMealStatus(
-                                  userId,
-                                  userName,
-                                  mealType,
-                                  isEaten,
-                                );
-                              },
-                            ),
-                          ),
-                          SizedBox(height: 24),
-                          Padding(
-                            padding: EdgeInsets.only(left: 4, bottom: 8),
-                            child: Text(
-                              'Family Members',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey[600],
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    }
+                        ),
+                      ),
+                      FamilyMemberMealCard(
+                        userId: controller.currentUser!.id,
+                        userName: controller.currentUser!.name,
+                        location: controller.currentUser!.location,
+                        avatarUrl: controller.currentUser!.photoUrl,
+                        meals: controller.getMealsForUser(
+                          controller.currentUser!.id,
+                        ),
+                        isCurrentUser: true,
+                        onMealTap: (mealType, isEaten) {
+                          controller.updateMealStatus(
+                            controller.currentUser!.id,
+                            controller.currentUser!.name,
+                            mealType,
+                            isEaten,
+                          );
+                        },
+                      ),
+                      SizedBox(height: 24),
+                    ],
 
-                    // Other family members
-                    final member = controller.familyMembers[index - 1];
-                    final userId = member['id']!;
-                    final userName = member['name']!;
-                    final location = member['location']!;
-                    final meals = controller.getMealsForUser(userId);
+                    // Family Members Section
+                    if (controller.familyMembers.isNotEmpty) ...[
+                      Padding(
+                        padding: EdgeInsets.only(left: 4, bottom: 8),
+                        child: Text(
+                          'home_family_members'.tr,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[600],
+                            letterSpacing: 0.5,
+                          ),
+                        ),
+                      ),
 
-                    return FamilyMemberMealCard(
-                      userId: userId,
-                      userName: userName,
-                      location: location,
-                      meals: meals,
-                      isCurrentUser: false,
-                      onMealTap: (mealType, isEaten) {
-                        controller.updateMealStatus(
-                          userId,
-                          userName,
-                          mealType,
-                          isEaten,
+                      // Family Members List
+                      ...controller.familyMembers.map((member) {
+                        final meals = controller.getMealsForUser(member.id);
+
+                        return FamilyMemberMealCard(
+                          userId: member.id,
+                          userName: member.name,
+                          location: member.location,
+                          avatarUrl: member.photoUrl,
+                          meals: meals,
+                          isCurrentUser: false,
+                          onMealTap: (mealType, isEaten) {
+                            controller.updateMealStatus(
+                              member.id,
+                              member.name,
+                              mealType,
+                              isEaten,
+                            );
+                          },
                         );
-                      },
-                    );
-                  },
+                      }).toList(),
+                    ],
+                  ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         );
       }),
     );

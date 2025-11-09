@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import '../../../data/models/meal_model.dart';
+import '../../../data/models/user_model.dart';
 import '../../../data/repositories/meal_repository.dart';
 import '../../../core/utils/constants.dart';
 import '../../../core/services/firebase_service.dart';
+import '../../home/viewmodel/home_viewmodel.dart';
 
 class MealsViewModel extends GetxController {
   late final MealRepository _mealRepository;
@@ -15,20 +17,26 @@ class MealsViewModel extends GetxController {
   RxBool isDemoMode = false.obs;
   Rx<DateTime> selectedDate = DateTime.now().obs;
 
-  // Current user (demo mode)
-  final Map<String, String> currentUser = {
-    'id': 'demo_user_1',
-    'name': 'You',
-    'location': 'Current Location',
-  };
+  // Get HomeViewModel to access family members
+  HomeViewModel get _homeViewModel => Get.find<HomeViewModel>();
 
-  // Demo family members
-  final List<Map<String, String>> familyMembers = [
-    {'id': '1', 'name': 'Ahmed', 'location': 'Home in Riyadh'},
-    {'id': '2', 'name': 'Fatima', 'location': 'Traveling to Cairo'},
-    {'id': '3', 'name': 'Youssef', 'location': 'Out in Jeddah'},
-    {'id': '4', 'name': 'Layla', 'location': 'Home in Alexandria'},
-  ];
+  // Get current user info
+  UserModel? get currentUser {
+    // TODO: Replace with actual current user from auth
+    // For now, return a demo user
+    return UserModel(
+      id: 'demo_user_1',
+      name: 'You',
+      email: 'you@example.com',
+      location: 'Current Location',
+      status: 'home',
+      isHome: true,
+      lastSeen: DateTime.now(),
+    );
+  }
+
+  // Get family members from HomeViewModel
+  List<UserModel> get familyMembers => _homeViewModel.familyMembers;
 
   @override
   void onInit() {

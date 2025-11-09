@@ -12,6 +12,10 @@ class PostModel {
   final List<String> likes;
   final int likeCount;
   final int commentCount;
+  final String?
+  category; // For voice notes: bedtime_story, greeting, recipe, message, other
+  final String? duration; // For voice notes: recording duration
+  final String? title; // For voice notes: title/description
 
   PostModel({
     required this.id,
@@ -25,6 +29,9 @@ class PostModel {
     this.likes = const [],
     this.likeCount = 0,
     this.commentCount = 0,
+    this.category,
+    this.duration,
+    this.title,
   });
 
   // Convert to JSON
@@ -41,6 +48,9 @@ class PostModel {
       'likes': likes,
       'likeCount': likeCount,
       'commentCount': commentCount,
+      'category': category,
+      'duration': duration,
+      'title': title,
     };
   }
 
@@ -58,6 +68,9 @@ class PostModel {
       likes: List<String>.from(json['likes'] ?? []),
       likeCount: json['likeCount'] ?? 0,
       commentCount: json['commentCount'] ?? 0,
+      category: json['category'],
+      duration: json['duration'],
+      title: json['title'],
     );
   }
 
@@ -74,6 +87,9 @@ class PostModel {
     List<String>? likes,
     int? likeCount,
     int? commentCount,
+    String? category,
+    String? duration,
+    String? title,
   }) {
     return PostModel(
       id: id ?? this.id,
@@ -87,6 +103,9 @@ class PostModel {
       likes: likes ?? this.likes,
       likeCount: likeCount ?? this.likeCount,
       commentCount: commentCount ?? this.commentCount,
+      category: category ?? this.category,
+      duration: duration ?? this.duration,
+      title: title ?? this.title,
     );
   }
 }

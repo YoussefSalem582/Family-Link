@@ -27,7 +27,7 @@ class _MoodSelectorSheetState extends State<MoodSelectorSheet> {
     final handleColor = isDark ? Colors.grey[700] : Colors.grey[300];
 
     return Container(
-      padding: EdgeInsets.all(24),
+      padding: const EdgeInsets.all(24),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -39,12 +39,12 @@ class _MoodSelectorSheetState extends State<MoodSelectorSheet> {
               borderRadius: BorderRadius.circular(2),
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Text(
             'mood_how_feeling'.tr,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 24),
+          const SizedBox(height: 24),
           GridView.count(
             shrinkWrap: true,
             crossAxisCount: 4,
@@ -110,7 +110,7 @@ class _MoodSelectorSheetState extends State<MoodSelectorSheet> {
               ),
             ],
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           TextField(
             controller: noteController,
             decoration: InputDecoration(
@@ -118,11 +118,11 @@ class _MoodSelectorSheetState extends State<MoodSelectorSheet> {
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              prefixIcon: Icon(Icons.note),
+              prefixIcon: const Icon(Icons.note),
             ),
             maxLines: 2,
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -141,12 +141,15 @@ class _MoodSelectorSheetState extends State<MoodSelectorSheet> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 16),
+                padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: Text('mood_share_mood'.tr, style: TextStyle(fontSize: 16)),
+              child: Text(
+                'mood_share_mood'.tr,
+                style: const TextStyle(fontSize: 16),
+              ),
             ),
           ),
         ],
@@ -189,8 +192,8 @@ class _MoodSelectorSheetState extends State<MoodSelectorSheet> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(emoji, style: TextStyle(fontSize: 32)),
-            SizedBox(height: 4),
+            Text(emoji, style: const TextStyle(fontSize: 32)),
+            const SizedBox(height: 4),
             Text(
               label,
               style: TextStyle(

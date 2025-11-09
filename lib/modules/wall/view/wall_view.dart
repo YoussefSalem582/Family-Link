@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../widgets/custom_app_bar.dart';
+import '../../../widgets/feature_navigation_card.dart';
 import '../viewmodel/wall_viewmodel.dart';
 import 'widgets/post_card.dart';
+import 'widgets/voice_note_card.dart';
 import 'widgets/create_post_dialog.dart';
 import 'widgets/comments_sheet.dart';
 import 'widgets/empty_posts_widget.dart';
@@ -27,66 +29,96 @@ class WallView extends GetView<WallViewModel> {
           return Center(child: CircularProgressIndicator());
         }
 
-        return Column(
-          children: [
-            // Demo Mode Banner
-            if (controller.isDemoMode.value)
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.orange.shade50, Colors.orange.shade100],
-                  ),
-                  border: Border(
-                    bottom: BorderSide(color: Colors.orange.shade200, width: 1),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.orange.shade200,
-                        borderRadius: BorderRadius.circular(8),
+        return RefreshIndicator(
+          onRefresh: () async {
+            controller.loadPosts();
+          },
+          child: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Column(
+              children: [
+                // Demo Mode Banner
+                if (controller.isDemoMode.value)
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [Colors.orange.shade50, Colors.orange.shade100],
                       ),
-                      child: Icon(
-                        Icons.info_outline,
-                        color: Colors.orange.shade900,
-                        size: 20,
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        'demo_wall'.tr,
-                        style: TextStyle(
-                          color: Colors.orange.shade900,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Colors.orange.shade200,
+                          width: 1,
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ),
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.orange.shade200,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(
+                            Icons.info_outline,
+                            color: Colors.orange.shade900,
+                            size: 20,
+                          ),
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'demo_wall'.tr,
+                            style: TextStyle(
+                              color: Colors.orange.shade900,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
 
-            // Posts List
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  controller.loadPosts();
-                },
-                child: controller.posts.isEmpty
+                // Voice Notes Hub Button
+                FeatureNavigationCard(
+                  title: 'voice_notes_title',
+                  subtitle: 'voice_notes_family',
+                  icon: Icons.mic,
+                  onTap: () => Get.toNamed('/voice-notes'),
+                  gradientColors: [Color(0xFF9C27B0), Color(0xFFBA68C8)],
+                ),
+
+                // Posts List
+                controller.posts.isEmpty
                     ? EmptyPostsWidget(
                         onCreatePost: () => _showCreatePostDialog(context),
                       )
                     : ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
                         padding: EdgeInsets.all(16),
                         itemCount: controller.posts.length,
                         itemBuilder: (context, index) {
                           final post = controller.posts[index];
                           final hasLiked = post.likes.contains('demo_user_1');
+                          final isVoiceNote =
+                              post.voiceUrl != null &&
+                              post.voiceUrl!.isNotEmpty;
+
+                          // Render voice note card or regular post card
+                          if (isVoiceNote) {
+                            return VoiceNoteCard(
+                              voiceNote: post,
+                              onDelete:
+                                  controller.isDemoMode.value ||
+                                      post.userId == 'demo_user_1'
+                                  ? () => _showDeleteConfirmation(context, post)
+                                  : null,
+                            );
+                          }
 
                           return PostCard(
                             post: post,
@@ -102,9 +134,9 @@ class WallView extends GetView<WallViewModel> {
                           );
                         },
                       ),
-              ),
+              ],
             ),
-          ],
+          ),
         );
       }),
       floatingActionButton: Container(

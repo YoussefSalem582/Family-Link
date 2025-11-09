@@ -29,6 +29,7 @@ import '../../modules/chat/view/chat_view.dart';
 import '../../modules/chat/view/chat_list_view.dart';
 import '../../modules/chat/viewmodel/chat_viewmodel.dart';
 import '../../modules/chat/viewmodel/chat_list_viewmodel.dart';
+import '../../modules/wall/view/voice_notes_view.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -149,6 +150,14 @@ class AppPages {
       page: () => ChatListView(),
       binding: BindingsBuilder(() {
         Get.lazyPut(() => ChatListViewModel());
+      }),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: AppRoutes.voiceNotes,
+      page: () => VoiceNotesView(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut(() => WallViewModel());
       }),
       transition: Transition.rightToLeft,
     ),

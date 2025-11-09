@@ -24,6 +24,7 @@ class FamilyMemberMealCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final breakfastMeal = meals.firstWhereOrNull(
       (m) => m.mealType.toLowerCase() == 'breakfast',
     );
@@ -35,17 +36,25 @@ class FamilyMemberMealCard extends StatelessWidget {
     );
 
     return Container(
-      margin: EdgeInsets.only(bottom: 16),
-      padding: EdgeInsets.all(16),
+      margin: EdgeInsets.only(bottom: isCurrentUser ? 16 : 12),
+      padding: EdgeInsets.all(isCurrentUser ? 16 : 12),
       decoration: BoxDecoration(
         color: isCurrentUser
             ? Theme.of(context).primaryColor.withOpacity(0.05)
             : Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(isCurrentUser ? 16 : 12),
+        border: Border.all(
+          color: isCurrentUser
+              ? Theme.of(context).primaryColor.withOpacity(0.3)
+              : (isDark
+                    ? Colors.white.withOpacity(0.1)
+                    : Colors.grey.withOpacity(0.1)),
+          width: isCurrentUser ? 2 : 1,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(isCurrentUser ? 0.08 : 0.05),
-            blurRadius: isCurrentUser ? 12 : 10,
+            blurRadius: isCurrentUser ? 12 : 8,
             offset: Offset(0, 2),
           ),
         ],
@@ -56,7 +65,7 @@ class FamilyMemberMealCard extends StatelessWidget {
           Row(
             children: [
               CircleAvatar(
-                radius: 24,
+                radius: isCurrentUser ? 28 : 22,
                 backgroundColor: _getAvatarColor(userName),
                 backgroundImage: avatarUrl != null
                     ? NetworkImage(avatarUrl!)
@@ -66,13 +75,13 @@ class FamilyMemberMealCard extends StatelessWidget {
                         userName[0].toUpperCase(),
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: isCurrentUser ? 24 : 18,
                           fontWeight: FontWeight.bold,
                         ),
                       )
                     : null,
               ),
-              SizedBox(width: 12),
+              SizedBox(width: isCurrentUser ? 16 : 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -80,14 +89,14 @@ class FamilyMemberMealCard extends StatelessWidget {
                     Text(
                       userName,
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: isCurrentUser ? 18 : 15,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
                       location,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: isCurrentUser ? 14 : 12,
                         color: Theme.of(context).brightness == Brightness.dark
                             ? Colors.grey[400]
                             : Colors.grey[600],
@@ -98,7 +107,7 @@ class FamilyMemberMealCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 16),
+          SizedBox(height: isCurrentUser ? 16 : 12),
           // Three meal boxes
           Row(
             children: [
@@ -112,7 +121,7 @@ class FamilyMemberMealCard extends StatelessWidget {
                   Colors.orange,
                 ),
               ),
-              SizedBox(width: 12),
+              SizedBox(width: isCurrentUser ? 12 : 8),
               Expanded(
                 child: _buildMealBox(
                   context,
@@ -123,7 +132,7 @@ class FamilyMemberMealCard extends StatelessWidget {
                   Colors.green,
                 ),
               ),
-              SizedBox(width: 12),
+              SizedBox(width: isCurrentUser ? 12 : 8),
               Expanded(
                 child: _buildMealBox(
                   context,
@@ -174,12 +183,15 @@ class FamilyMemberMealCard extends StatelessWidget {
         );
       },
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+        padding: EdgeInsets.symmetric(
+          vertical: isCurrentUser ? 12 : 8,
+          horizontal: isCurrentUser ? 8 : 6,
+        ),
         decoration: BoxDecoration(
           color: hasStatus
               ? (isEaten ? color.withOpacity(0.15) : skippedBg)
               : noStatusBg,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(isCurrentUser ? 12 : 10),
           border: Border.all(
             color: hasStatus
                 ? (isEaten ? color : skippedBorder)
@@ -192,14 +204,14 @@ class FamilyMemberMealCard extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 28,
+              size: isCurrentUser ? 28 : 22,
               color: hasStatus ? (isEaten ? color : skippedIcon) : noStatusIcon,
             ),
-            SizedBox(height: 4),
+            SizedBox(height: isCurrentUser ? 4 : 2),
             Text(
               label,
               style: TextStyle(
-                fontSize: 11,
+                fontSize: isCurrentUser ? 11 : 10,
                 fontWeight: hasStatus && isEaten
                     ? FontWeight.bold
                     : FontWeight.normal,

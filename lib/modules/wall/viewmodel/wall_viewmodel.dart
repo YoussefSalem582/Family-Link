@@ -82,6 +82,9 @@ class WallViewModel extends GetxController {
       'likes': post.likes,
       'likeCount': post.likeCount,
       'commentCount': post.commentCount,
+      'category': post.category,
+      'duration': post.duration,
+      'title': post.title,
     };
   }
 
@@ -98,6 +101,9 @@ class WallViewModel extends GetxController {
       likes: List<String>.from(json['likes'] ?? []),
       likeCount: json['likeCount'] ?? 0,
       commentCount: json['commentCount'] ?? 0,
+      category: json['category'],
+      duration: json['duration'],
+      title: json['title'],
     );
   }
 
@@ -390,5 +396,62 @@ class WallViewModel extends GetxController {
   // Get comments for a post
   List<CommentModel> getComments(String postId) {
     return comments[postId] ?? [];
+  }
+
+  // Get voice notes (posts with voiceUrl)
+  List<PostModel> getVoiceNotes() {
+    return posts
+        .where((post) => post.voiceUrl != null && post.voiceUrl!.isNotEmpty)
+        .toList();
+  }
+
+  // Create voice note
+  Future<void> createVoiceNote(
+    String userId,
+    String userName,
+    String? userPhotoUrl,
+    String title,
+    String category,
+    String duration,
+    String audioPath,
+  ) async {
+    if (isDemoMode.value) {
+      // In demo mode, add voice note locally
+      final newPost = PostModel(
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        userId: userId,
+        userName: userName,
+        userPhotoUrl: userPhotoUrl,
+        text: title, // Use title as text
+        voiceUrl: audioPath, // In production, this would be uploaded URL
+        createdAt: DateTime.now(),
+        likes: [],
+        likeCount: 0,
+        commentCount: 0,
+        category: category,
+        duration: duration,
+      );
+      posts.insert(0, newPost);
+      _savePosts(); // Save to storage
+      Get.snackbar(
+        'success'.tr,
+        'voice_notes_created'.tr,
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 2),
+      );
+      return;
+    }
+
+    try {
+      // Firebase implementation would go here
+      // Upload audio file and create post with voiceUrl
+    } catch (e) {
+      Get.snackbar(
+        'error'.tr,
+        'Failed to create voice note',
+        snackPosition: SnackPosition.BOTTOM,
+        duration: const Duration(seconds: 2),
+      );
+    }
   }
 }
