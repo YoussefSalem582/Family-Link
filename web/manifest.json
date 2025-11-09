@@ -1,11 +1,11 @@
 {
-    "name": "family_link",
-    "short_name": "family_link",
+    "name": "Family Link",
+    "short_name": "FamilyLink",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#6C3FBF",
+    "theme_color": "#6C3FBF",
+    "description": "Family coordination app for events, meals, moods, and availability tracking.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

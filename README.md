@@ -7,6 +7,12 @@ A modern family management application built with Flutter, featuring real-time l
 ![Firebase](https://img.shields.io/badge/Firebase-Ready-orange.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 
+## 🌐 Live Demo
+
+**Try it now:** [https://youssefsalem582.github.io/Family-Link/](https://youssefsalem582.github.io/Family-Link/)
+
+The web version runs in full demo mode with all features available!
+
 ## 📱 About FamilyLink
 
 FamilyLink helps families stay connected by providing:
@@ -226,14 +232,20 @@ flutter test --coverage
 
 ## 📱 Supported Platforms
 
-| Platform | Status | Minimum Version |
-|----------|--------|-----------------|
-| Android  | ✅ Supported | API 21 (Android 5.0) |
-| iOS      | ✅ Supported | iOS 12.0+ |
-| Web      | 🚧 In Progress | Modern browsers |
-| Windows  | 🚧 Planned | Windows 10+ |
-| macOS    | 🚧 Planned | macOS 10.14+ |
-| Linux    | 🚧 Planned | Ubuntu 20.04+ |
+| Platform | Status | Minimum Version | Live Demo |
+|----------|--------|-----------------|-----------|
+| **Web**  | ✅ **Live** | Modern browsers | [Try Now](https://youssefsalem582.github.io/Family-Link/) |
+| Android  | ✅ Supported | API 21 (Android 5.0) | - |
+| iOS      | ✅ Supported | iOS 12.0+ | - |
+| Windows  | 🚧 Planned | Windows 10+ | - |
+| macOS    | 🚧 Planned | macOS 10.14+ | - |
+| Linux    | 🚧 Planned | Ubuntu 20.04+ | - |
+
+### 🌐 GitHub Pages Deployment
+
+This app automatically deploys to GitHub Pages on every push to `main`. See:
+- [Quick Start Guide](QUICK_START_GITHUB_PAGES.md) - Get started in 3 steps
+- [Deployment Guide](GITHUB_PAGES.md) - Detailed instructions and troubleshooting
 
 ## 🗺️ Roadmap
 
